@@ -657,11 +657,22 @@
           <td style="text-align:right;color:var(--grn);font-size:1.05rem" id="fu_total_m">&mdash;</td>
           <td style="text-align:right;color:var(--grn);font-size:1.05rem" id="fu_total_a">&mdash;</td>
         </tr>
+        <tr class="fin-unit-header" style="background:var(--red)10"><td colspan="5" style="color:var(--red);font-weight:700;font-size:12px">BETRIEBSKOSTEN</td></tr>
         <tr>
-          <td>Betriebskosten p.a.</td><td></td>
-          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk" value="23674" step="500" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
+          <td>Umlagefaehig <span style="font-size:10px;color:var(--mut)">(Grundsteuer, Wasser, Muell, Versicherung, Hauswart etc.)</span></td><td></td>
+          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk_umlage" value="18000" step="500" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
           <td></td>
-          <td style="text-align:right;color:var(--red)" id="fu_bk_display">&mdash;</td>
+          <td style="text-align:right;color:var(--txt2)" id="fu_bk_umlage_display">&mdash;</td>
+        </tr>
+        <tr>
+          <td>Nicht umlagefaehig <span style="font-size:10px;color:var(--mut)">(Verwaltung, Instandhaltung, Reparaturen)</span></td><td></td>
+          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk_nicht" value="5674" step="500" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
+          <td></td>
+          <td style="text-align:right;color:var(--red)" id="fu_bk_nicht_display">&mdash;</td>
+        </tr>
+        <tr style="font-weight:700">
+          <td>Summe Betriebskosten p.a.</td><td></td><td></td><td></td>
+          <td style="text-align:right;color:var(--red)" id="fu_bk_total">&mdash;</td>
         </tr>
       </tfoot>
     </table>
@@ -769,8 +780,9 @@
   <!-- Cashflow & Kennzahlen -->
   <div class="stat-grid">
     <div class="stat-box"><h3>Cashflow-Analyse (p.a.)</h3><table>
-      <tr><td>Mieteinnahmen p.a.</td><td style="color:var(--grn)" id="fin_cf_miete">&mdash;</td></tr>
-      <tr><td>Betriebskosten p.a.</td><td style="color:var(--red)" id="fin_cf_bk">&mdash;</td></tr>
+      <tr><td>Mieteinnahmen (Kaltmiete) p.a.</td><td style="color:var(--grn)" id="fin_cf_miete">&mdash;</td></tr>
+      <tr><td style="padding-left:14px;font-size:12px;color:var(--mut)">davon umlagef. BK (Durchlaufposten)</td><td style="font-size:12px;color:var(--txt2)" id="fin_cf_bk_umlage">&mdash;</td></tr>
+      <tr><td>Nicht umlagef. Betriebskosten p.a.</td><td style="color:var(--red)" id="fin_cf_bk_nicht">&mdash;</td></tr>
       <tr><td>= NOI (Net Operating Income)</td><td style="font-weight:700" id="fin_cf_noi">&mdash;</td></tr>
       <tr class="sep"><td>Darlehensraten p.a. (gesamt)</td><td style="color:var(--red)" id="fin_cf_rate">&mdash;</td></tr>
       <tr style="font-weight:700"><td>Cashflow vor Steuern</td><td id="fin_cf_netto"><strong>&mdash;</strong></td></tr>

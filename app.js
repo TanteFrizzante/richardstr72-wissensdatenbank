@@ -429,8 +429,15 @@ function calcFin() {
   setEl('fu_total_m', fmtN(Math.round(mieteMon)) + ' \u20AC');
   setEl('fu_total_a', fmtN(Math.round(mietePA)) + ' \u20AC');
 
-  var bk = getVal('fin_bk');
-  setEl('fu_bk_display', '-' + fmtN(Math.round(bk)) + ' \u20AC');
+  // Betriebskosten: umlagefaehig vs. nicht umlagefaehig
+  var bkUmlage = getVal('fin_bk_umlage');
+  var bkNicht = getVal('fin_bk_nicht');
+  var bkTotal = bkUmlage + bkNicht;
+  setEl('fu_bk_umlage_display', '-' + fmtN(Math.round(bkUmlage)) + ' \u20AC');
+  setEl('fu_bk_nicht_display', '-' + fmtN(Math.round(bkNicht)) + ' \u20AC');
+  setEl('fu_bk_total', '-' + fmtN(Math.round(bkTotal)) + ' \u20AC');
+  // Fuer Cashflow: Nur nicht-umlagefaehige BK belasten den Eigentuemer
+  var bk = bkNicht;
 
   // Collect all active loans
   var loans = [];
@@ -492,9 +499,10 @@ function calcFin() {
   setEl('fin_avg_zins', avgZins.toFixed(2) + ' %');
 
   // Cashflow
-  var noi = mietePA - bk;
+  var noi = mietePA - bk; // bk = nur nicht-umlagefaehig
   setEl('fin_cf_miete', '+' + fmtN(Math.round(mietePA)) + ' \u20AC');
-  setEl('fin_cf_bk', '-' + fmtN(Math.round(bk)) + ' \u20AC');
+  setEl('fin_cf_bk_umlage', fmtN(Math.round(bkUmlage)) + ' \u20AC (Durchlaufposten)');
+  setEl('fin_cf_bk_nicht', '-' + fmtN(Math.round(bk)) + ' \u20AC');
   setEl('fin_cf_noi', fmtN(Math.round(noi)) + ' \u20AC');
   var noiEl = $('fin_cf_noi');
   if (noiEl) noiEl.style.color = noi >= 0 ? 'var(--grn)' : 'var(--red)';
@@ -817,6 +825,63 @@ function renderDokumente() {
     '<tr><td>\u2022</td><td>Flaechenberechnung Detail (Architekt)</td></tr>' +
     '<tr><td>\u2022</td><td>Lageplan Ebeling+Finck GbR</td></tr>' +
     '<tr><td>\u2022</td><td>Angebot PV-Anlage Novia Energie (Nr. 1000120)</td></tr></table></div></div>' +
+
+    // ─── Plaene & Grundrisse ───
+    '<h2 class="section-title">Plaene &amp; Grundrisse</h2>' +
+    '<p style="color:var(--txt2);font-size:13px;margin-bottom:14px">Alle Plaene als PDF — Klick oeffnet in neuem Tab.</p>' +
+
+    // Lageplan & Ansichten
+    '<div class="stat-box" style="margin-bottom:16px">' +
+    '<h3 style="margin-bottom:10px">Lageplan &amp; Ansichten</h3>' +
+    '<div class="doc-plan-grid">' +
+    '<a href="docs/plaene/lageplan.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83D\uDDFA\uFE0F</span><span class="doc-plan-name">Lageplan</span></a>' +
+    '<a href="docs/plaene/sued-ansicht.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83C\uDFE0</span><span class="doc-plan-name">Sued-Ansicht</span></a>' +
+    '</div></div>' +
+
+    // Haus 1 (Vorderhaus)
+    '<div class="stat-box" style="margin-bottom:16px">' +
+    '<h3 style="margin-bottom:10px;color:var(--acc)">Haus 1 — Vorderhaus (WE1–WE4, TE1)</h3>' +
+    '<div class="doc-plan-grid">' +
+    '<a href="docs/plaene/haus1-kg.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2B07\uFE0F</span><span class="doc-plan-name">Kellergeschoss</span></a>' +
+    '<a href="docs/plaene/haus1-eg.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83C\uDFE2</span><span class="doc-plan-name">Erdgeschoss</span></a>' +
+    '<a href="docs/plaene/haus1-1og.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2B06\uFE0F</span><span class="doc-plan-name">1. Obergeschoss</span></a>' +
+    '<a href="docs/plaene/haus1-dg.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83C\uDFDA\uFE0F</span><span class="doc-plan-name">Dachgeschoss</span></a>' +
+    '<a href="docs/plaene/haus1-schnitt-aa.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2702\uFE0F</span><span class="doc-plan-name">Schnitt A-A</span></a>' +
+    '<a href="docs/plaene/haus1-schnitt-bb.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2702\uFE0F</span><span class="doc-plan-name">Schnitt B-B</span></a>' +
+    '</div></div>' +
+
+    // Haus 2 (Seitenflügel)
+    '<div class="stat-box" style="margin-bottom:16px">' +
+    '<h3 style="margin-bottom:10px;color:var(--org)">Haus 2 — Seitenfluegel</h3>' +
+    '<div class="doc-plan-grid">' +
+    '<a href="docs/plaene/haus2-eg.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83C\uDFE2</span><span class="doc-plan-name">Erdgeschoss</span></a>' +
+    '</div></div>' +
+
+    // Haus 3 (Quergebäude / Musiker)
+    '<div class="stat-box" style="margin-bottom:16px">' +
+    '<h3 style="margin-bottom:10px;color:var(--pur)">Haus 3 — Quergebaeude (TE5 Musiker)</h3>' +
+    '<div class="doc-plan-grid">' +
+    '<a href="docs/plaene/haus3-eg.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83C\uDFE2</span><span class="doc-plan-name">Erdgeschoss</span></a>' +
+    '<a href="docs/plaene/haus3-1og.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2B06\uFE0F</span><span class="doc-plan-name">1. Obergeschoss</span></a>' +
+    '</div></div>' +
+
+    // KG Gesamt
+    '<div class="stat-box" style="margin-bottom:16px">' +
+    '<h3 style="margin-bottom:10px;color:var(--cyn)">Kellergeschoss Gesamt</h3>' +
+    '<div class="doc-plan-grid">' +
+    '<a href="docs/plaene/kg-gesamt.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2B07\uFE0F</span><span class="doc-plan-name">KG Gesamtplan</span></a>' +
+    '</div></div>' +
+
+    // Bestandspläne (Ebeling+Finck 2022)
+    '<div class="stat-box" style="margin-bottom:22px">' +
+    '<h3 style="margin-bottom:10px;color:var(--txt2)">Bestandsplaene (Ebeling+Finck, Nov. 2022)</h3>' +
+    '<div class="doc-plan-grid">' +
+    '<a href="docs/plaene/bestand-grundstueck.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83D\uDDFA\uFE0F</span><span class="doc-plan-name">Grundstueck</span></a>' +
+    '<a href="docs/plaene/bestand-eg.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\uD83C\uDFE2</span><span class="doc-plan-name">EG Grundriss</span></a>' +
+    '<a href="docs/plaene/bestand-og.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2B06\uFE0F</span><span class="doc-plan-name">OG Grundriss</span></a>' +
+    '<a href="docs/plaene/bestand-schnitt1.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2702\uFE0F</span><span class="doc-plan-name">Schnitt 1</span></a>' +
+    '<a href="docs/plaene/bestand-schnitt2.pdf" target="_blank" class="doc-plan-card"><span class="doc-plan-icon">\u2702\uFE0F</span><span class="doc-plan-name">Schnitt 2</span></a>' +
+    '</div></div>' +
 
     '<h2 class="section-title">Status &amp; Naechste Schritte</h2>' +
     '<div class="stat-box"><table class="comp-table">' +

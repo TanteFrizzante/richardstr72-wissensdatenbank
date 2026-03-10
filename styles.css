@@ -1327,6 +1327,43 @@ html {
   border-radius: 8px;
 }
 
+/* Dokumente Plan Grid */
+.doc-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+.doc-plan-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: var(--card2);
+  border: 1px solid var(--brd);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--txt);
+  transition: border-color .2s, background .2s;
+  cursor: pointer;
+}
+.doc-plan-card:hover {
+  border-color: var(--acc);
+  background: var(--card);
+}
+.doc-plan-icon {
+  font-size: 24px;
+}
+.doc-plan-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--txt2);
+}
+.doc-plan-card:hover .doc-plan-name {
+  color: var(--acc);
+}
+
 /* Responsive Dashboard */
 @media (max-width: 768px) {
   .dash-split {
