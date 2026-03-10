@@ -4,7 +4,7 @@
    ═══════════════════════════════════════════ */
 
 // ─── Auth Gate ───
-var AUTH_HASH = '5bbca397783413aa728391e8917d5c6078d5d0ce5e6d61300ffccab0f2fcb4be';
+var AUTH_HASH = '683d2896fa2a073c264323b75eab86c9f7d99cb3879fae62a671842e32c746c2';
 
 async function sha256(str) {
   var buf = new TextEncoder().encode(str);
