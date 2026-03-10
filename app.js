@@ -1,0 +1,1300 @@
+/* ═══════════════════════════════════════════
+   Richardstr. 72 — App Logic
+   Navigation, Calculators, Data
+   ═══════════════════════════════════════════ */
+
+// ─── Navigation ───
+function navigateToPage(pageId) {
+  var pages = document.querySelectorAll('.page');
+  var navLinks = document.querySelectorAll('#nav a');
+  var sidebar = document.getElementById('sidebar');
+  pages.forEach(function (p) { p.classList.remove('active'); });
+  navLinks.forEach(function (l) { l.classList.remove('active'); });
+  var target = document.getElementById(pageId);
+  if (target) target.classList.add('active');
+  var link = document.querySelector('[data-page="' + pageId + '"]');
+  if (link) link.classList.add('active');
+  if (window.innerWidth <= 768 && sidebar) sidebar.classList.remove('open');
+  window.scrollTo(0, 0);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const navLinks = document.querySelectorAll('#nav a');
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      navigateToPage(this.dataset.page);
+    });
+  });
+
+  if (menuToggle) {
+    menuToggle.addEventListener('click', function () {
+      sidebar.classList.toggle('open');
+    });
+  }
+
+  // Init all calculators
+  calcWEG(2000000);
+  calcF20();
+  calcVM();
+  calcFin();
+  renderTrello();
+  renderGallery();
+  renderNotes();
+  renderEnergie();
+  renderDokumente();
+  renderFlaechen();
+  renderGantt();
+  renderDashboard();
+});
+
+// ─── Helpers ───
+function fmt(n) {
+  return n.toLocaleString('de-DE', { maximumFractionDigits: 0 }) + ' \u20AC';
+}
+
+function fmtN(n) {
+  return n.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+}
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function setEl(id, txt) {
+  var e = $(id);
+  if (e) e.textContent = txt;
+}
+
+function getVal(id) {
+  var e = $(id);
+  if (!e) return 0;
+  return parseFloat(e.value) || 0;
+}
+
+// ─── Collapsible sections ───
+function toggleCollapse(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+// ═══════════════════════════════════
+// WEG RECHNER
+// ═══════════════════════════════════
+var WG_W1 = 59.56, WG_W2 = 106.70, WG_W3 = 138.31;
+var WG_DG_SALE = 100000, WG_IR = 21530, WG_SR = 56126;
+var _weg_kp = 2000000;
+
+function calcWEG(kp) {
+  if (!kp) kp = _weg_kp || 2000000;
+  _weg_kp = kp;
+
+  var p1 = getVal('weg_p1') || 4900;
+  var p2 = getVal('weg_p2') || 5200;
+  var p3 = getVal('weg_p3') || 4900;
+
+  var w1 = WG_W1 * p1, w2 = WG_W2 * p2, w3 = WG_W3 * p3;
+  var tw = w1 + w2 + w3, te = kp - tw;
+  var av = tw / (WG_W1 + WG_W2 + WG_W3);
+
+  var eDG = getVal('weg_dg') || 120;
+  var eTE = getVal('weg_te15') || 619.86;
+  var eGar = getVal('weg_gar') || 197.60;
+  var ES = eDG + eTE + eGar;
+
+  setEl('weg_eig_sqm', ES.toFixed(2).replace('.', ',') + ' m\u00B2');
+  var es = te / ES;
+  var gr = kp * 0.06, no = kp * 0.015, ti = kp + gr + no;
+
+  setEl('we1p', fmt(w1));
+  setEl('we2p', fmt(w2));
+  setEl('we3p', fmt(w3));
+  setEl('twoh', fmt(tw));
+  setEl('avgsqm', '\u00D8 ' + fmtN(Math.round(av)) + ' \u20AC/m\u00B2');
+  setEl('teig', fmt(te));
+  setEl('eigsqm', '\u00D8 ' + fmtN(Math.round(es)) + ' \u20AC/m\u00B2 (' + ES.toFixed(2).replace('.', ',') + ' m\u00B2)');
+  setEl('kpt', fmt(kp));
+  setEl('kpw', fmt(tw));
+  setEl('kpe', fmt(te));
+  setEl('pcw', (tw / kp * 100).toFixed(1) + ' %');
+  setEl('pce', (te / kp * 100).toFixed(1) + ' %');
+  setEl('kng', fmt(gr));
+  setEl('knn', fmt(no));
+  setEl('knt', fmt(ti));
+  setEl('ri', (WG_IR / kp * 100).toFixed(2) + ' %');
+  setEl('rs', (WG_SR / kp * 100).toFixed(2) + ' %');
+  setEl('kf', (kp / WG_SR).toFixed(1) + 'x');
+  setEl('ead', fmt(te - WG_DG_SALE));
+}
+
+function setV(kp, el) {
+  document.querySelectorAll('.variant-tab').forEach(function (t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  $('ckp').value = '';
+  calcWEG(kp);
+}
+
+function setCust() {
+  var v = parseInt($('ckp').value);
+  if (v > 0) {
+    document.querySelectorAll('.variant-tab').forEach(function (t) { t.classList.remove('active'); });
+    calcWEG(v);
+  }
+}
+
+// ═══════════════════════════════════
+// KP VARIANTE FAKTOR 20
+// ═══════════════════════════════════
+var WE1_SQM = 59.56, WE2_SQM = 106.70, WE3_SQM = 138.31;
+var TE15_SQM = 619.86, TE6_SQM = 57.91, SDG_SQM = 116.25;
+var RENOV_GEW = 137000, INVEST_WOHN = 300000, DG_AUSBAU_WOHN = 300000, SDG_AUSBAU = 300000, SDG_SANIERUNG = 350000;
+var EK_TOTAL = 250000, BK_PA = 23674;
+
+function calcF20() {
+  var kp = getVal('inp_kp'); if (kp <= 0) kp = 2200000;
+  var faktor = getVal('inp_faktor'); if (faktor <= 0) faktor = 20;
+  var ziel_pa = kp / faktor, ziel_mon = ziel_pa / 12;
+  var grest = kp * 0.06, notar = kp * 0.015;
+  var total_a = kp + grest + notar + RENOV_GEW + SDG_AUSBAU + SDG_SANIERUNG + INVEST_WOHN;
+  var total_b = total_a + DG_AUSBAU_WOHN;
+  var fk_a = total_a - EK_TOTAL, fk_b = total_b - EK_TOTAL;
+
+  // IST Wohnen
+  var r_we1 = getVal('inp_we1'), r_we3 = getVal('inp_we3');
+  var ist_we1 = WE1_SQM * r_we1, ist_we3 = WE3_SQM * r_we3;
+  var ist_w_mon = ist_we1 + ist_we3, ist_w_pa = ist_w_mon * 12;
+  setEl('ist_we1m', fmtN(Math.round(ist_we1)) + ' \u20AC');
+  setEl('ist_we1a', fmtN(Math.round(ist_we1 * 12)) + ' \u20AC');
+  setEl('ist_we3m', fmtN(Math.round(ist_we3)) + ' \u20AC');
+  setEl('ist_we3a', fmtN(Math.round(ist_we3 * 12)) + ' \u20AC');
+  setEl('ist_wm', fmtN(Math.round(ist_w_mon)) + ' \u20AC');
+  setEl('ist_wa', fmtN(Math.round(ist_w_pa)) + ' \u20AC');
+
+  // IST Gewerbe
+  var sdg_ist = SDG_SQM * getVal('inp_scheune_ist');
+  setEl('ist_sdgm', fmtN(Math.round(sdg_ist)) + ' \u20AC');
+  setEl('ist_sdga', fmtN(Math.round(sdg_ist * 12)) + ' \u20AC');
+  var gew_ist_mon = 1200 + 210 + 0 + sdg_ist + 455;
+  var gew_ist_pa = gew_ist_mon * 12;
+  setEl('ist_gew_m', fmtN(Math.round(gew_ist_mon)) + ' \u20AC');
+  setEl('ist_gew_a', fmtN(Math.round(gew_ist_pa)) + ' \u20AC');
+
+  var ist_mon = ist_w_mon + gew_ist_mon, ist_pa = ist_mon * 12;
+  var gap_pa = ziel_pa - ist_pa;
+  setEl('inv_kp', fmt(kp));
+  setEl('inv_ziel_pa', fmtN(Math.round(ziel_pa)) + ' \u20AC');
+  setEl('inv_ziel_mon', fmtN(Math.round(ziel_mon)) + ' \u20AC');
+  setEl('inv_ist_pa2', fmtN(Math.round(ist_pa)) + ' \u20AC');
+  setEl('inv_gap_pa', (gap_pa >= 0 ? '+' : '') + fmtN(Math.round(gap_pa)) + ' \u20AC');
+  var gapEl = $('inv_gap_pa');
+  if (gapEl) gapEl.style.color = gap_pa >= 0 ? 'var(--grn)' : 'var(--red)';
+
+  setEl('gap_ist_wm', fmtN(Math.round(ist_w_mon)) + ' \u20AC');
+  setEl('gap_ist_wa', fmtN(Math.round(ist_w_pa)) + ' \u20AC');
+  setEl('gap_ist_gm', fmtN(Math.round(gew_ist_mon)) + ' \u20AC');
+  setEl('gap_ist_ga', fmtN(Math.round(gew_ist_pa)) + ' \u20AC');
+  setEl('gap_ist_tm', fmtN(Math.round(ist_mon)) + ' \u20AC');
+  setEl('gap_ist_ta', fmtN(Math.round(ist_pa)) + ' \u20AC');
+  setEl('gap_ziel_m', fmtN(Math.round(ziel_mon)) + ' \u20AC');
+  setEl('gap_ziel_a', fmtN(Math.round(ziel_pa)) + ' \u20AC');
+  setEl('gap_delta_m', (gap_pa >= 0 ? '+' : '-') + fmtN(Math.round(Math.abs(gap_pa / 12))) + ' \u20AC');
+  setEl('gap_delta_a', (gap_pa >= 0 ? '+' : '-') + fmtN(Math.round(Math.abs(gap_pa))) + ' \u20AC');
+  setEl('gap_ist_faktor', ist_pa > 0 ? (kp / ist_pa).toFixed(1) + 'x' : '\u2014');
+
+  // VARIANTE A
+  var a_we1 = WE1_SQM * getVal('inp_a_we1'), a_we2 = WE2_SQM * getVal('inp_a_we2'), a_we3 = WE3_SQM * getVal('inp_a_we3');
+  var a_w_mon = a_we1 + a_we2 + a_we3, a_w_pa = a_w_mon * 12;
+  setEl('a_we1m', fmtN(Math.round(a_we1)) + ' \u20AC'); setEl('a_we1a', fmtN(Math.round(a_we1 * 12)) + ' \u20AC');
+  setEl('a_we2m', fmtN(Math.round(a_we2)) + ' \u20AC'); setEl('a_we2a', fmtN(Math.round(a_we2 * 12)) + ' \u20AC');
+  setEl('a_we3m', fmtN(Math.round(a_we3)) + ' \u20AC'); setEl('a_we3a', fmtN(Math.round(a_we3 * 12)) + ' \u20AC');
+  setEl('a_wm', fmtN(Math.round(a_w_mon)) + ' \u20AC'); setEl('a_wa', fmtN(Math.round(a_w_pa)) + ' \u20AC');
+
+  var a_te15 = TE15_SQM * getVal('inp_a_te15');
+  var a_te6 = TE6_SQM * getVal('inp_a_te6');
+  var a_sp_mon = getVal('inp_a_sp_n') * getVal('inp_a_sp_p');
+  var a_g_mon = a_te15 + a_te6 + a_sp_mon, a_g_pa = a_g_mon * 12;
+  setEl('a_te15m', fmtN(Math.round(a_te15)) + ' \u20AC'); setEl('a_te15a', fmtN(Math.round(a_te15 * 12)) + ' \u20AC');
+  setEl('a_te6m', fmtN(Math.round(a_te6)) + ' \u20AC'); setEl('a_te6a', fmtN(Math.round(a_te6 * 12)) + ' \u20AC');
+  setEl('a_spm', fmtN(Math.round(a_sp_mon)) + ' \u20AC'); setEl('a_spa', fmtN(Math.round(a_sp_mon * 12)) + ' \u20AC');
+  setEl('a_gm', fmtN(Math.round(a_g_mon)) + ' \u20AC'); setEl('a_ga', fmtN(Math.round(a_g_pa)) + ' \u20AC');
+
+  var a_tot_mon = a_w_mon + a_g_mon, a_tot_pa = a_tot_mon * 12;
+  var a_delta = a_tot_pa - ziel_pa, a_fak = a_tot_pa > 0 ? kp / a_tot_pa : 999, a_ren = a_tot_pa / kp * 100;
+  setEl('a_f_wm', fmtN(Math.round(a_w_mon)) + ' \u20AC'); setEl('a_f_wa', fmtN(Math.round(a_w_pa)) + ' \u20AC');
+  setEl('a_f_gm', fmtN(Math.round(a_g_mon)) + ' \u20AC'); setEl('a_f_ga', fmtN(Math.round(a_g_pa)) + ' \u20AC');
+  setEl('a_f_tm', fmtN(Math.round(a_tot_mon)) + ' \u20AC'); setEl('a_f_ta', fmtN(Math.round(a_tot_pa)) + ' \u20AC');
+  setEl('a_f_zm', fmtN(Math.round(ziel_mon)) + ' \u20AC'); setEl('a_f_za', fmtN(Math.round(ziel_pa)) + ' \u20AC');
+  setEl('a_f_dm', (a_delta >= 0 ? '+' : '') + fmtN(Math.round(a_delta / 12)) + ' \u20AC');
+  setEl('a_f_da', (a_delta >= 0 ? '+' : '') + fmtN(Math.round(a_delta)) + ' \u20AC');
+  var adr = $('a_f_dr');
+  if (adr) adr.className = a_delta >= 0 ? 'hl-green' : 'hl-red';
+  setEl('a_f_fak', a_fak.toFixed(1) + 'x');
+  setEl('a_f_chk', a_fak <= faktor ? 'JA \u2014 Faktor ' + a_fak.toFixed(1) + 'x' : 'NEIN \u2014 Faktor ' + a_fak.toFixed(1) + 'x');
+  var achk = $('a_f_chk');
+  if (achk) achk.style.color = a_fak <= faktor ? 'var(--grn)' : 'var(--red)';
+  setEl('a_f_ren', a_ren.toFixed(2) + ' %');
+
+  // VARIANTE B
+  var b_we1 = WE1_SQM * getVal('inp_b_we1'), b_we2 = WE2_SQM * getVal('inp_b_we2'), b_we3 = WE3_SQM * getVal('inp_b_we3');
+  var b_dg_sqm = getVal('inp_b_dg_sqm'), b_dg = b_dg_sqm * getVal('inp_b_dg');
+  var b_w_mon = b_we1 + b_we2 + b_we3 + b_dg, b_w_pa = b_w_mon * 12;
+  setEl('b_we1m', fmtN(Math.round(b_we1)) + ' \u20AC'); setEl('b_we1a', fmtN(Math.round(b_we1 * 12)) + ' \u20AC');
+  setEl('b_we2m', fmtN(Math.round(b_we2)) + ' \u20AC'); setEl('b_we2a', fmtN(Math.round(b_we2 * 12)) + ' \u20AC');
+  setEl('b_we3m', fmtN(Math.round(b_we3)) + ' \u20AC'); setEl('b_we3a', fmtN(Math.round(b_we3 * 12)) + ' \u20AC');
+  setEl('b_dgm', fmtN(Math.round(b_dg)) + ' \u20AC'); setEl('b_dga', fmtN(Math.round(b_dg * 12)) + ' \u20AC');
+  setEl('b_sqm_total', (59.56 + 106.70 + 138.31 + b_dg_sqm).toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('b_wm', fmtN(Math.round(b_w_mon)) + ' \u20AC'); setEl('b_wa', fmtN(Math.round(b_w_pa)) + ' \u20AC');
+
+  var b_te15 = TE15_SQM * getVal('inp_b_te15');
+  var b_te6 = TE6_SQM * getVal('inp_b_te6');
+  var b_sp_mon = getVal('inp_b_sp_n') * getVal('inp_b_sp_p');
+  var b_g_mon = b_te15 + b_te6 + b_sp_mon, b_g_pa = b_g_mon * 12;
+  setEl('b_te15m', fmtN(Math.round(b_te15)) + ' \u20AC'); setEl('b_te15a', fmtN(Math.round(b_te15 * 12)) + ' \u20AC');
+  setEl('b_te6m', fmtN(Math.round(b_te6)) + ' \u20AC'); setEl('b_te6a', fmtN(Math.round(b_te6 * 12)) + ' \u20AC');
+  setEl('b_spm', fmtN(Math.round(b_sp_mon)) + ' \u20AC'); setEl('b_spa', fmtN(Math.round(b_sp_mon * 12)) + ' \u20AC');
+  setEl('b_gm', fmtN(Math.round(b_g_mon)) + ' \u20AC'); setEl('b_ga', fmtN(Math.round(b_g_pa)) + ' \u20AC');
+
+  var b_tot_mon = b_w_mon + b_g_mon, b_tot_pa = b_tot_mon * 12;
+  var b_delta = b_tot_pa - ziel_pa, b_fak = b_tot_pa > 0 ? kp / b_tot_pa : 999, b_ren = b_tot_pa / kp * 100;
+  setEl('b_f_wm', fmtN(Math.round(b_w_mon)) + ' \u20AC'); setEl('b_f_wa', fmtN(Math.round(b_w_pa)) + ' \u20AC');
+  setEl('b_f_gm', fmtN(Math.round(b_g_mon)) + ' \u20AC'); setEl('b_f_ga', fmtN(Math.round(b_g_pa)) + ' \u20AC');
+  setEl('b_f_tm', fmtN(Math.round(b_tot_mon)) + ' \u20AC'); setEl('b_f_ta', fmtN(Math.round(b_tot_pa)) + ' \u20AC');
+  setEl('b_f_zm', fmtN(Math.round(ziel_mon)) + ' \u20AC'); setEl('b_f_za', fmtN(Math.round(ziel_pa)) + ' \u20AC');
+  setEl('b_f_dm', (b_delta >= 0 ? '+' : '') + fmtN(Math.round(b_delta / 12)) + ' \u20AC');
+  setEl('b_f_da', (b_delta >= 0 ? '+' : '') + fmtN(Math.round(b_delta)) + ' \u20AC');
+  var bdr = $('b_f_dr');
+  if (bdr) bdr.className = b_delta >= 0 ? 'hl-green' : 'hl-red';
+  setEl('b_f_fak', b_fak.toFixed(1) + 'x');
+  setEl('b_f_chk', b_fak <= faktor ? 'JA \u2014 Faktor ' + b_fak.toFixed(1) + 'x' : 'NEIN \u2014 Faktor ' + b_fak.toFixed(1) + 'x');
+  var bchk = $('b_f_chk');
+  if (bchk) bchk.style.color = b_fak <= faktor ? 'var(--grn)' : 'var(--red)';
+  setEl('b_f_ren', b_ren.toFixed(2) + ' %');
+
+  // VERGLEICH
+  setEl('cmp_a_wm', fmtN(Math.round(a_w_mon)) + ' \u20AC');
+  setEl('cmp_b_wm', fmtN(Math.round(b_w_mon)) + ' \u20AC');
+  setEl('cmp_d_wm', '+' + fmtN(Math.round(b_w_mon - a_w_mon)) + ' \u20AC');
+  setEl('cmp_a_ta', fmtN(Math.round(a_tot_pa)) + ' \u20AC');
+  setEl('cmp_b_ta', fmtN(Math.round(b_tot_pa)) + ' \u20AC');
+  setEl('cmp_d_ta', '+' + fmtN(Math.round(b_tot_pa - a_tot_pa)) + ' \u20AC');
+  setEl('cmp_a_fak', a_fak.toFixed(1) + 'x'); setEl('cmp_b_fak', b_fak.toFixed(1) + 'x');
+  setEl('cmp_d_fak', (b_fak - a_fak > 0 ? '+' : '') + (b_fak - a_fak).toFixed(1));
+  setEl('cmp_a_ren', a_ren.toFixed(2) + ' %'); setEl('cmp_b_ren', b_ren.toFixed(2) + ' %');
+  setEl('cmp_d_ren', '+' + (b_ren - a_ren).toFixed(2) + ' %');
+  setEl('cmp_dg_plus', '+' + fmtN(Math.round(b_tot_pa - a_tot_pa)) + ' \u20AC/a durch Wohn-DG-Ausbau');
+
+  // FINANZIERUNG
+  setEl('inv_kp2', fmt(kp)); setEl('inv_kp3', fmt(kp));
+  setEl('inv_grest', fmt(grest)); setEl('inv_grest2', fmt(grest));
+  setEl('inv_notar', fmt(notar)); setEl('inv_notar2', fmt(notar));
+  setEl('inv_total_a', fmt(total_a)); setEl('inv_total_b', fmt(total_b));
+  setEl('inv_fk_a', fmt(fk_a)); setEl('inv_fk_b', fmt(fk_b));
+
+  // CASHFLOW
+  var noi_a = a_tot_pa - BK_PA, zins_a = fk_a * 0.035, cf_a = noi_a - zins_a;
+  setEl('cf_a_soll', fmtN(Math.round(a_tot_pa)) + ' \u20AC/a');
+  setEl('cf_a_noi', fmt(noi_a)); setEl('cf_a_zins', '-' + fmt(zins_a));
+  setEl('cf_a_cf', fmt(cf_a));
+  var cfa = $('cf_a_cf');
+  if (cfa) cfa.style.color = cf_a >= 0 ? 'var(--grn)' : 'var(--red)';
+
+  var noi_b = b_tot_pa - BK_PA, zins_b = fk_b * 0.035, cf_b = noi_b - zins_b;
+  setEl('cf_b_soll', fmtN(Math.round(b_tot_pa)) + ' \u20AC/a');
+  setEl('cf_b_noi', fmt(noi_b)); setEl('cf_b_zins', '-' + fmt(zins_b));
+  setEl('cf_b_cf', fmt(cf_b));
+  var cfb = $('cf_b_cf');
+  if (cfb) cfb.style.color = cf_b >= 0 ? 'var(--grn)' : 'var(--red)';
+}
+
+// ═══════════════════════════════════
+// VARIANTE MIETE
+// ═══════════════════════════════════
+function calcVM() {
+  var flaeche = 1200 / 2.78;
+  setEl('vm_flaeche', fmtN(Math.round(flaeche * 10) / 10) + ' m\u00B2');
+  setEl('vm_ist_sqm', '2,78 \u20AC/m\u00B2');
+  var maiSqm = 1375.20 / flaeche;
+  setEl('vm_mai_sqm', maiSqm.toFixed(2).replace('.', ',') + ' \u20AC/m\u00B2');
+  setEl('vm_mai_sqm2', maiSqm.toFixed(2).replace('.', ','));
+
+  var istPA = 1200 * 12;
+  var markt15mon = flaeche * 15;
+  var markt15pa = markt15mon * 12;
+  setEl('vm_diff1', '-' + fmtN(Math.round(markt15pa - istPA)) + ' \u20AC/a');
+  setEl('vm_diff2', '-' + fmtN(Math.round(markt15pa - 16502)) + ' \u20AC/a');
+
+  var rates = [5, 8, 10, 12.10, 15];
+  var ids = ['5', '8', '10', '12', '15'];
+  for (var i = 0; i < rates.length; i++) {
+    var mon = flaeche * rates[i];
+    var pa = mon * 12;
+    var diff = pa - istPA;
+    setEl('vm_m' + ids[i] + 'm', fmtN(Math.round(mon)) + ' \u20AC');
+    setEl('vm_m' + ids[i] + 'a', fmtN(Math.round(pa)) + ' \u20AC');
+    setEl('vm_d' + ids[i], '+' + fmtN(Math.round(diff)) + ' \u20AC/a');
+  }
+
+  setEl('vm_markt15a', fmtN(Math.round(markt15pa)) + ' \u20AC');
+  var ersparnis = markt15pa - istPA;
+  setEl('vm_ersparnis', fmtN(Math.round(ersparnis)) + ' \u20AC/a');
+  setEl('vm_ersparnis10', fmtN(Math.round(ersparnis * 10)) + ' \u20AC');
+  setEl('vm_ersparnis30', fmtN(Math.round(ersparnis * 30)) + ' \u20AC');
+}
+
+// ═══════════════════════════════════
+// FINANZIERUNGSRECHNER
+// ═══════════════════════════════════
+function calcFin() {
+  var mieteMon = getVal('fin_miete_mon');
+  var mietePA = mieteMon * 12;
+  var bk = getVal('fin_bk');
+  setEl('fin_miete_pa_display', fmtN(Math.round(mietePA)) + ' \u20AC/a');
+
+  // Collect all active loans
+  var loans = [];
+  var maxBind = 0;
+  for (var i = 1; i <= 5; i++) {
+    var cb = $('loan_on_' + i);
+    var row = $('loan_row_' + i);
+    var active = cb && cb.checked;
+    if (row) {
+      row.style.opacity = active ? '1' : '0.4';
+    }
+    var betrag = getVal('loan_betrag_' + i);
+    var zins = getVal('loan_zins_' + i) / 100;
+    var tilg = getVal('loan_tilg_' + i) / 100;
+    var bind = parseInt($('loan_bind_' + i) ? $('loan_bind_' + i).value : '10') || 10;
+    var sonder = getVal('loan_sonder_' + i);
+    var name = $('loan_name_' + i) ? $('loan_name_' + i).value : 'Darlehen ' + i;
+
+    if (active && betrag > 0) {
+      var ann = zins + tilg;
+      var rateA = betrag * ann;
+      var rateM = rateA / 12;
+      loans.push({idx: i, name: name, betrag: betrag, zins: zins, tilg: tilg, bind: bind, sonder: sonder, ann: ann, rateA: rateA, rateM: rateM});
+      if (bind > maxBind) maxBind = bind;
+      setEl('loan_rate_m_' + i, fmtN(Math.round(rateM)) + ' \u20AC');
+      setEl('loan_rate_a_' + i, fmtN(Math.round(rateA)) + ' \u20AC');
+    } else {
+      setEl('loan_rate_m_' + i, active && betrag === 0 ? '0 \u20AC' : '\u2014');
+      setEl('loan_rate_a_' + i, active && betrag === 0 ? '0 \u20AC' : '\u2014');
+    }
+  }
+
+  // Totals
+  var sumBetrag = 0, sumRateA = 0, sumRateM = 0, sumZinsJ1 = 0, sumTilgJ1 = 0;
+  var weightedZins = 0;
+  loans.forEach(function (l) {
+    sumBetrag += l.betrag;
+    sumRateA += l.rateA;
+    sumRateM += l.rateM;
+    sumZinsJ1 += l.betrag * l.zins;
+    sumTilgJ1 += l.rateA - l.betrag * l.zins;
+    weightedZins += l.betrag * l.zins;
+  });
+  var avgZins = sumBetrag > 0 ? (weightedZins / sumBetrag) * 100 : 0;
+  var avgAnn = sumBetrag > 0 ? (sumRateA / sumBetrag) * 100 : 0;
+
+  // Footer sums
+  setEl('loan_sum_betrag', fmtN(Math.round(sumBetrag)) + ' \u20AC');
+  setEl('loan_avg_zins', avgZins.toFixed(2) + ' %');
+  setEl('loan_sum_rate_m', fmtN(Math.round(sumRateM)) + ' \u20AC');
+  setEl('loan_sum_rate_a', fmtN(Math.round(sumRateA)) + ' \u20AC');
+
+  // KPIs
+  setEl('fin_rate', fmt(sumRateM) + '/Mon');
+  setEl('fin_rate_a', fmt(sumRateA));
+  setEl('fin_sum_darlehen', fmt(sumBetrag));
+  setEl('fin_zins_a', fmt(sumZinsJ1));
+  setEl('fin_tilg_a', fmt(sumTilgJ1));
+  setEl('fin_avg_zins', avgZins.toFixed(2) + ' %');
+
+  // Cashflow
+  var noi = mietePA - bk;
+  setEl('fin_cf_miete', '+' + fmtN(Math.round(mietePA)) + ' \u20AC');
+  setEl('fin_cf_bk', '-' + fmtN(Math.round(bk)) + ' \u20AC');
+  setEl('fin_cf_noi', fmtN(Math.round(noi)) + ' \u20AC');
+  var noiEl = $('fin_cf_noi');
+  if (noiEl) noiEl.style.color = noi >= 0 ? 'var(--grn)' : 'var(--red)';
+  setEl('fin_cf_rate', '-' + fmtN(Math.round(sumRateA)) + ' \u20AC');
+  var cfNetto = noi - sumRateA;
+  setEl('fin_cf_netto', (cfNetto >= 0 ? '+' : '') + fmtN(Math.round(cfNetto)) + ' \u20AC');
+  var cfn = $('fin_cf_netto');
+  if (cfn) cfn.style.color = cfNetto >= 0 ? 'var(--grn)' : 'var(--red)';
+  setEl('fin_cf_mon', (cfNetto >= 0 ? '+' : '') + fmtN(Math.round(cfNetto / 12)) + ' \u20AC');
+  var cfm = $('fin_cf_mon');
+  if (cfm) cfm.style.color = cfNetto >= 0 ? 'var(--grn)' : 'var(--red)';
+
+  // Kennzahlen
+  setEl('fin_annuitaet', avgAnn.toFixed(2) + ' %');
+  var dscr = sumRateA > 0 ? noi / sumRateA : 0;
+  setEl('fin_dscr', dscr.toFixed(2) + 'x');
+  var dscEl = $('fin_dscr');
+  if (dscEl) dscEl.style.color = dscr >= 1.2 ? 'var(--grn)' : dscr >= 1.0 ? 'var(--org)' : 'var(--red)';
+  var kaufpreis = 2200000; // Basis-KP fuer LTV
+  var ltv = kaufpreis > 0 ? (sumBetrag / kaufpreis) * 100 : 0;
+  setEl('fin_ltv', ltv.toFixed(1) + ' % (KP ' + fmtN(kaufpreis) + ' \u20AC)');
+  var yod = sumBetrag > 0 ? (noi / sumBetrag) * 100 : 0;
+  setEl('fin_yod', yod.toFixed(2) + ' %');
+  var ek = 250000;
+  var ekRendite = ek > 0 ? (cfNetto / ek) * 100 : 0;
+  setEl('fin_ek_rendite', ekRendite.toFixed(1) + ' % (EK ' + fmtN(ek) + ' \u20AC)');
+  var ekrEl = $('fin_ek_rendite');
+  if (ekrEl) ekrEl.style.color = ekRendite >= 0 ? 'var(--grn)' : 'var(--red)';
+
+  // Per-loan detail cards
+  var detailHtml = '';
+  loans.forEach(function (l) {
+    var rest = l.betrag, zG = 0, tG = 0;
+    for (var j = 1; j <= l.bind; j++) {
+      var zJ = rest * l.zins;
+      var tJ = l.rateA - zJ;
+      var sJ = Math.min(l.sonder, rest - tJ);
+      if (sJ < 0) sJ = 0;
+      var rE = rest - tJ - sJ;
+      if (rE < 0) { tJ = rest; rE = 0; sJ = 0; }
+      zG += zJ; tG += tJ + sJ;
+      rest = rE;
+      if (rest <= 0) break;
+    }
+    var tQuote = l.betrag > 0 ? (tG / l.betrag * 100).toFixed(1) : '0';
+    var colors = ['var(--acc)', 'var(--grn)', 'var(--org)', 'var(--pur)', 'var(--cyn)'];
+    var col = colors[(l.idx - 1) % 5];
+    detailHtml += '<div class="stat-box" style="border-left:3px solid ' + col + '"><h3>' + l.name + '</h3><table>' +
+      '<tr><td>Darlehensbetrag</td><td>' + fmt(l.betrag) + '</td></tr>' +
+      '<tr><td>Zinssatz / Tilgung</td><td>' + (l.zins * 100).toFixed(2) + ' % / ' + (l.tilg * 100).toFixed(2) + ' %</td></tr>' +
+      '<tr><td>Monatsrate</td><td>' + fmt(l.rateM) + '</td></tr>' +
+      '<tr><td>Jahresrate</td><td>' + fmt(l.rateA) + '</td></tr>' +
+      '<tr><td>Zinsen Jahr 1</td><td style="color:var(--red)">' + fmt(l.betrag * l.zins) + '</td></tr>' +
+      '<tr><td>Restschuld n. ' + l.bind + ' J.</td><td style="font-weight:700">' + fmt(rest) + '</td></tr>' +
+      '<tr><td>Getilgt in Bindung</td><td style="color:var(--grn)">' + fmt(tG) + ' (' + tQuote + ' %)</td></tr>' +
+      '<tr><td>Zinskosten gesamt</td><td>' + fmt(zG) + '</td></tr>' +
+      '</table></div>';
+  });
+  var detailEl = $('fin_loan_details');
+  if (detailEl) detailEl.innerHTML = detailHtml;
+
+  // Combined Tilgungsplan (aggregate all loans per year)
+  if (maxBind === 0) maxBind = 10;
+  var loanStates = loans.map(function (l) { return {rest: l.betrag, zins: l.zins, rateA: l.rateA, sonder: l.sonder, bind: l.bind, done: false}; });
+  var tpRows = '';
+  for (var y = 1; y <= maxBind; y++) {
+    var yRest0 = 0, yZins = 0, yTilg = 0, ySonder = 0, yRate = 0, yRest1 = 0;
+    loanStates.forEach(function (s) {
+      if (s.done || s.rest <= 0) { yRest0 += 0; return; }
+      yRest0 += s.rest;
+      if (y > s.bind) { yRest1 += s.rest; return; }
+      var zJ = s.rest * s.zins;
+      var tJ = s.rateA - zJ;
+      var sJ = Math.min(s.sonder, s.rest - tJ);
+      if (sJ < 0) sJ = 0;
+      var rE = s.rest - tJ - sJ;
+      if (rE < 0) { tJ = s.rest; rE = 0; sJ = 0; }
+      yZins += zJ;
+      yTilg += tJ;
+      ySonder += sJ;
+      yRate += s.rateA + sJ;
+      yRest1 += rE;
+      s.rest = rE;
+      if (s.rest <= 0) s.done = true;
+    });
+    if (yRest0 <= 0) break;
+    tpRows += '<tr><td>' + y + '</td><td>' + fmt(yRest0) + '</td><td>' + fmt(yZins) + '</td><td>' + fmt(yTilg) + '</td><td>' + (ySonder > 0 ? fmt(ySonder) : '\u2014') + '</td><td>' + fmt(yRate) + '</td><td>' + fmt(yRest1) + '</td></tr>';
+  }
+  var tbody = $('fin_tbody');
+  if (tbody) tbody.innerHTML = tpRows;
+}
+
+// ═══════════════════════════════════
+// TRELLO BOARD
+// ═══════════════════════════════════
+var board = {
+  "Backlog / Ideen": [{ n: "Milieuschutz Vorkaufsrecht", d: "Positive Auskunft benoetig" }, { n: "Wirtschaftlichkeits-DD", d: "Renditeberechnung je Variante" }, { n: "AfA Aufteilung optimieren", d: "Boden vs Gebaeude" }],
+  "Finanzierung": [{ n: "BaufiTeam Liebhardt", d: "Hauptansprechpartner", lb: ["In Bearbeitung"] }, { n: "IBB Kontakt", d: "Frau Kati Mueller", lb: ["In Bearbeitung"] }, { n: "Interhyp anfragen", d: "" }, { n: "Dr. Klein anfragen", d: "" }, { n: "Sparkasse", d: "3,5% Angebot pruefen" }, { n: "KfW Foerderung", d: "Energetische Sanierung" }],
+  "WEG-Teilung": [{ n: "Aufteilungsplan erstellen", d: "Architekt beauftragen", lb: ["Dringend"] }, { n: "Abgeschlossenheitsbescheinigung", d: "Bauamt Neukoelln" }, { n: "Teilungserklaerung", d: "Notar Bombitzky" }],
+  "Kaeufer Jan-Philip Roedger": [{ n: "Erstgespraech / Besichtigung", d: "jp.saltero@gmail.com", lb: ["Heissester Interessent"] }, { n: "Unterlagen zusenden", d: "" }, { n: "Kaufpreisverhandlung", d: "" }, { n: "Notartermin vereinbaren", d: "" }],
+  "Kaeufer Lina (1.OG)": [{ n: "Grundrisse uebergeben", d: "", cl: [{ n: "Unterlagen", d: 1, t: 2 }] }, { n: "Mieterliste uebergeben", d: "", cl: [{ n: "Unterlagen", d: 1, t: 1 }] }, { n: "Expose erstellen", d: "" }, { n: "Teilungserklaerung", d: "" }],
+  "Kaeufer Kolja (EG)": [{ n: "Ersttermin 28.01.", d: "stattgefunden" }, { n: "NDA", d: "" }, { n: "Grundrisse", d: "" }, { n: "Expose", d: "" }],
+  "Kaeufer Morits (DG)": [{ n: "50% DG Rohling verkaufen", d: "100.000 EUR fuer 69,5 m2" }, { n: "Baugenehmigung DG", d: "Aufschiebende Bedingung" }, { n: "Ausbau spaeter", d: "Kosten spaeter kalkulieren" }],
+  "Due Diligence": [{ n: "Grundbuchauszug", d: "Von Finck anfordern", lb: ["Dringend"] }, { n: "Baulastenverzeichnis", d: "" }, { n: "Altlastenkataster", d: "" }, { n: "Energieausweis", d: "" }],
+  "Unterlagen Finck": [{ n: "Grundbuchauszug aktuell", d: "", lb: ["Dringend"] }, { n: "Grundsteuer-Widerspruch", d: "" }, { n: "BK-Abrechnung 2023", d: "" }, { n: "Mietvertraege", d: "" }],
+  "Sanierung / Technik": [{ n: "Heizung erneuern", d: "Gewerbe: 50.000 EUR" }, { n: "Elektrik erneuern", d: "Gewerbe: 12.000 EUR" }, { n: "Solaranlage", d: "40.000 EUR" }, { n: "Daemmung Flachdach Haus 3 & 4", d: "Gewerbe: 35.000 EUR" }, { n: "Sanierung DG Scheune", d: "Haus 4, 1. OG: 350.000 EUR" }, { n: "Wohnhaus Haus 1 Sanierung", d: "ca. 300.000 EUR" }],
+  "Erledigt": [{ n: "Besichtigung durchgefuehrt", d: "Dezember 2022" }, { n: "Wertindikation Drescher", d: "1.900.000 EUR, Januar 2024" }]
+};
+
+function renderTrello(filter) {
+  var el = $('tboard');
+  if (!el) return;
+  var h = '';
+  var f = (filter || '').toLowerCase();
+
+  for (var listName in board) {
+    var cards = board[listName];
+    var fc = cards.filter(function (c) {
+      return !f || c.n.toLowerCase().includes(f) || (c.d || '').toLowerCase().includes(f) || listName.toLowerCase().includes(f);
+    });
+    if (!fc.length && f) continue;
+    h += '<h2 class="section-title">' + listName + '</h2><div class="card-grid">';
+    for (var i = 0; i < fc.length; i++) {
+      var c = fc[i];
+      var lb = (c.lb || []).map(function (l) {
+        var cl = l.includes('Bearbeitung') ? 'tag-orange' : l.includes('Dringend') ? 'tag-red' : 'tag-blue';
+        return '<span class="tag ' + cl + '">' + l + '</span>';
+      }).join(' ');
+      var ch = '';
+      if (c.cl) {
+        for (var j = 0; j < c.cl.length; j++) {
+          var cl = c.cl[j];
+          var p = cl.t > 0 ? Math.round(cl.d / cl.t * 100) : 0;
+          var co = p >= 75 ? 'green' : p >= 25 ? 'orange' : 'red';
+          ch += '<div class="progress-bar"><div class="progress-fill ' + co + '" style="width:' + p + '%"></div></div><div class="progress-text">' + cl.n + ': ' + cl.d + '/' + cl.t + '</div>';
+        }
+      }
+      h += '<div class="card">' + lb + '<h3>' + c.n + '</h3>' + (c.d ? '<p>' + c.d + '</p>' : '') + ch + '</div>';
+    }
+    h += '</div>';
+  }
+  el.innerHTML = h;
+}
+
+function filterTrello() {
+  renderTrello($('tsearch').value);
+}
+
+// ═══════════════════════════════════
+// GALLERY
+// ═══════════════════════════════════
+var galleryFiles = [
+  "IMG_0316.jpeg", "IMG_0317.jpeg", "IMG_0318.jpeg", "IMG_0319.jpeg",
+  "IMG_8247.jpeg", "IMG_8248.jpeg", "IMG_8250.jpeg", "IMG_8251.jpeg",
+  "IMG_8252.jpeg", "IMG_8253.jpeg", "IMG_8254.jpeg", "IMG_8255.jpeg",
+  "IMG_8256.jpeg", "IMG_8257.jpeg", "IMG_8258.jpeg", "IMG_8259.jpeg",
+  "IMG_8260.jpeg", "IMG_8261.jpeg", "IMG_8270.jpeg", "IMG_8272.jpeg",
+  "IMG_8273.jpeg", "IMG_8274.jpeg", "IMG_8638.jpeg", "IMG_8639.jpeg",
+  "IMG_8889.jpeg", "IMG_8890.jpeg", "IMG_8891.jpeg", "IMG_8892.jpeg"
+];
+var gallerySubfolders = [
+  { folder: "Richardplatz 17/Wohnung EG rechts", files: ["Frontansicht.jpeg", "IMG_8263.jpeg", "IMG_8264.jpeg", "IMG_8266.jpeg", "IMG_8267.jpeg", "IMG_8269.jpeg"] }
+];
+
+function renderGallery() {
+  var g = $('gallery');
+  if (!g) return;
+  var html = '';
+  var count = 0;
+
+  galleryFiles.forEach(function (name) {
+    html += '<div class="gallery-item" onclick="openLightbox(\'images/' + name + '\')">' +
+      '<img src="images/' + name + '" loading="lazy" alt="' + name + '">' +
+      '<div class="caption">' + name + '</div></div>';
+    count++;
+  });
+
+  gallerySubfolders.forEach(function (sub) {
+    sub.files.forEach(function (name) {
+      var path = 'images/' + sub.folder + '/' + name;
+      html += '<div class="gallery-item" onclick="openLightbox(\'' + path + '\')">' +
+        '<img src="' + path + '" loading="lazy" alt="' + name + '">' +
+        '<div class="caption">' + sub.folder + '/' + name + '</div></div>';
+      count++;
+    });
+  });
+
+  g.innerHTML = html;
+  setEl('imgcount', count + ' Fotos');
+}
+
+function openLightbox(src) {
+  $('lbi').src = src;
+  $('lb').classList.add('open');
+}
+
+function closeLightbox() {
+  $('lb').classList.remove('open');
+}
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// ═══════════════════════════════════
+// NOTES
+// ═══════════════════════════════════
+var notes = JSON.parse(localStorage.getItem('r72notes') || '[]');
+if (!notes.length) notes = [{ title: 'Allgemeine Notizen', content: '', date: new Date().toISOString().slice(0, 10) }];
+
+function renderNotes() {
+  var c = $('nc');
+  if (!c) return;
+  c.innerHTML = notes.map(function (n, i) {
+    return '<div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+      '<input type="text" value="' + n.title + '" onchange="notes[' + i + '].title=this.value" style="background:transparent;border:none;color:var(--txt);font-size:15px;font-weight:600;outline:none;flex:1">' +
+      '<span style="font-size:10px;color:var(--mut)">' + n.date + '</span>' +
+      (notes.length > 1 ? '<button onclick="deleteNote(' + i + ')" style="background:none;border:none;color:var(--red);cursor:pointer;margin-left:10px;font-size:15px">&times;</button>' : '') +
+      '</div><textarea class="note-textarea" onchange="notes[' + i + '].content=this.value">' + n.content + '</textarea></div>';
+  }).join('');
+}
+
+function addNote() {
+  notes.unshift({ title: 'Neue Notiz', content: '', date: new Date().toISOString().slice(0, 10) });
+  renderNotes();
+}
+
+function deleteNote(i) {
+  notes.splice(i, 1);
+  renderNotes();
+}
+
+function saveNotes() {
+  localStorage.setItem('r72notes', JSON.stringify(notes));
+  var b = $('sbtn');
+  if (b) { b.textContent = 'Gespeichert!'; setTimeout(function () { b.textContent = 'Speichern'; }, 2000); }
+}
+
+// ═══════════════════════════════════
+// ENERGIEKONZEPT (rendered as HTML)
+// ═══════════════════════════════════
+function renderEnergie() {
+  var el = $('energie-content');
+  if (!el) return;
+  el.innerHTML = '<h2 class="section-title">1 Gebaeudestruktur</h2>' +
+    '<div class="stat-box" style="margin-bottom:22px"><p>Das Ensemble auf Flurstck 260 besteht aus vier Gebaeudeteilen. Haus 1 am Richardplatz 17 ist das Wohngebaeude, Haus 2-4 bilden das Gewerbeensemble in der Richardstrasse 72. Alle Gebaeude stehen unter Einzeldenkmalschutz (Nr. 9090409).</p>' +
+    '<div class="two-col" style="margin-top:14px">' +
+    '<div class="result-card rc-wohnen"><h3>Haus 1 — Richardplatz 17</h3><table>' +
+    '<tr><td>Baujahr</td><td>1889, Klinkerbauweise</td></tr>' +
+    '<tr><td>Wohnflaeche Bestand</td><td>278 m\u00B2 WF (4 WE)</td></tr>' +
+    '<tr><td>DG-Erweiterung (geplant)</td><td>GF 139 m\u00B2, Wohnung ca. 100-120 m\u00B2</td></tr>' +
+    '<tr><td>Heizung IST</td><td>Oelheizung Buderus (KG), Tanklager im Keller</td></tr>' +
+    '<tr><td>Warmwasser</td><td>Dezentral (Durchlauferhitzer)</td></tr></table></div>' +
+    '<div class="result-card rc-gewerbe"><h3>Haus 2-4 — Richardstr. 72</h3><table>' +
+    '<tr><td>Haus 2 (Scheune)</td><td>250 m\u00B2 NF, Lager TF, unbeheizt</td></tr>' +
+    '<tr><td>Haus 3 EG (Garagen)</td><td>ca. 153 m\u00B2, unbeheizt</td></tr>' +
+    '<tr><td>Haus 3 OG (Gewerbe)</td><td>95 m\u00B2, Proberaum, Klimaanlage</td></tr>' +
+    '<tr><td>Haus 4 (Garagen)</td><td>ca. 65-70 m\u00B2, unbeheizt</td></tr>' +
+    '<tr><td>Heizung IST</td><td>Nur Hs. 3 OG: Klimaanlage (Strom)</td></tr></table></div></div></div>' +
+
+    '<h2 class="section-title">2 Energiebedarfsanalyse</h2>' +
+    '<div class="stat-box" style="margin-bottom:22px"><h3>Gesamtwaermebedarf Ensemble</h3>' +
+    '<table class="comp-table">' +
+    '<tr><th>Kennzahl</th><th>Wert</th></tr>' +
+    '<tr><td>Beheizte Flaeche (Szenario B)</td><td>~781 m\u00B2</td></tr>' +
+    '<tr><td>Gesamtwaermebedarf</td><td>~108.500-134.750 kWh/a</td></tr>' +
+    '<tr><td>Anschlusswert FHW (ca.)</td><td>~75-100 kW gemeinsam</td></tr></table></div>' +
+
+    '<h2 class="section-title">3 Photovoltaik 18 kWp — Haus 3 Flachdach</h2>' +
+    '<div class="stat-box" style="margin-bottom:22px">' +
+    '<p>PV-Anlage: Angebot Novia Energie GmbH Nr. 1000120, <strong>40.937 \u20AC brutto</strong>.</p>' +
+    '<table class="comp-table" style="margin-top:10px">' +
+    '<tr><th>Parameter</th><th>Pessimistisch</th><th>Optimistisch</th></tr>' +
+    '<tr><td>Jahreserzeugung</td><td>15.300 kWh/a</td><td>17.100 kWh/a</td></tr>' +
+    '<tr><td>Eigenverbrauchsquote</td><td>~60%</td><td>~70%</td></tr>' +
+    '<tr><td>Gesamtvorteil p.a.</td><td>~3.531 \u20AC/a</td><td>~4.371 \u20AC/a</td></tr>' +
+    '<tr><td>Amortisation (statisch)</td><td>~11,6 Jahre</td><td>~9,4 Jahre</td></tr></table></div>' +
+
+    '<h2 class="section-title">4 Heizungsversorgung — Empfehlung</h2>' +
+    '<div class="stat-box" style="margin-bottom:22px"><h3>Haus 1 — Vergleich</h3>' +
+    '<table class="comp-table">' +
+    '<tr><th>Kriterium</th><th>A — Oel-Modernisierung</th><th style="background:rgba(76,175,80,0.15)">B — Fernwaerme FHW</th><th>C — Waermepumpe</th></tr>' +
+    '<tr><td>Investition</td><td>8.000-12.000 \u20AC</td><td>10.000-25.000 \u20AC</td><td>25.000-40.000 \u20AC</td></tr>' +
+    '<tr><td>Jaerl. Kosten (Bestand)</td><td>~6.300 \u20AC/a</td><td>~8.500-11.000 \u20AC/a</td><td>~4.500-7.500 \u20AC/a</td></tr>' +
+    '<tr><td>GEG 2024</td><td style="color:var(--red)">Problematisch</td><td style="color:var(--grn)">\u2713 GEG-konform</td><td style="color:var(--grn)">\u2713 GEG-konform</td></tr>' +
+    '<tr><td>Empfehlung</td><td>Nur Uebergangsloesung</td><td style="color:var(--grn);font-weight:700">\u2713 Empfohlen</td><td>Langfristig ueberpruefen</td></tr></table></div>' +
+
+    '<h2 class="section-title">5 Massnahmenplan</h2>' +
+    '<div class="two-col" style="margin-bottom:22px">' +
+    '<div class="result-card" style="border-left:3px solid var(--red)"><h3>Sofortmassnahmen (0-6 Mon.)</h3><table>' +
+    '<tr><td>1.</td><td>Kellersanierung Haus 1</td><td style="text-align:right">~74.500 \u20AC</td></tr>' +
+    '<tr><td>2.</td><td>FHW-Machbarkeitsanfrage</td><td style="text-align:right">kostenlos</td></tr>' +
+    '<tr><td>3.</td><td>Asbestverdacht Dach pruefen</td><td style="text-align:right">~1.500-3.000 \u20AC</td></tr>' +
+    '<tr><td>4.</td><td>Bauantrag DG-Ausbau</td><td style="text-align:right">~5.000-12.000 \u20AC</td></tr></table></div>' +
+    '<div class="result-card" style="border-left:3px solid var(--org)"><h3>Kurzfristig (6-18 Mon.)</h3><table>' +
+    '<tr><td>5.</td><td>Flachdach Haus 3 daemmen</td><td style="text-align:right">~15.000-25.000 \u20AC</td></tr>' +
+    '<tr><td>6.</td><td>PV-Anlage 18 kWp</td><td style="text-align:right">40.937 \u20AC</td></tr>' +
+    '<tr><td>7.</td><td>FHW-Anschluss realisieren</td><td style="text-align:right">~20.000-40.000 \u20AC</td></tr>' +
+    '<tr><td>8.</td><td>DG-Ausbau Haus 1</td><td style="text-align:right">~120.000-200.000 \u20AC</td></tr></table></div></div>';
+}
+
+// ═══════════════════════════════════
+// DOKUMENTE
+// ═══════════════════════════════════
+function renderDokumente() {
+  var el = $('dokumente-content');
+  if (!el) return;
+  el.innerHTML =
+    '<h2 class="section-title">Projektdokumente — Uebersicht</h2>' +
+    '<div class="two-col" style="margin-bottom:22px">' +
+    '<div class="result-card" style="border-left:3px solid var(--acc)"><h3>Kaufunterlagen</h3><table style="font-size:12px">' +
+    '<tr><td>\u2022</td><td>Teilungserklaerung (Entwurf)</td></tr>' +
+    '<tr><td>\u2022</td><td>Muster-Teilungserklaerung (PDF/DOCX)</td></tr>' +
+    '<tr><td>\u2022</td><td>Wertindikationsgutachten Drescher/Wertstatt (Jan. 2024)</td></tr>' +
+    '<tr><td>\u2022</td><td>Anschreiben WEG-Teilung Milieuschutz Neukoelln</td></tr>' +
+    '<tr><td>\u2022</td><td>Pruefung WEG-Teilung (Milieuschutz)</td></tr></table></div>' +
+    '<div class="result-card" style="border-left:3px solid var(--grn)"><h3>Bau &amp; Technik</h3><table style="font-size:12px">' +
+    '<tr><td>\u2022</td><td>Energiekonzept-Analyse (Maerz 2026)</td></tr>' +
+    '<tr><td>\u2022</td><td>Bauzustandsbericht BWS 06-25 (Kalmbach)</td></tr>' +
+    '<tr><td>\u2022</td><td>Flaechenberechnung Detail (Architekt)</td></tr>' +
+    '<tr><td>\u2022</td><td>Lageplan Ebeling+Finck GbR</td></tr>' +
+    '<tr><td>\u2022</td><td>Angebot PV-Anlage Novia Energie (Nr. 1000120)</td></tr></table></div></div>' +
+
+    '<h2 class="section-title">Status &amp; Naechste Schritte</h2>' +
+    '<div class="stat-box"><table class="comp-table">' +
+    '<tr><th>Dokument</th><th>Status</th><th>Aktion</th></tr>' +
+    '<tr><td>Teilungserklaerung</td><td><span class="tag tag-orange">Entwurf</span></td><td>Notar-Abstimmung erforderlich</td></tr>' +
+    '<tr><td>Abgeschlossenheitsbescheinigung</td><td><span class="tag tag-red">Ausstehend</span></td><td>Beim Bauamt beantragen</td></tr>' +
+    '<tr><td>Aufteilungsplan</td><td><span class="tag tag-red">Ausstehend</span></td><td>Vom Architekten erstellen lassen</td></tr>' +
+    '<tr><td>Genehmigung \u00A7 250 BauGB</td><td><span class="tag tag-red">Ausstehend</span></td><td>Bezirksamt Neukoelln</td></tr>' +
+    '<tr><td>Energiekonzept</td><td><span class="tag tag-green">Fertig</span></td><td>Siehe Tab "Energiekonzept"</td></tr>' +
+    '<tr><td>Flaechenberechnung</td><td><span class="tag tag-green">Fertig</span></td><td>Detail-Excel vorhanden</td></tr>' +
+    '<tr><td>FHW-Machbarkeitsanfrage</td><td><span class="tag tag-red">Ausstehend</span></td><td>Bei FHW Neukoelln einreichen</td></tr></table></div>';
+}
+
+// ═══════════════════════════════════════════
+// FLAECHENBERECHNUNG (aus Excel)
+// ═══════════════════════════════════════════
+
+var FLAECHEN_DATA = [
+  {nr:1, lage:'Haus 1', einheit:'WE1', bez:'EG links (59,56), 2 ZKB', raum:'Zimmer 1, Wohnen', mea:'Sondereigentum WE1', nutzung:'Wohnen', flaeche:10.41, hoehe:3.10, faktor:1, angerechnet:10.41},
+  {nr:2, lage:'Haus 1', einheit:'WE1', bez:'EG links (59,56), 2 ZKB', raum:'Zimmer 2, Schlafen', mea:'Sondereigentum WE1', nutzung:'Wohnen', flaeche:32.25, hoehe:3.10, faktor:1, angerechnet:32.25},
+  {nr:3, lage:'Haus 1', einheit:'WE1', bez:'EG links (59,56), 2 ZKB', raum:'Flur', mea:'Sondereigentum WE1', nutzung:'Wohnen', flaeche:5.16, hoehe:3.10, faktor:1, angerechnet:5.16},
+  {nr:4, lage:'Haus 1', einheit:'WE1', bez:'EG links (59,56), 2 ZKB', raum:'Kueche', mea:'Sondereigentum WE1', nutzung:'Wohnen', flaeche:7.04, hoehe:3.10, faktor:1, angerechnet:7.04},
+  {nr:5, lage:'Haus 1', einheit:'WE1', bez:'EG links (59,56), 2 ZKB', raum:'Bad', mea:'Sondereigentum WE1', nutzung:'Wohnen', flaeche:4.70, hoehe:3.10, faktor:1, angerechnet:4.70},
+  {nr:6, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Zimmer 1, Wohnen', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:24.25, hoehe:3.10, faktor:1, angerechnet:24.25},
+  {nr:7, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Zimmer 2, Schlafen', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:21.70, hoehe:3.10, faktor:1, angerechnet:21.70},
+  {nr:8, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Zimmer 3, Kinder', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:11.84, hoehe:3.10, faktor:1, angerechnet:11.84},
+  {nr:9, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Flur', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:6.44, hoehe:3.10, faktor:1, angerechnet:6.44},
+  {nr:10, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Kueche', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:9.32, hoehe:3.10, faktor:1, angerechnet:9.32},
+  {nr:11, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Bad', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:5.20, hoehe:3.10, faktor:1, angerechnet:5.20},
+  {nr:12, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Balkon', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:5.90, hoehe:3.10, faktor:0.5, angerechnet:2.95},
+  {nr:13, lage:'Haus 1', einheit:'WE2', bez:'EG rechts (78,75), 3 ZKB Balkon, Garten', raum:'Garten', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:50.00, hoehe:0, faktor:0.5, angerechnet:25.00},
+  {nr:14, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Zimmer 1, Wohnen', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:10.41, hoehe:3.07, faktor:1, angerechnet:10.41},
+  {nr:15, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Zimmer 2, Schlafen', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:32.25, hoehe:3.15, faktor:1, angerechnet:32.25},
+  {nr:16, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Flur', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:5.16, hoehe:3.15, faktor:1, angerechnet:5.16},
+  {nr:17, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Kueche', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:7.04, hoehe:3.15, faktor:1, angerechnet:7.04},
+  {nr:18, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Bad', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:4.70, hoehe:3.15, faktor:1, angerechnet:4.70},
+  {nr:19, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Zimmer 1, Wohnen (rechts)', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:24.25, hoehe:3.15, faktor:1, angerechnet:24.25},
+  {nr:20, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Zimmer 2, Schlafen (rechts)', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:21.70, hoehe:3.15, faktor:1, angerechnet:21.70},
+  {nr:21, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Zimmer 3, Kinder (rechts)', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:11.84, hoehe:3.15, faktor:1, angerechnet:11.84},
+  {nr:22, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Flur (rechts)', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:6.44, hoehe:3.15, faktor:1, angerechnet:6.44},
+  {nr:23, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Kueche (rechts)', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:9.32, hoehe:3.15, faktor:1, angerechnet:9.32},
+  {nr:24, lage:'Haus 1', einheit:'WE3', bez:'1. OG links (58,8) & rechts (ca. 79qm) 5 ZKB', raum:'Bad (rechts)', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:5.20, hoehe:3.15, faktor:1, angerechnet:5.20},
+  {nr:25, lage:'Haus 1', einheit:'WE4', bez:'DG (leerstehend)', raum:'Dachgeschossrohling Potential', mea:'Sondereigentum WE4', nutzung:'Wohnen', flaeche:120.00, hoehe:4.51, faktor:0, angerechnet:0},
+  {nr:26, lage:'Haus 1', einheit:'GE', bez:'Treppenhaus 2. OG', raum:'Treppenhaus 2. OG', mea:'Gemeinschaftseigentum', nutzung:'Wohnen', flaeche:12.96, hoehe:0, faktor:0, angerechnet:0},
+  {nr:27, lage:'Haus 1', einheit:'GE', bez:'Treppenhaus 1. OG', raum:'Treppenhaus 1. OG', mea:'Gemeinschaftseigentum', nutzung:'Wohnen', flaeche:12.96, hoehe:0, faktor:0, angerechnet:0},
+  {nr:28, lage:'Haus 1', einheit:'GE', bez:'Treppenhaus Erdgeschoss', raum:'Treppenhaus Erdgeschoss', mea:'Gemeinschaftseigentum', nutzung:'Wohnen', flaeche:12.44, hoehe:0, faktor:0, angerechnet:0},
+  {nr:29, lage:'Haus 1', einheit:'GE', bez:'Treppenhaus Kellergeschoss', raum:'Treppenhaus Kellergeschoss', mea:'Gemeinschaftseigentum', nutzung:'Wohnen', flaeche:6.51, hoehe:0, faktor:0, angerechnet:0},
+  {nr:30, lage:'Haus 1', einheit:'TE1', bez:'Sonstiges Gewerbe KG links', raum:'Sonstiges Gewerbe', mea:'Teileigentum TE1', nutzung:'Gewerbe', flaeche:24.86, hoehe:2.30, faktor:0.5, angerechnet:12.43},
+  {nr:31, lage:'Haus 1', einheit:'TE1', bez:'Sonstiges Gewerbe KG links', raum:'Kellerraum 1', mea:'Teileigentum TE1', nutzung:'Gewerbe', flaeche:19.46, hoehe:2.30, faktor:0.5, angerechnet:9.73},
+  {nr:32, lage:'Haus 1', einheit:'TE1', bez:'Sonstiges Gewerbe KG links', raum:'Kellerraum 2', mea:'Teileigentum TE1', nutzung:'Gewerbe', flaeche:11.71, hoehe:2.30, faktor:0.5, angerechnet:5.86},
+  {nr:33, lage:'Haus 1', einheit:'GE', bez:'Hausanschlussraum', raum:'Hausanschlussraum', mea:'Gemeinschaftseigentum', nutzung:'Wohnen', flaeche:14.14, hoehe:2.30, faktor:0, angerechnet:0},
+  {nr:34, lage:'Haus 1', einheit:'SE1', bez:'Kellerraum 1', raum:'Kellerraum WE2', mea:'Sondereigentum WE2', nutzung:'Wohnen', flaeche:4.50, hoehe:2.30, faktor:0, angerechnet:0},
+  {nr:35, lage:'Haus 1', einheit:'SE2', bez:'Kellerraum 2', raum:'Kellerraum WE3', mea:'Sondereigentum WE3', nutzung:'Wohnen', flaeche:4.50, hoehe:2.30, faktor:0, angerechnet:0},
+  {nr:36, lage:'Haus 1', einheit:'SE3', bez:'Kellerraum 3', raum:'Kellerraum 3', mea:'Gemeinschaftseigentum', nutzung:'Wohnen', flaeche:2.81, hoehe:2.30, faktor:0, angerechnet:0},
+  {nr:37, lage:'Haus 1', einheit:'SE4', bez:'Kellerraum 4', raum:'Kellerraum WE1', mea:'Sondereigentum WE1', nutzung:'Wohnen', flaeche:9.92, hoehe:2.30, faktor:0, angerechnet:0},
+  {nr:38, lage:'Haus 1', einheit:'SE5', bez:'Kellerraum 5', raum:'Kellerraum WE4', mea:'Sondereigentum WE4', nutzung:'Wohnen', flaeche:6.02, hoehe:2.30, faktor:0, angerechnet:0},
+  {nr:39, lage:'Haus 4', einheit:'TE2', bez:'Scharnier EG (Tante Frizzante)', raum:'Werkstatt', mea:'Teileigentum TE2', nutzung:'Gewerbe', flaeche:82.16, hoehe:7.75, faktor:1, angerechnet:82.16},
+  {nr:40, lage:'Haus 4', einheit:'TE3', bez:'Scharnier 1. OG (Tante Frizzante)', raum:'Scharnier 1. OG', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:77.20, hoehe:3.70, faktor:1, angerechnet:77.20},
+  {nr:41, lage:'Haus 4', einheit:'TE3', bez:'Scharnier 1. OG (Tante Frizzante)', raum:'Toilette Scharnier 1. OG', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:4.96, hoehe:3.70, faktor:1, angerechnet:4.96},
+  {nr:42, lage:'Haus 4', einheit:'TE4', bez:'Scheune / Lager EG (Tante Frizzante)', raum:'Gemeinschaftsraum', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:111.67, hoehe:3.75, faktor:1, angerechnet:111.67},
+  {nr:43, lage:'Haus 4', einheit:'TE4', bez:'Scheune / Lager (Tante Frizzante)', raum:'Buero', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:22.04, hoehe:2.65, faktor:1, angerechnet:22.04},
+  {nr:44, lage:'Haus 4', einheit:'TE4', bez:'Scheune / Lager (Tante Frizzante)', raum:'Flur', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:6.12, hoehe:2.95, faktor:1, angerechnet:6.12},
+  {nr:45, lage:'Haus 4', einheit:'TE4', bez:'Scheune / Lager (Tante Frizzante)', raum:'Abstell 1', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:5.98, hoehe:2.50, faktor:1, angerechnet:5.98},
+  {nr:46, lage:'Haus 4', einheit:'TE4', bez:'Scheune / Lager (Tante Frizzante)', raum:'Abstell 2', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:3.48, hoehe:2.70, faktor:1, angerechnet:3.48},
+  {nr:47, lage:'Haus 4', einheit:'TE4', bez:'Scheune / Lager (Tante Frizzante)', raum:'Treppe', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:5.51, hoehe:2.95, faktor:1, angerechnet:5.51},
+  {nr:48, lage:'Haus 4', einheit:'TE4', bez:'Scheune DG 1. OG (Tante Frizzante)', raum:'Scheune DG gross', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:83.75, hoehe:5.25, faktor:0, angerechnet:0},
+  {nr:49, lage:'Haus 4', einheit:'TE4', bez:'Scheune DG 1. OG (Tante Frizzante)', raum:'Scheune DG klein', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:32.50, hoehe:1.00, faktor:0, angerechnet:0},
+  {nr:50, lage:'Haus 3', einheit:'TE5', bez:'Quergebaeude 1. OG (Wanubale GbR/Musiker)', raum:'Raum 1 / Kueche / Bad', mea:'Teileigentum TE4', nutzung:'Gewerbe', flaeche:36.15, hoehe:3.68, faktor:1, angerechnet:36.15},
+  {nr:51, lage:'Haus 3', einheit:'TE5', bez:'Quergebaeude 1. OG (Wanubale GbR/Musiker)', raum:'Raum 2 / Musikstudio', mea:'Teileigentum TE4', nutzung:'Gewerbe', flaeche:61.79, hoehe:3.68, faktor:1, angerechnet:61.79},
+  {nr:52, lage:'Haus 3', einheit:'TE2', bez:'Toilette Erdgeschoss', raum:'Toilette EG Gewerbe', mea:'Teileigentum TE3', nutzung:'Gewerbe', flaeche:16.38, hoehe:2.20, faktor:0, angerechnet:0},
+  {nr:53, lage:'Haus 4', einheit:'GE', bez:'Kellergeschoss Scheune', raum:'Kellerraum & Oeltank / HAR', mea:'Gemeinschaftseigentum', nutzung:'Gewerbe', flaeche:28.93, hoehe:1.92, faktor:0, angerechnet:0},
+  {nr:54, lage:'Haus 4', einheit:'GE', bez:'Kellergeschoss Scheune', raum:'Kohlekeller / Haustechnik', mea:'Gemeinschaftseigentum', nutzung:'Gewerbe', flaeche:3.74, hoehe:1.64, faktor:0, angerechnet:0},
+  {nr:55, lage:'Haus 3', einheit:'TE9', bez:'4. Garage (Annika Finck)', raum:'4. Garage', mea:'Teileigentum TE8', nutzung:'Garage', flaeche:15.78, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:56, lage:'Haus 3', einheit:'TE10', bez:'5. Garage (Holger Jordan)', raum:'5. Garage', mea:'Teileigentum TE9', nutzung:'Garage', flaeche:14.60, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:57, lage:'Haus 3', einheit:'TE11', bez:'6. Garage (Michael Steeger)', raum:'6. Garage', mea:'Teileigentum TE10', nutzung:'Garage', flaeche:13.97, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:58, lage:'Haus 3', einheit:'TE12', bez:'7. Garage (Corinna Schaffer)', raum:'7. Garage', mea:'Teileigentum TE11', nutzung:'Garage', flaeche:13.86, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:59, lage:'Haus 3', einheit:'TE13', bez:'8. Garage (Detlev Leu)', raum:'8. Garage', mea:'Teileigentum TE12', nutzung:'Garage', flaeche:14.81, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:60, lage:'Haus 3', einheit:'TE14', bez:'9. Garage (Detlev Leu)', raum:'9. Garage', mea:'Teileigentum TE13', nutzung:'Garage', flaeche:15.00, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:61, lage:'Haus 2', einheit:'TE6', bez:'1. Garage (Detlev Leu, Doppelgarage)', raum:'1. Garage (Doppelgarage)', mea:'Teileigentum TE5', nutzung:'Garage', flaeche:57.91, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:62, lage:'Haus 2', einheit:'TE7', bez:'2. Garage (Thomas Finck)', raum:'2. Garage', mea:'Teileigentum TE6', nutzung:'Garage', flaeche:18.09, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:63, lage:'Haus 2', einheit:'TE8', bez:'3. Garage (Thomas Finck, Doppelgarage)', raum:'3. Garage', mea:'Teileigentum TE7', nutzung:'Garage', flaeche:33.58, hoehe:2.77, faktor:0, angerechnet:0},
+  {nr:64, lage:'Haus 2', einheit:'WE5', bez:'Aufstockung DG Haus 2', raum:'Aufstockung Potential Neubau', mea:'Sondereigentum WE5', nutzung:'Gewerbe', flaeche:126.28, hoehe:0, faktor:0, angerechnet:0}
+];
+
+var BETRIEBSKOSTEN = [
+  {nr:1, pos:'Grundsteuer', betrag:6076.64},
+  {nr:2, pos:'Hausversicherung', betrag:5147.27},
+  {nr:3, pos:'Muellabfuhr', betrag:594.56},
+  {nr:4, pos:'Strassenreinigung', betrag:1111.12},
+  {nr:5, pos:'Wasser', betrag:2145.00},
+  {nr:6, pos:'Strom', betrag:829.40},
+  {nr:7, pos:'Papiertonne', betrag:118.80},
+  {nr:8, pos:'Schornsteinfeger', betrag:159.53},
+  {nr:9, pos:'Heizoel', betrag:6300.00},
+  {nr:10, pos:'Winterdienst', betrag:1191.49}
+];
+
+function renderFlaechen() {
+  var fHaus = document.getElementById('fl_filter_haus').value;
+  var fNutz = document.getElementById('fl_filter_nutzung').value;
+  var fEig = document.getElementById('fl_filter_eigentum').value;
+
+  var filtered = FLAECHEN_DATA.filter(function (r) {
+    if (fHaus && r.lage !== fHaus) return false;
+    if (fNutz && r.nutzung !== fNutz) return false;
+    if (fEig && r.mea.indexOf(fEig) === -1) return false;
+    return true;
+  });
+
+  // Table
+  var tbody = document.getElementById('fl_tbody');
+  var html = '';
+  var totalFlaeche = 0, totalAngerechnet = 0;
+  filtered.forEach(function (r) {
+    totalFlaeche += r.flaeche;
+    totalAngerechnet += r.angerechnet;
+    var rowColor = r.nutzung === 'Wohnen' ? 'var(--acc)' : r.nutzung === 'Gewerbe' ? 'var(--org)' : 'var(--pur)';
+    html += '<tr>' +
+      '<td>' + r.nr + '</td>' +
+      '<td>' + r.lage + '</td>' +
+      '<td><span class="tag" style="background:' + rowColor + '20;color:' + rowColor + '">' + r.einheit + '</span></td>' +
+      '<td style="font-size:.85rem">' + r.bez + '</td>' +
+      '<td>' + r.raum + '</td>' +
+      '<td style="font-size:.8rem;color:var(--txt2)">' + r.mea + '</td>' +
+      '<td><span class="tag ' + (r.nutzung === 'Wohnen' ? 'tag-blue' : r.nutzung === 'Gewerbe' ? 'tag-orange' : 'tag-purple') + '">' + r.nutzung + '</span></td>' +
+      '<td style="text-align:right">' + r.flaeche.toFixed(2) + '</td>' +
+      '<td style="text-align:right">' + (r.hoehe > 0 ? r.hoehe.toFixed(2) : '-') + '</td>' +
+      '<td style="text-align:right">' + r.faktor + '</td>' +
+      '<td style="text-align:right;font-weight:600">' + r.angerechnet.toFixed(2) + '</td>' +
+      '</tr>';
+  });
+  tbody.innerHTML = html;
+
+  document.getElementById('fl_tfoot').innerHTML =
+    '<tr style="font-weight:700;border-top:2px solid var(--brd)"><td colspan="7">Summe (' + filtered.length + ' Positionen)</td>' +
+    '<td style="text-align:right">' + totalFlaeche.toFixed(2) + '</td><td></td><td></td>' +
+    '<td style="text-align:right">' + totalAngerechnet.toFixed(2) + '</td></tr>';
+
+  // KPIs
+  var wohnFlaeche = 0, gewerbeFlaeche = 0, garageFlaeche = 0, gesamtBrutto = 0;
+  FLAECHEN_DATA.forEach(function (r) {
+    gesamtBrutto += r.flaeche;
+    if (r.nutzung === 'Wohnen') wohnFlaeche += r.angerechnet;
+    if (r.nutzung === 'Gewerbe') gewerbeFlaeche += r.angerechnet;
+    if (r.nutzung === 'Garage') garageFlaeche += r.flaeche;
+  });
+  document.getElementById('flaechen-kpis').innerHTML =
+    '<div class="kpi-card"><div class="kpi-label">Gesamt Bruttoflaeche</div><div class="kpi-val">' + gesamtBrutto.toFixed(0) + ' m&sup2;</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Wohnen (angerechnet)</div><div class="kpi-val" style="color:var(--acc)">' + wohnFlaeche.toFixed(1) + ' m&sup2;</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Gewerbe (angerechnet)</div><div class="kpi-val" style="color:var(--org)">' + gewerbeFlaeche.toFixed(1) + ' m&sup2;</div></div>' +
+    '<div class="kpi-card"><div class="kpi-label">Garagen (Bruttoflaeche)</div><div class="kpi-val" style="color:var(--pur)">' + garageFlaeche.toFixed(1) + ' m&sup2;</div></div>';
+
+  // Summary by unit
+  var units = {};
+  FLAECHEN_DATA.forEach(function (r) {
+    var key = r.einheit;
+    if (!units[key]) units[key] = {einheit: key, flaeche: 0, angerechnet: 0, nutzung: r.nutzung, lage: r.lage, bez: r.bez};
+    units[key].flaeche += r.flaeche;
+    units[key].angerechnet += r.angerechnet;
+  });
+  var unitHtml = '';
+  Object.keys(units).forEach(function (key) {
+    var u = units[key];
+    var col = u.nutzung === 'Wohnen' ? 'var(--acc)' : u.nutzung === 'Gewerbe' ? 'var(--org)' : 'var(--pur)';
+    unitHtml += '<div class="kpi-card" style="border-left:3px solid ' + col + '">' +
+      '<div class="kpi-label">' + u.einheit + ' &mdash; ' + u.lage + '</div>' +
+      '<div class="kpi-val" style="font-size:1.3rem">' + u.angerechnet.toFixed(1) + ' m&sup2;</div>' +
+      '<div style="font-size:.8rem;color:var(--txt2)">' + u.bez + '</div>' +
+      '<div style="font-size:.75rem;margin-top:.3rem;color:var(--txt2)">Brutto: ' + u.flaeche.toFixed(1) + ' m&sup2; | ' + u.nutzung + '</div>' +
+      '</div>';
+  });
+  document.getElementById('fl_units_summary').innerHTML = unitHtml;
+
+  // Betriebskosten
+  var bkHtml = '';
+  var bkTotal = 0;
+  BETRIEBSKOSTEN.forEach(function (b) {
+    bkTotal += b.betrag;
+    bkHtml += '<tr><td>' + b.nr + '</td><td>' + b.pos + '</td><td style="text-align:right">' + b.betrag.toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' \u20AC</td></tr>';
+  });
+  document.getElementById('bk_tbody').innerHTML = bkHtml;
+  document.getElementById('bk_total').innerHTML = bkTotal.toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' \u20AC';
+  document.getElementById('bk_monthly').innerHTML = (bkTotal / 12).toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' \u20AC';
+  document.getElementById('bk_sqm').innerHTML = (bkTotal / 280).toLocaleString('de-DE', {minimumFractionDigits: 2}) + ' \u20AC/m\u00B2';
+}
+
+// ═══════════════════════════════════════════
+// PROJEKTSTRUKTURPLAN / GANTT
+// ═══════════════════════════════════════════
+
+var GANTT_MONTHS = ['Mrz','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+var GANTT_START = 3; // Maerz = Monat 3
+var GANTT_COLS = 10; // 10 Monate
+
+var GANTT_PHASES = [
+  { name: 'Ankauf & Due Diligence', color: 'var(--acc)', tasks: [
+    {name: 'Kaufvertragsentwurf Notar', start: 3, end: 4, progress: 40, status: 'aktiv'},
+    {name: 'Due Diligence rechtlich', start: 3, end: 5, progress: 10, status: 'aktiv'},
+    {name: 'Due Diligence technisch', start: 3, end: 5, progress: 5, status: 'aktiv'},
+    {name: 'Grundbuch & Baulastencheck', start: 3, end: 4, progress: 20, status: 'aktiv'},
+    {name: 'Notartermin / Beurkundung', start: 4, end: 5, progress: 0, status: 'offen'}
+  ]},
+  { name: 'WEG-Teilung & Genehmigungen', color: 'var(--pur)', tasks: [
+    {name: 'Aufteilungsplan (Architekt)', start: 4, end: 5, progress: 0, status: 'offen'},
+    {name: 'Abgeschlossenheitsbescheinigung', start: 5, end: 6, progress: 0, status: 'offen'},
+    {name: 'Teilungserklaerung (Notar)', start: 5, end: 7, progress: 0, status: 'offen'},
+    {name: 'Genehmigung \u00A7250 BauGB', start: 5, end: 7, progress: 0, status: 'offen'},
+    {name: 'Grundbucheintrag WEG', start: 7, end: 8, progress: 0, status: 'offen'}
+  ]},
+  { name: 'Finanzierung', color: 'var(--grn)', tasks: [
+    {name: 'Bankangebote einholen', start: 3, end: 4, progress: 50, status: 'aktiv'},
+    {name: 'KfW-Antrag (BEG 261)', start: 3, end: 5, progress: 15, status: 'aktiv'},
+    {name: 'IBB Foerderdarlehen', start: 3, end: 5, progress: 10, status: 'aktiv'},
+    {name: 'Kreditvertrag abschliessen', start: 5, end: 6, progress: 0, status: 'offen'},
+    {name: 'Auszahlung / Kaufpreis', start: 5, end: 6, progress: 0, status: 'offen'}
+  ]},
+  { name: 'Sanierung Gewerbe (Richardstr. 72)', color: 'var(--org)', tasks: [
+    {name: 'Heizung erneuern', start: 6, end: 8, progress: 0, status: 'offen'},
+    {name: 'Elektrik / Strom', start: 6, end: 7, progress: 0, status: 'offen'},
+    {name: 'Dach & Daemmung', start: 7, end: 9, progress: 0, status: 'offen'},
+    {name: 'Solaranlage installieren', start: 8, end: 10, progress: 0, status: 'offen'},
+    {name: 'Scheune DG Ausbau', start: 7, end: 11, progress: 0, status: 'offen'}
+  ]},
+  { name: 'Sanierung Wohnen (Haus 1)', color: 'var(--cyn)', tasks: [
+    {name: 'Sanierungsplanung', start: 6, end: 7, progress: 0, status: 'offen'},
+    {name: 'WE2 Renovierung (EG rechts)', start: 7, end: 9, progress: 0, status: 'offen'},
+    {name: 'Gemeinschaftsflaechen', start: 8, end: 10, progress: 0, status: 'offen'},
+    {name: 'Treppenhaus / Fassade', start: 9, end: 11, progress: 0, status: 'offen'}
+  ]},
+  { name: 'Verkauf Wohneinheiten', color: 'var(--red)', tasks: [
+    {name: 'Expose WE2 & WE3 erstellen', start: 5, end: 6, progress: 15, status: 'aktiv'},
+    {name: 'Besichtigungen / Verhandlungen', start: 6, end: 8, progress: 0, status: 'offen'},
+    {name: 'Notartermine WE-Kaeufer', start: 8, end: 9, progress: 0, status: 'offen'},
+    {name: 'Uebergabe WE2 (Kolja)', start: 9, end: 10, progress: 0, status: 'offen'},
+    {name: 'Uebergabe WE3 (Lina)', start: 9, end: 10, progress: 0, status: 'offen'}
+  ]},
+  { name: 'Abschluss & Verwaltung', color: '#a3e635', tasks: [
+    {name: 'Endabnahmen Sanierung', start: 11, end: 11, progress: 0, status: 'offen'},
+    {name: 'Hausverwaltung beauftragen', start: 11, end: 12, progress: 0, status: 'offen'},
+    {name: '1. WEG-Versammlung', start: 12, end: 12, progress: 0, status: 'offen'},
+    {name: 'Projektabschluss', start: 12, end: 12, progress: 0, status: 'offen'}
+  ]}
+];
+
+var GANTT_MILESTONES = [
+  {name: 'Kaufvertrag beurkundet', month: 5, color: 'var(--acc)'},
+  {name: 'Finanzierung gesichert', month: 6, color: 'var(--grn)'},
+  {name: 'WEG-Teilung genehmigt', month: 7, color: 'var(--pur)'},
+  {name: 'Baubeginn Sanierung', month: 6, color: 'var(--org)'},
+  {name: 'WE2 + WE3 verkauft', month: 9, color: 'var(--red)'},
+  {name: 'Sanierung abgeschlossen', month: 11, color: 'var(--cyn)'},
+  {name: 'Projekt abgeschlossen', month: 12, color: '#a3e635'}
+];
+
+function renderGantt() {
+  // Current month for "today" line
+  var now = new Date();
+  var curMonth = now.getMonth() + 1; // 1-12
+  var curYear = now.getFullYear();
+  var todayCol = (curYear === 2026 && curMonth >= 3 && curMonth <= 12) ? curMonth - GANTT_START : -1;
+
+  // KPIs
+  var totalTasks = 0, totalProgress = 0;
+  GANTT_PHASES.forEach(function (ph) {
+    ph.tasks.forEach(function (t) {
+      totalTasks++;
+      totalProgress += t.progress;
+    });
+  });
+  var avgProgress = totalTasks > 0 ? Math.round(totalProgress / totalTasks) : 0;
+  var monthsLeft = 12 - curMonth + (curYear < 2026 ? 12 : 0);
+  if (curYear > 2026) monthsLeft = 0;
+
+  var kpiEl = $('gantt-kpis');
+  if (kpiEl) {
+    kpiEl.innerHTML =
+      '<div class="kpi-card"><div class="kpi-value">Mrz 2026</div><div class="kpi-label">Projektstart</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">Dez 2026</div><div class="kpi-label">Projektende</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value" style="color:' + (avgProgress > 50 ? 'var(--grn)' : avgProgress > 20 ? 'var(--org)' : 'var(--red)') + '">' + avgProgress + ' %</div><div class="kpi-label">Fortschritt gesamt</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">' + totalTasks + '</div><div class="kpi-label">Aufgaben</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">' + GANTT_MILESTONES.length + '</div><div class="kpi-label">Meilensteine</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">' + (monthsLeft > 0 ? monthsLeft : 0) + '</div><div class="kpi-label">Monate verbleibend</div></div>';
+  }
+
+  // Gantt Chart
+  var chartEl = $('gantt-chart');
+  if (!chartEl) return;
+  var h = '';
+
+  // Month header row
+  h += '<div class="gantt-row gantt-header-row">';
+  h += '<div class="gantt-label" style="font-weight:600;color:var(--txt)">Aufgabe</div>';
+  h += '<div class="gantt-timeline">';
+  for (var m = 0; m < GANTT_COLS; m++) {
+    var isToday = (m === todayCol);
+    h += '<div class="gantt-month-header' + (isToday ? ' today' : '') + '">' + GANTT_MONTHS[m] + '</div>';
+  }
+  h += '</div></div>';
+
+  // Phases and tasks
+  GANTT_PHASES.forEach(function (phase) {
+    // Phase header
+    h += '<div class="gantt-phase-header" style="border-left:4px solid ' + phase.color + '">';
+    h += '<span style="color:' + phase.color + ';font-weight:700">' + phase.name + '</span>';
+    var phProg = 0;
+    phase.tasks.forEach(function (t) { phProg += t.progress; });
+    phProg = phase.tasks.length > 0 ? Math.round(phProg / phase.tasks.length) : 0;
+    h += '<span style="font-size:11px;color:var(--mut);margin-left:auto">' + phProg + ' %</span>';
+    h += '</div>';
+
+    // Tasks
+    phase.tasks.forEach(function (task) {
+      var colStart = task.start - GANTT_START + 1;
+      var colEnd = task.end - GANTT_START + 2;
+      if (colStart < 1) colStart = 1;
+      if (colEnd > GANTT_COLS + 1) colEnd = GANTT_COLS + 1;
+
+      var statusTag = '';
+      if (task.status === 'aktiv') statusTag = '<span class="tag tag-orange" style="margin-left:6px;font-size:8px">aktiv</span>';
+      else if (task.status === 'done') statusTag = '<span class="tag tag-green" style="margin-left:6px;font-size:8px">fertig</span>';
+
+      h += '<div class="gantt-row">';
+      h += '<div class="gantt-label">' + task.name + statusTag + '</div>';
+      h += '<div class="gantt-timeline">';
+
+      // Today line
+      if (todayCol >= 0) {
+        var todayPct = ((todayCol + 0.35) / GANTT_COLS) * 100;
+        h += '<div class="gantt-today-line" style="left:' + todayPct + '%"></div>';
+      }
+
+      // Bar
+      h += '<div class="gantt-bar" style="grid-column:' + colStart + '/' + colEnd + ';background:' + phase.color + '30;border:1px solid ' + phase.color + '60">';
+      if (task.progress > 0) {
+        h += '<div class="gantt-bar-fill" style="width:' + task.progress + '%;background:' + phase.color + '"></div>';
+      }
+      h += '</div>';
+      h += '</div></div>';
+    });
+  });
+
+  chartEl.innerHTML = h;
+
+  // Milestones
+  var msEl = $('gantt-milestones');
+  if (msEl) {
+    var msH = '<div class="gantt-row gantt-header-row">';
+    msH += '<div class="gantt-label" style="font-weight:600;color:var(--txt)">Meilenstein</div>';
+    msH += '<div class="gantt-timeline">';
+    for (var mi = 0; mi < GANTT_COLS; mi++) {
+      msH += '<div class="gantt-month-header">' + GANTT_MONTHS[mi] + '</div>';
+    }
+    msH += '</div></div>';
+
+    GANTT_MILESTONES.forEach(function (ms) {
+      var col = ms.month - GANTT_START + 1;
+      msH += '<div class="gantt-row">';
+      msH += '<div class="gantt-label" style="font-size:12px">' + ms.name + '</div>';
+      msH += '<div class="gantt-timeline">';
+      if (todayCol >= 0) {
+        var tp = ((todayCol + 0.35) / GANTT_COLS) * 100;
+        msH += '<div class="gantt-today-line" style="left:' + tp + '%"></div>';
+      }
+      msH += '<div style="grid-column:' + col + '/' + (col + 1) + ';display:flex;justify-content:center;align-items:center">';
+      msH += '<span class="gantt-diamond" style="color:' + ms.color + '">&#x25C6;</span>';
+      msH += '</div>';
+      msH += '</div></div>';
+    });
+    msEl.innerHTML = msH;
+  }
+
+  // Phase details
+  var detEl = $('gantt-details');
+  if (detEl) {
+    var dH = '';
+    GANTT_PHASES.forEach(function (phase) {
+      var phProg = 0, done = 0, aktiv = 0, offen = 0;
+      phase.tasks.forEach(function (t) {
+        phProg += t.progress;
+        if (t.status === 'done') done++;
+        else if (t.status === 'aktiv') aktiv++;
+        else offen++;
+      });
+      phProg = phase.tasks.length > 0 ? Math.round(phProg / phase.tasks.length) : 0;
+      var startM = 12, endM = 3;
+      phase.tasks.forEach(function (t) { if (t.start < startM) startM = t.start; if (t.end > endM) endM = t.end; });
+
+      dH += '<div class="stat-box" style="border-left:3px solid ' + phase.color + '">';
+      dH += '<h3 style="color:' + phase.color + '">' + phase.name + '</h3>';
+      dH += '<div class="progress-bar" style="margin:8px 0"><div class="progress-fill" style="width:' + phProg + '%;background:' + phase.color + '"></div></div>';
+      dH += '<div style="font-size:11px;color:var(--mut);margin-bottom:8px">' + phProg + ' % abgeschlossen</div>';
+      dH += '<table style="font-size:12px">';
+      dH += '<tr><td>Zeitraum</td><td>' + GANTT_MONTHS[startM - 3] + ' \u2014 ' + GANTT_MONTHS[endM - 3] + ' 2026</td></tr>';
+      dH += '<tr><td>Aufgaben</td><td>' + phase.tasks.length + ' (' + done + ' fertig, ' + aktiv + ' aktiv, ' + offen + ' offen)</td></tr>';
+      phase.tasks.forEach(function (t) {
+        var sCol = t.status === 'done' ? 'var(--grn)' : t.status === 'aktiv' ? 'var(--org)' : 'var(--mut)';
+        var sIcon = t.status === 'done' ? '\u2705' : t.status === 'aktiv' ? '\u23F3' : '\u25CB';
+        dH += '<tr><td style="color:' + sCol + '">' + sIcon + ' ' + t.name + '</td><td style="color:' + sCol + '">' + t.progress + ' %</td></tr>';
+      });
+      dH += '</table></div>';
+    });
+    detEl.innerHTML = dH;
+  }
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+
+function renderDashboard() {
+  // Calculate progress from GANTT_PHASES
+  var totalTasks = 0, totalProgress = 0;
+  var phaseData = [];
+  GANTT_PHASES.forEach(function(ph) {
+    var phProg = 0;
+    var done = 0, aktiv = 0, offen = 0;
+    ph.tasks.forEach(function(t) {
+      totalTasks++;
+      totalProgress += t.progress;
+      phProg += t.progress;
+      if (t.status === 'done') done++;
+      else if (t.status === 'aktiv') aktiv++;
+      else offen++;
+    });
+    phProg = ph.tasks.length > 0 ? Math.round(phProg / ph.tasks.length) : 0;
+    phaseData.push({ name: ph.name, color: ph.color, progress: phProg, total: ph.tasks.length, done: done, aktiv: aktiv, offen: offen });
+  });
+  var avgProgress = totalTasks > 0 ? Math.round(totalProgress / totalTasks) : 0;
+
+  var now = new Date();
+  var curMonth = now.getMonth() + 1;
+  var curYear = now.getFullYear();
+  var monthsLeft = 12 - curMonth + (curYear < 2026 ? 12 : 0);
+  if (curYear > 2026) monthsLeft = 0;
+  var activeTasks = 0, openTasks = 0;
+  GANTT_PHASES.forEach(function(ph) {
+    ph.tasks.forEach(function(t) {
+      if (t.status === 'aktiv') activeTasks++;
+      if (t.status === 'offen') openTasks++;
+    });
+  });
+
+  // ─── KPIs ───
+  var kpiEl = $('dash-kpis');
+  if (kpiEl) {
+    var progCol = avgProgress > 50 ? 'var(--grn)' : avgProgress > 20 ? 'var(--org)' : 'var(--red)';
+    kpiEl.innerHTML =
+      '<div class="kpi-card"><div class="kpi-value" style="color:' + progCol + '">' + avgProgress + ' %</div><div class="kpi-label">Fortschritt</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">' + activeTasks + '</div><div class="kpi-label">Aktive Aufgaben</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">' + (monthsLeft > 0 ? monthsLeft : 0) + '</div><div class="kpi-label">Monate verbleibend</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">2.000.000 \u20AC</div><div class="kpi-label">Kaufpreis</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">250.000 \u20AC</div><div class="kpi-label">EK (mit Morits)</div></div>' +
+      '<div class="kpi-card"><div class="kpi-value">~947 m\u00B2</div><div class="kpi-label">Nutzflaeche</div></div>';
+  }
+
+  // ─── Hero Progress ───
+  var heroEl = $('dash-hero');
+  if (heroEl) {
+    var heroCol = avgProgress > 50 ? 'var(--grn)' : avgProgress > 20 ? 'var(--org)' : 'var(--acc)';
+    heroEl.innerHTML =
+      '<div class="dash-hero-inner">' +
+      '<div class="dash-hero-top">' +
+      '<span class="dash-hero-pct" style="color:' + heroCol + '">' + avgProgress + '%</span>' +
+      '<span class="dash-hero-label">Gesamtfortschritt Projekt</span>' +
+      '</div>' +
+      '<div class="progress-bar" style="height:16px;border-radius:8px"><div class="progress-fill" style="width:' + avgProgress + '%;background:' + heroCol + ';border-radius:8px;transition:width 1s ease"></div></div>' +
+      '<div class="dash-hero-range"><span>Mrz 2026 \u2014 Projektstart</span><span>Dez 2026 \u2014 Abschluss</span></div>' +
+      '</div>';
+  }
+
+  // ─── Phase Progress Cards ───
+  var phEl = $('dash-phases');
+  if (phEl) {
+    var phH = '';
+    phaseData.forEach(function(p) {
+      var fillCol = p.progress > 50 ? 'green' : p.progress > 20 ? 'orange' : '';
+      var statusParts = [];
+      if (p.done > 0) statusParts.push(p.done + ' fertig');
+      if (p.aktiv > 0) statusParts.push(p.aktiv + ' aktiv');
+      if (p.offen > 0) statusParts.push(p.offen + ' offen');
+      phH += '<div class="card dash-phase-card" style="border-left:3px solid ' + p.color + '" onclick="navigateToPage(\'gantt\')">';
+      phH += '<h3 style="color:' + p.color + ';font-size:13px;margin-bottom:8px">' + p.name + '</h3>';
+      phH += '<div class="progress-bar"><div class="progress-fill ' + fillCol + '" style="width:' + p.progress + '%"></div></div>';
+      phH += '<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--mut)">';
+      phH += '<span style="font-weight:600">' + p.progress + ' %</span>';
+      phH += '<span>' + statusParts.join(', ') + '</span>';
+      phH += '</div></div>';
+    });
+    phEl.innerHTML = phH;
+  }
+
+  // ─── To-Dos ───
+  var todoEl = $('dash-todos');
+  if (todoEl) {
+    var todos = [];
+    // Collect from Trello board
+    for (var listName in board) {
+      var cards = board[listName];
+      for (var i = 0; i < cards.length; i++) {
+        var c = cards[i];
+        var prio = 3;
+        if (c.lb) {
+          for (var j = 0; j < c.lb.length; j++) {
+            if (c.lb[j].indexOf('Dringend') >= 0 || c.lb[j].indexOf('Heissester') >= 0) prio = 1;
+            else if (c.lb[j].indexOf('Bearbeitung') >= 0) prio = 2;
+          }
+        }
+        if (prio <= 2) {
+          todos.push({ name: c.n, desc: c.d || '', list: listName, prio: prio, tag: (c.lb && c.lb[0]) || (prio === 1 ? 'Dringend' : 'In Bearbeitung') });
+        }
+      }
+    }
+    // Add active GANTT tasks
+    GANTT_PHASES.forEach(function(ph) {
+      ph.tasks.forEach(function(t) {
+        if (t.status === 'aktiv') {
+          todos.push({ name: t.name, desc: t.progress + '% abgeschlossen', list: ph.name, prio: 2, tag: 'Aktiv' });
+        }
+      });
+    });
+    todos.sort(function(a, b) { return a.prio - b.prio; });
+    todos = todos.slice(0, 12);
+
+    var tdH = '';
+    for (var k = 0; k < todos.length; k++) {
+      var td = todos[k];
+      var tagCls = td.prio === 1 ? 'tag-red' : 'tag-orange';
+      tdH += '<div class="dash-todo-item">';
+      tdH += '<div class="dash-todo-head">';
+      tdH += '<span class="tag ' + tagCls + '" style="font-size:9px">' + td.tag + '</span>';
+      tdH += '<span class="dash-todo-list">' + td.list + '</span>';
+      tdH += '</div>';
+      tdH += '<div class="dash-todo-title">' + td.name + '</div>';
+      if (td.desc) tdH += '<div class="dash-todo-desc">' + td.desc + '</div>';
+      tdH += '</div>';
+    }
+    todoEl.innerHTML = tdH;
+  }
+
+  // ─── Calendar ───
+  var calEl = $('dash-calendar');
+  if (calEl) {
+    calEl.innerHTML =
+      '<div class="cal-embed">' +
+      '<iframe src="https://calendar.google.com/calendar/embed?src=tuntefrizzante%40gmail.com&ctz=Europe%2FBerlin&mode=AGENDA&showTitle=0&showCalendars=0&showPrint=0&showTabs=0&showDate=1" style="width:100%;height:500px;border:none;border-radius:8px" frameborder="0" scrolling="no"></iframe>' +
+      '</div>';
+  }
+
+  // ─── Quick Links ───
+  var qlEl = $('dash-quicklinks');
+  if (qlEl) {
+    qlEl.innerHTML =
+      '<div class="card" onclick="navigateToPage(\'fin\')"><span class="nav-icon" style="font-size:22px">&#x1F4B0;</span><h3>Finanzen</h3><p>EK, Finanzierung, Renovierung</p></div>' +
+      '<div class="card" onclick="navigateToPage(\'buyer\')"><span class="nav-icon" style="font-size:22px">&#x1F3E0;</span><h3>Kaeufer</h3><p>WEG-Kaeufer &amp; Interessenten</p></div>' +
+      '<div class="card" onclick="navigateToPage(\'gantt\')"><span class="nav-icon" style="font-size:22px">&#x1F4C5;</span><h3>Projektplan</h3><p>Gantt-Chart &amp; Meilensteine</p></div>' +
+      '<div class="card" onclick="navigateToPage(\'finrechner\')"><span class="nav-icon" style="font-size:22px">&#x1F4B3;</span><h3>Finanzierungsrechner</h3><p>5 Darlehenstranchen</p></div>' +
+      '<div class="card" onclick="navigateToPage(\'flaechen\')"><span class="nav-icon" style="font-size:22px">&#x1F4D0;</span><h3>Flaechen</h3><p>Nutzflaechen &amp; Betriebskosten</p></div>' +
+      '<div class="card" onclick="navigateToPage(\'dd\')"><span class="nav-icon" style="font-size:22px">&#x1F50D;</span><h3>Due Diligence</h3><p>Grundbuch, Baulasten, Altlasten</p></div>';
+  }
+}

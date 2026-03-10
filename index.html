@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Projekt-Wissensdatenbank Richardstr. 72 / Richardplatz 17, 12055 Berlin-Neukoelln">
+  <title>Richardstr. 72 — Projekt-Wissensdatenbank</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<button class="menu-toggle" id="menuToggle">&#9776;</button>
+
+<div class="app">
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <h2>Richardstr. 72</h2>
+    <small>12055 Berlin-Neukoelln</small>
+  </div>
+  <ul class="sidebar-nav" id="nav">
+    <li><a href="#" data-page="dash" class="active"><span class="nav-icon">&#x1F4CA;</span>Uebersicht</a></li>
+    <li class="nav-section">Kalkulation</li>
+    <li><a href="#" data-page="kauf_weg"><span class="nav-icon">&#x1F4B6;</span>KP-Variante WEG</a></li>
+    <li><a href="#" data-page="kauf_allein"><span class="nav-icon">&#x1F3E2;</span>KP Variante Faktor 20</a></li>
+    <li><a href="#" data-page="var_miete"><span class="nav-icon">&#x1F4C8;</span>Variante Miete</a></li>
+    <li><a href="#" data-page="finrechner"><span class="nav-icon">&#x1F4B3;</span>Finanzierungsrechner</a></li>
+    <li class="nav-section">Projekt</li>
+    <li><a href="#" data-page="fin"><span class="nav-icon">&#x1F4B0;</span>Finanzen</a></li>
+    <li><a href="#" data-page="buyer"><span class="nav-icon">&#x1F3E0;</span>Kaeufer</a></li>
+    <li><a href="#" data-page="dd"><span class="nav-icon">&#x1F50D;</span>Due Diligence</a></li>
+    <li><a href="#" data-page="gantt"><span class="nav-icon">&#x1F4C5;</span>Projektstrukturplan</a></li>
+    <li><a href="#" data-page="trello"><span class="nav-icon">&#x1F4CB;</span>Trello Board</a></li>
+    <li class="nav-section">Daten</li>
+    <li><a href="#" data-page="flaechen"><span class="nav-icon">&#x1F4D0;</span>Flaechenberechnung</a></li>
+    <li><a href="#" data-page="energie"><span class="nav-icon">&#x26A1;</span>Energiekonzept</a></li>
+    <li><a href="#" data-page="dokumente"><span class="nav-icon">&#x1F4C1;</span>Dokumente</a></li>
+    <li class="nav-section">Tools</li>
+    <li><a href="#" data-page="gal"><span class="nav-icon">&#x1F5BC;</span>Galerie</a></li>
+    <li><a href="#" data-page="contact"><span class="nav-icon">&#x1F465;</span>Kontakte</a></li>
+    <li><a href="#" data-page="notes"><span class="nav-icon">&#x1F4DD;</span>Notizen</a></li>
+  </ul>
+  <div class="sidebar-footer">Stand: Maerz 2026 (v6)</div>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main-content">
+
+<!-- ─── DASHBOARD ─── -->
+<div class="page active" id="dash">
+  <div class="page-header">
+    <h1>Projektuebersicht</h1>
+    <div class="meta">Richardstr. 72 / Richardplatz 17 &middot; 12055 Berlin-Neukoelln</div>
+  </div>
+
+  <!-- Dashboard KPIs -->
+  <div class="kpi-row" id="dash-kpis"></div>
+
+  <!-- Overall Progress Hero -->
+  <div class="dash-progress-hero" id="dash-hero"></div>
+
+  <!-- Phase Progress Cards -->
+  <h2 class="section-title">Fortschritt nach Phase <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('gantt')">&#x1F4C5; Gantt-Chart</a></h2>
+  <div class="kpi-grid" id="dash-phases"></div>
+
+  <!-- To-Dos + Calendar Split -->
+  <div class="dash-split">
+    <div class="dash-split-col">
+      <h2 class="section-title">Wichtigste To-Dos <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')">&#x1F4CB; Trello</a></h2>
+      <div id="dash-todos"></div>
+    </div>
+    <div class="dash-split-col">
+      <h2 class="section-title">Kalender</h2>
+      <div id="dash-calendar"></div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <h2 class="section-title">Schnellzugriff</h2>
+  <div class="card-grid" id="dash-quicklinks"></div>
+</div>
+
+<!-- ─── KP-VARIANTE WEG ─── -->
+<div class="page" id="kauf_weg">
+  <div class="page-header">
+    <h1>Kaufpreisvariante WEG</h1>
+    <div class="meta">Interaktiver Rechner &middot; WEG-Teilung mit Einzelverkauf</div>
+  </div>
+
+  <div class="variant-tabs" id="vtabs">
+    <div class="variant-tab" onclick="setV(1900000,this)">Gutachter<span class="amount">1.900.000 &euro;</span></div>
+    <div class="variant-tab active" onclick="setV(2000000,this)">Basis<span class="amount">2.000.000 &euro;</span></div>
+    <div class="variant-tab" onclick="setV(2200000,this)">Investor<span class="amount">2.200.000 &euro;</span></div>
+  </div>
+
+  <div style="margin-bottom:22px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:12px;color:var(--mut)">Eigener Kaufpreis:</span>
+    <input type="number" class="custom-kp-input" id="ckp" placeholder="z.B. 2050000" step="50000">
+    <button class="btn btn-secondary" onclick="setCust()" style="padding:7px 16px;font-size:12px">Berechnen</button>
+  </div>
+  <div class="editable-hint">Alle blau umrandeten Felder koennen bearbeitet werden.</div>
+
+  <h2 class="section-title">Wohnen — Verkauf an WEG-Kaeufer</h2>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <h3>Wohneinheiten</h3>
+      <table>
+        <tr style="font-size:11px;color:var(--mut)"><td>Einheit</td><td>m&sup2;</td><td>&euro;/m&sup2;</td><td style="text-align:right">Preis</td></tr>
+        <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="weg_p1" value="4900" step="100" oninput="calcWEG()"></td><td style="text-align:right" id="we1p">&mdash;</td></tr>
+        <tr><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="weg_p2" value="5200" step="100" oninput="calcWEG()"></td><td style="text-align:right" id="we2p">&mdash;</td></tr>
+        <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="weg_p3" value="4900" step="100" oninput="calcWEG()"></td><td style="text-align:right" id="we3p">&mdash;</td></tr>
+        <tr style="font-weight:700"><td>Summe</td><td>304,57</td><td id="avgsqm">&mdash;</td><td style="text-align:right;color:var(--acc)" id="twoh">&mdash;</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="section-title">Gewerbe + DG — Eigennutzung (Residual)</h2>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <h3>Eigennutzung</h3>
+      <div class="editable-hint" style="margin-bottom:8px">Flaechen editierbar — Summe wird automatisch berechnet.</div>
+      <table>
+        <tr style="font-size:11px;color:var(--mut)"><td>Bereich</td><td>m&sup2;</td></tr>
+        <tr><td>DG / WE4</td><td><input type="number" class="input-field input-sm" id="weg_dg" value="120.00" step="1" oninput="calcWEG()"></td></tr>
+        <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td><input type="number" class="input-field input-sm" id="weg_te15" value="619.86" step="1" oninput="calcWEG()"></td></tr>
+        <tr><td>Garagen</td><td><input type="number" class="input-field input-sm" id="weg_gar" value="197.60" step="1" oninput="calcWEG()"></td></tr>
+        <tr style="font-weight:700"><td>Summe</td><td id="weg_eig_sqm">&mdash;</td></tr>
+      </table>
+      <div style="margin-top:10px;font-size:14px;font-weight:700;color:var(--grn)" id="teig">&mdash;</div>
+      <div id="eigsqm" style="font-size:11px;color:var(--mut);margin-top:4px"></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Gesamtrechnung</h2>
+  <div class="stat-grid">
+    <div class="stat-box"><h3>Aufteilung</h3><table>
+      <tr><td>Kaufpreis</td><td id="kpt" style="font-weight:700">&mdash;</td></tr>
+      <tr><td>Wohnen</td><td id="kpw">&mdash;</td></tr>
+      <tr><td>Eigennutzung</td><td id="kpe" style="color:var(--grn)">&mdash;</td></tr>
+      <tr><td>% Wohnen</td><td id="pcw">&mdash;</td></tr>
+      <tr><td>% Eigennutzung</td><td id="pce">&mdash;</td></tr>
+    </table></div>
+    <div class="stat-box"><h3>Kaufnebenkosten</h3><table>
+      <tr><td>GrESt (6%)</td><td id="kng">&mdash;</td></tr>
+      <tr><td>Notar (~1,5%)</td><td id="knn">&mdash;</td></tr>
+      <tr><td>Makler</td><td>&mdash; (privat)</td></tr>
+      <tr style="font-weight:700"><td>Gesamt inkl. NK</td><td id="knt">&mdash;</td></tr>
+    </table></div>
+    <div class="stat-box"><h3>Kennzahlen</h3><table>
+      <tr><td>IST Bruttorendite</td><td id="ri">&mdash;</td></tr>
+      <tr><td>SOLL Bruttorendite</td><td id="rs">&mdash;</td></tr>
+      <tr><td>Kaufpreisfaktor</td><td id="kf">&mdash;</td></tr>
+    </table></div>
+    <div class="stat-box"><h3>DG an Morits</h3><table>
+      <tr><td>50% DG (60 m&sup2;)</td><td>Rohling</td></tr>
+      <tr style="font-weight:700"><td>Verkaufspreis</td><td>100.000 &euro;</td></tr>
+      <tr><td>Netto-Eigennutzung</td><td id="ead" style="color:var(--grn);font-weight:700">&mdash;</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- ─── KP VARIANTE FAKTOR 20 ─── -->
+<div class="page" id="kauf_allein">
+  <div class="page-header">
+    <h1>KP Variante Faktor 20</h1>
+    <div class="meta">Investor-Kalkulation &middot; Alle Felder editierbar &middot; Live-Berechnung</div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+    <div class="editable-hint" style="margin-bottom:0">Alle blau umrandeten Felder koennen bearbeitet werden.</div>
+    <button class="btn btn-primary" onclick="calcF20()" style="display:flex;align-items:center;gap:8px">&#x1F504; Aktualisieren</button>
+  </div>
+
+  <div class="invest-box">
+    <h3>Zielmiete &amp; Faktor</h3>
+    <p style="font-size:12px;color:var(--mut);margin-bottom:14px">Kaufpreis / Faktor = notwendige Jahresmiete</p>
+    <div style="margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div><span style="font-size:12px;color:var(--mut)">Kaufpreis:</span><br>
+        <input type="number" class="input-field input-lg" id="inp_kp" value="2200000" step="50000" oninput="calcF20()"></div>
+      <div><span style="font-size:12px;color:var(--mut)">Faktor (Jahre):</span><br>
+        <input type="number" class="input-field input-sm" id="inp_faktor" value="20" step="1" min="1" max="50" oninput="calcF20()"></div>
+    </div>
+    <div class="invest-kpi">
+      <div class="kpi-card"><div class="kpi-value" id="inv_kp">&mdash;</div><div class="kpi-label">Kaufpreis</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="inv_ziel_pa">&mdash;</div><div class="kpi-label">Zielmiete p.a.</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="inv_ziel_mon">&mdash;</div><div class="kpi-label">Zielmiete / Monat</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="inv_ist_pa2">&mdash;</div><div class="kpi-label">IST Miete p.a.</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="inv_gap_pa" style="color:var(--red)">&mdash;</div><div class="kpi-label">Fehlbetrag p.a.</div></div>
+    </div>
+  </div>
+
+  <!-- IST Wohnen -->
+  <h2 class="section-title">IST-Mieten — Wohnen</h2>
+  <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen IST</h3>
+  <table class="comp-table">
+    <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2; netto kalt</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
+    <tr><td>WE1 (EG links) — vermietet</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_we1" value="7.00" step="0.50" oninput="calcF20()"></td><td id="ist_we1m">&mdash;</td><td id="ist_we1a">&mdash;</td></tr>
+    <tr class="hl-red"><td>WE2 (EG rechts) — leerstehend</td><td>106,70</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
+    <tr><td>WE3 (1. OG) — vermietet</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_we3" value="10.00" step="0.50" oninput="calcF20()"></td><td id="ist_we3m">&mdash;</td><td id="ist_we3a">&mdash;</td></tr>
+    <tr><td>WE4/DG (50% eigen, Rohling)</td><td>120,00</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
+    <tr class="hl"><td><strong>IST Wohnen</strong></td><td>424,57</td><td></td><td id="ist_wm"><strong>&mdash;</strong></td><td id="ist_wa"><strong>&mdash;</strong></td></tr>
+  </table></div>
+
+  <!-- IST Gewerbe -->
+  <h2 class="section-title">IST-Mieten — Gewerbe</h2>
+  <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe IST</h3>
+  <table class="comp-table">
+    <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
+    <tr><td>Tante Frizzante (TE2-TE4)</td><td>387,55</td><td>2,78</td><td>1.200 &euro;</td><td>14.400 &euro;</td></tr>
+    <tr><td>Musikstudio</td><td>&mdash;</td><td>&mdash;</td><td>210 &euro;</td><td>2.520 &euro;</td></tr>
+    <tr><td>TE6 Garage</td><td>57,91</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
+    <tr><td>Scheune DG (Lager)</td><td>116,25</td><td><input type="number" class="input-field input-sm" id="inp_scheune_ist" value="5.00" step="0.50" oninput="calcF20()"></td><td id="ist_sdgm">&mdash;</td><td id="ist_sdga">&mdash;</td></tr>
+    <tr><td>7 Stellplaetze</td><td>&mdash;</td><td>&agrave; 65 &euro;</td><td>455 &euro;</td><td>5.460 &euro;</td></tr>
+    <tr class="hl"><td><strong>IST Gewerbe</strong></td><td></td><td></td><td id="ist_gew_m"><strong>&mdash;</strong></td><td id="ist_gew_a"><strong>&mdash;</strong></td></tr>
+  </table></div>
+
+  <!-- Gap Analyse -->
+  <h2 class="section-title">IST Gesamt vs. Zielmiete</h2>
+  <div class="stat-box" style="margin-bottom:22px"><h3>Gap-Analyse IST</h3>
+  <table class="comp-table">
+    <tr><th>Posten</th><th>pro Monat</th><th>pro Jahr</th></tr>
+    <tr><td>IST Wohnen</td><td id="gap_ist_wm">&mdash;</td><td id="gap_ist_wa">&mdash;</td></tr>
+    <tr><td>IST Gewerbe</td><td id="gap_ist_gm">&mdash;</td><td id="gap_ist_ga">&mdash;</td></tr>
+    <tr class="hl"><td><strong>IST Gesamt</strong></td><td id="gap_ist_tm"><strong>&mdash;</strong></td><td id="gap_ist_ta"><strong>&mdash;</strong></td></tr>
+    <tr><td style="color:var(--acc)">Zielmiete</td><td style="color:var(--acc)" id="gap_ziel_m">&mdash;</td><td style="color:var(--acc)" id="gap_ziel_a">&mdash;</td></tr>
+    <tr class="hl-red"><td><strong>Fehlbetrag</strong></td><td id="gap_delta_m"><strong>&mdash;</strong></td><td id="gap_delta_a"><strong>&mdash;</strong></td></tr>
+    <tr><td>IST-Faktor</td><td colspan="2" style="text-align:center;font-weight:700" id="gap_ist_faktor">&mdash;</td></tr>
+  </table></div>
+
+  <!-- Variante A -->
+  <div class="section-divider">
+    <h2 class="section-title" style="margin-top:0">Variante A: SOLL ohne DG-Ausbau Wohnen</h2>
+  </div>
+  <p style="color:var(--mut);font-size:12px;margin-bottom:14px">Bestand + Gewerbe Vollvermietung inkl. Scheune DG. Kein Wohn-DG-Ertrag.</p>
+
+  <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen SOLL (ohne DG)</h3>
+  <table class="comp-table">
+    <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th><th>Status</th></tr>
+    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_a_we1" value="7.00" step="0.50" oninput="calcF20()"></td><td id="a_we1m">&mdash;</td><td id="a_we1a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
+    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_a_we2" value="12.00" step="0.50" oninput="calcF20()"></td><td id="a_we2m">&mdash;</td><td id="a_we2a">&mdash;</td><td><span class="tag tag-orange">SOLL</span></td></tr>
+    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_a_we3" value="10.00" step="0.50" oninput="calcF20()"></td><td id="a_we3m">&mdash;</td><td id="a_we3a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
+    <tr><td>WE4/DG Wohnen (50%)</td><td>60,00</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td><td><span class="tag tag-red">Rohling</span></td></tr>
+    <tr class="hl"><td><strong>SOLL Wohnen A</strong></td><td>364,57</td><td></td><td id="a_wm"><strong>&mdash;</strong></td><td id="a_wa"><strong>&mdash;</strong></td><td></td></tr>
+  </table></div>
+
+  <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe SOLL (inkl. Scheune DG ausgebaut)</h3>
+  <table class="comp-table">
+    <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
+    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_a_te15" value="15.00" step="0.50" oninput="calcF20()"></td><td id="a_te15m">&mdash;</td><td id="a_te15a">&mdash;</td></tr>
+    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_a_te6" value="15.00" step="0.50" oninput="calcF20()"></td><td id="a_te6m">&mdash;</td><td id="a_te6a">&mdash;</td></tr>
+    <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_a_sp_n" value="10" step="1" min="0" oninput="calcF20()"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_a_sp_p" value="150" step="10" oninput="calcF20()"> &euro;</td><td id="a_spm">&mdash;</td><td id="a_spa">&mdash;</td></tr>
+    <tr class="hl"><td><strong>SOLL Gewerbe A</strong></td><td></td><td></td><td id="a_gm"><strong>&mdash;</strong></td><td id="a_ga"><strong>&mdash;</strong></td></tr>
+  </table></div>
+
+  <div class="stat-box" style="margin-bottom:22px"><h3>Variante A: Erreichung Faktor</h3>
+  <table class="comp-table">
+    <tr><th>Posten</th><th>pro Monat</th><th>pro Jahr</th></tr>
+    <tr><td>SOLL Wohnen</td><td id="a_f_wm">&mdash;</td><td id="a_f_wa">&mdash;</td></tr>
+    <tr><td>SOLL Gewerbe</td><td id="a_f_gm">&mdash;</td><td id="a_f_ga">&mdash;</td></tr>
+    <tr class="hl"><td><strong>SOLL Gesamt A</strong></td><td id="a_f_tm"><strong>&mdash;</strong></td><td id="a_f_ta"><strong>&mdash;</strong></td></tr>
+    <tr><td style="color:var(--acc)">Zielmiete</td><td style="color:var(--acc)" id="a_f_zm">&mdash;</td><td style="color:var(--acc)" id="a_f_za">&mdash;</td></tr>
+    <tr id="a_f_dr"><td><strong>Differenz</strong></td><td id="a_f_dm"><strong>&mdash;</strong></td><td id="a_f_da"><strong>&mdash;</strong></td></tr>
+    <tr><td>Erreichter Faktor</td><td colspan="2" style="text-align:center;font-weight:700" id="a_f_fak">&mdash;</td></tr>
+    <tr><td>Faktor &le; Ziel?</td><td colspan="2" style="text-align:center;font-weight:700" id="a_f_chk">&mdash;</td></tr>
+    <tr><td>Bruttorendite</td><td colspan="2" style="text-align:center;font-weight:700" id="a_f_ren">&mdash;</td></tr>
+  </table></div>
+
+  <!-- Variante B -->
+  <div class="section-divider green">
+    <h2 class="section-title" style="margin-top:0">Variante B: SOLL mit DG-Ausbau Wohnen</h2>
+  </div>
+  <p style="color:var(--mut);font-size:12px;margin-bottom:14px">Wohn-DG ausgebaut (120 m&sup2;, 50% = 60 m&sup2; eigen) + Scheune DG ausgebaut.</p>
+
+  <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen SOLL (mit DG-Ausbau)</h3>
+  <table class="comp-table">
+    <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th><th>Status</th></tr>
+    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_b_we1" value="7.00" step="0.50" oninput="calcF20()"></td><td id="b_we1m">&mdash;</td><td id="b_we1a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
+    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_b_we2" value="12.00" step="0.50" oninput="calcF20()"></td><td id="b_we2m">&mdash;</td><td id="b_we2a">&mdash;</td><td><span class="tag tag-orange">SOLL</span></td></tr>
+    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_b_we3" value="10.00" step="0.50" oninput="calcF20()"></td><td id="b_we3m">&mdash;</td><td id="b_we3a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
+    <tr class="hl-green"><td>WE4/DG (50% von 120 m&sup2;)</td><td><input type="number" class="input-field input-sm" id="inp_b_dg_sqm" value="60" step="1" oninput="calcF20()"> m&sup2;</td><td><input type="number" class="input-field input-sm" id="inp_b_dg" value="12.00" step="0.50" oninput="calcF20()"></td><td id="b_dgm">&mdash;</td><td id="b_dga">&mdash;</td><td><span class="tag tag-orange">SOLL DG</span></td></tr>
+    <tr class="hl"><td><strong>SOLL Wohnen B</strong></td><td id="b_sqm_total">&mdash;</td><td></td><td id="b_wm"><strong>&mdash;</strong></td><td id="b_wa"><strong>&mdash;</strong></td><td></td></tr>
+  </table></div>
+
+  <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe SOLL (inkl. Scheune DG ausgebaut)</h3>
+  <table class="comp-table">
+    <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
+    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_b_te15" value="15.00" step="0.50" oninput="calcF20()"></td><td id="b_te15m">&mdash;</td><td id="b_te15a">&mdash;</td></tr>
+    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_b_te6" value="15.00" step="0.50" oninput="calcF20()"></td><td id="b_te6m">&mdash;</td><td id="b_te6a">&mdash;</td></tr>
+    <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_b_sp_n" value="10" step="1" min="0" oninput="calcF20()"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_b_sp_p" value="150" step="10" oninput="calcF20()"> &euro;</td><td id="b_spm">&mdash;</td><td id="b_spa">&mdash;</td></tr>
+    <tr class="hl"><td><strong>SOLL Gewerbe B</strong></td><td></td><td></td><td id="b_gm"><strong>&mdash;</strong></td><td id="b_ga"><strong>&mdash;</strong></td></tr>
+  </table></div>
+
+  <div class="stat-box" style="margin-bottom:22px"><h3>Variante B: Erreichung Faktor</h3>
+  <table class="comp-table">
+    <tr><th>Posten</th><th>pro Monat</th><th>pro Jahr</th></tr>
+    <tr><td>SOLL Wohnen (inkl. DG)</td><td id="b_f_wm">&mdash;</td><td id="b_f_wa">&mdash;</td></tr>
+    <tr><td>SOLL Gewerbe</td><td id="b_f_gm">&mdash;</td><td id="b_f_ga">&mdash;</td></tr>
+    <tr class="hl"><td><strong>SOLL Gesamt B</strong></td><td id="b_f_tm"><strong>&mdash;</strong></td><td id="b_f_ta"><strong>&mdash;</strong></td></tr>
+    <tr><td style="color:var(--acc)">Zielmiete</td><td style="color:var(--acc)" id="b_f_zm">&mdash;</td><td style="color:var(--acc)" id="b_f_za">&mdash;</td></tr>
+    <tr id="b_f_dr"><td><strong>Differenz</strong></td><td id="b_f_dm"><strong>&mdash;</strong></td><td id="b_f_da"><strong>&mdash;</strong></td></tr>
+    <tr><td>Erreichter Faktor</td><td colspan="2" style="text-align:center;font-weight:700" id="b_f_fak">&mdash;</td></tr>
+    <tr><td>Faktor &le; Ziel?</td><td colspan="2" style="text-align:center;font-weight:700" id="b_f_chk">&mdash;</td></tr>
+    <tr><td>Bruttorendite</td><td colspan="2" style="text-align:center;font-weight:700" id="b_f_ren">&mdash;</td></tr>
+  </table></div>
+
+  <!-- Vergleich -->
+  <div class="section-divider purple">
+    <h2 class="section-title" style="margin-top:0">Vergleich: ohne vs. mit Wohn-DG-Ausbau</h2>
+  </div>
+  <div class="stat-box" style="margin-bottom:22px"><h3>DG-Ausbau Wohnen Effekt</h3>
+  <table class="comp-table">
+    <tr><th>Kennzahl</th><th>Variante A (ohne DG Wohnen)</th><th>Variante B (mit DG Wohnen)</th><th>Delta</th></tr>
+    <tr><td>SOLL Wohnen / Mon</td><td id="cmp_a_wm">&mdash;</td><td id="cmp_b_wm">&mdash;</td><td id="cmp_d_wm">&mdash;</td></tr>
+    <tr><td>SOLL Gesamt / Jahr</td><td id="cmp_a_ta">&mdash;</td><td id="cmp_b_ta">&mdash;</td><td id="cmp_d_ta">&mdash;</td></tr>
+    <tr><td>Faktor</td><td id="cmp_a_fak">&mdash;</td><td id="cmp_b_fak">&mdash;</td><td id="cmp_d_fak">&mdash;</td></tr>
+    <tr><td>Bruttorendite</td><td id="cmp_a_ren">&mdash;</td><td id="cmp_b_ren">&mdash;</td><td id="cmp_d_ren">&mdash;</td></tr>
+    <tr class="hl"><td><strong>Wohn-DG Mehrertrag / Jahr</strong></td><td colspan="3" style="text-align:center;font-weight:700;color:var(--grn)" id="cmp_dg_plus">&mdash;</td></tr>
+  </table></div>
+
+  <!-- Investitionskosten -->
+  <h2 class="section-title">Investitionskosten</h2>
+  <div class="two-col">
+    <div class="result-card rc-gewerbe"><h3>Renovierung Gewerbe</h3><table>
+      <tr><td>Heizung</td><td>50.000 &euro;</td></tr>
+      <tr><td>Strom / Elektrik</td><td>12.000 &euro;</td></tr>
+      <tr><td>Solaranlage</td><td>40.000 &euro;</td></tr>
+      <tr><td>Daemmung Flachdach Haus 3 &amp; Haus 4<br><small style="color:var(--mut)">(Musiker 1. OG / Scharnier 1. OG)</small></td><td>35.000 &euro;</td></tr>
+      <tr class="sep"><td><strong>Summe Gewerbe</strong></td><td style="color:var(--org)"><strong>137.000 &euro;</strong></td></tr>
+      <tr><td>Scheune DG Ausbau</td><td style="font-weight:700;color:var(--org)">300.000 &euro;</td></tr>
+      <tr><td>Sanierung DG Scheune<br><small style="color:var(--mut)">(Haus 4 Scheune, 1. OG)</small></td><td style="font-weight:700;color:var(--org)">350.000 &euro;</td></tr>
+      <tr class="sep"><td><strong>Gewerbe + Scheune DG</strong></td><td style="color:var(--org)"><strong>787.000 &euro;</strong></td></tr>
+    </table></div>
+    <div class="result-card rc-wohnen"><h3>Sanierung Wohnen (Haus 1)</h3><table>
+      <tr><td>Investition Wohngebaeude</td><td style="font-weight:700;color:var(--acc)">300.000 &euro;</td></tr>
+      <tr><td>DG-Ausbau Wohnen (Var. B)</td><td style="color:var(--org)">300.000 &euro;</td></tr>
+      <tr class="sep"><td><strong>Wohnen + DG (Var. B)</strong></td><td style="color:var(--org)"><strong>600.000 &euro;</strong></td></tr>
+    </table></div>
+  </div>
+
+  <!-- Gesamtrechnung -->
+  <h2 class="section-title">Gesamtrechnung &amp; Finanzierung</h2>
+  <div class="stat-grid">
+    <div class="stat-box"><h3>Mittelverwendung A (ohne Wohn-DG)</h3><table>
+      <tr><td>Kaufpreis</td><td id="inv_kp2">&mdash;</td></tr>
+      <tr><td>GrESt (6%)</td><td id="inv_grest">&mdash;</td></tr>
+      <tr><td>Notar (~1,5%)</td><td id="inv_notar">&mdash;</td></tr>
+      <tr><td>Renovierung Gewerbe</td><td>137.000 &euro;</td></tr>
+      <tr><td>Scheune DG Ausbau</td><td>300.000 &euro;</td></tr>
+      <tr><td>Sanierung DG Scheune</td><td>350.000 &euro;</td></tr>
+      <tr><td>Sanierung Wohnen</td><td>300.000 &euro;</td></tr>
+      <tr class="sep"><td><strong>Gesamtinvestition A</strong></td><td style="color:var(--pur)" id="inv_total_a"><strong>&mdash;</strong></td></tr>
+    </table></div>
+    <div class="stat-box"><h3>Mittelverwendung B (mit Wohn-DG)</h3><table>
+      <tr><td>Kaufpreis</td><td id="inv_kp3">&mdash;</td></tr>
+      <tr><td>GrESt (6%)</td><td id="inv_grest2">&mdash;</td></tr>
+      <tr><td>Notar (~1,5%)</td><td id="inv_notar2">&mdash;</td></tr>
+      <tr><td>Renovierung Gewerbe</td><td>137.000 &euro;</td></tr>
+      <tr><td>Scheune DG Ausbau</td><td>300.000 &euro;</td></tr>
+      <tr><td>Sanierung DG Scheune</td><td>350.000 &euro;</td></tr>
+      <tr><td>Sanierung Wohnen</td><td>300.000 &euro;</td></tr>
+      <tr><td>DG-Ausbau Wohnen</td><td>300.000 &euro;</td></tr>
+      <tr class="sep"><td><strong>Gesamtinvestition B</strong></td><td style="color:var(--pur)" id="inv_total_b"><strong>&mdash;</strong></td></tr>
+    </table></div>
+    <div class="stat-box"><h3>Finanzierung</h3><table>
+      <tr><td>Eigenkapital (Andreas)</td><td style="color:var(--grn)">150.000 &euro;</td></tr>
+      <tr><td>Eigenkapital (Morits)</td><td style="color:var(--grn)">100.000 &euro;</td></tr>
+      <tr><td>= 50% DG Rohling</td><td style="font-size:10px;color:var(--mut)">Verkauf an Morits</td></tr>
+      <tr style="font-weight:700"><td>Eigene Mittel</td><td style="color:var(--grn)">250.000 &euro;</td></tr>
+      <tr class="sep"><td>FK Variante A</td><td style="color:var(--red);font-weight:700" id="inv_fk_a">&mdash;</td></tr>
+      <tr><td>FK Variante B</td><td style="color:var(--red);font-weight:700" id="inv_fk_b">&mdash;</td></tr>
+    </table></div>
+  </div>
+
+  <!-- Cashflow -->
+  <h2 class="section-title">Cashflow-Vergleich</h2>
+  <div class="stat-grid">
+    <div class="stat-box"><h3>Cashflow Variante A</h3><table>
+      <tr><td>SOLL Mieteinnahmen</td><td id="cf_a_soll">&mdash;</td></tr>
+      <tr><td>Betriebskosten</td><td>-23.674 &euro;</td></tr>
+      <tr><td>NOI</td><td style="color:var(--grn)" id="cf_a_noi">&mdash;</td></tr>
+      <tr class="sep"><td>Zinslast (3,5% FK)</td><td style="color:var(--red)" id="cf_a_zins">&mdash;</td></tr>
+      <tr style="font-weight:700"><td>Cashflow vor Tilgung</td><td id="cf_a_cf">&mdash;</td></tr>
+    </table></div>
+    <div class="stat-box"><h3>Cashflow Variante B</h3><table>
+      <tr><td>SOLL Mieteinnahmen</td><td id="cf_b_soll">&mdash;</td></tr>
+      <tr><td>Betriebskosten</td><td>-23.674 &euro;</td></tr>
+      <tr><td>NOI</td><td style="color:var(--grn)" id="cf_b_noi">&mdash;</td></tr>
+      <tr class="sep"><td>Zinslast (3,5% FK)</td><td style="color:var(--red)" id="cf_b_zins">&mdash;</td></tr>
+      <tr style="font-weight:700"><td>Cashflow vor Tilgung</td><td id="cf_b_cf">&mdash;</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- ─── VARIANTE MIETE ─── -->
+<div class="page" id="var_miete">
+  <div class="page-header">
+    <h1>Variante Miete — Vergleich</h1>
+    <div class="meta">IST-Miete vs. Marktmiete &middot; Indexmietvertrag TE2-TE4</div>
+  </div>
+
+  <div class="invest-box">
+    <h3>Indexmietvertrag TE2, TE3, TE4</h3>
+    <p style="font-size:12px;color:var(--mut);margin-bottom:14px">Basis 2020 &middot; Verbrauchpreisindex &middot; Tante Frizzante</p>
+    <div class="invest-kpi">
+      <div class="kpi-card"><div class="kpi-value">2,78 &euro;/m&sup2;</div><div class="kpi-label">IST Nettokaltmiete</div></div>
+      <div class="kpi-card"><div class="kpi-value">1.200 &euro;</div><div class="kpi-label">IST Miete/Monat</div></div>
+      <div class="kpi-card"><div class="kpi-value">1.375,20 &euro;</div><div class="kpi-label">Ab Mai 2026</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="vm_flaeche">—</div><div class="kpi-label">Flaeche TE2-TE4</div></div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Mietentwicklung Indexmietvertrag</h2>
+  <div class="stat-box" style="margin-bottom:22px"><h3>Zeitlicher Verlauf</h3>
+  <table class="comp-table">
+    <tr><th>Zeitraum</th><th>Miete/Mon</th><th>&euro;/m&sup2;</th><th>Miete/Jahr</th><th>Differenz zu Markt (15&euro;)</th></tr>
+    <tr><td>Bis April 2026 (IST)</td><td>1.200 &euro;</td><td id="vm_ist_sqm">—</td><td>14.400 &euro;</td><td style="color:var(--red)" id="vm_diff1">—</td></tr>
+    <tr><td>Ab Mai 2026 (Indexanpassung)</td><td>1.375,20 &euro;</td><td id="vm_mai_sqm">—</td><td>16.502 &euro;</td><td style="color:var(--red)" id="vm_diff2">—</td></tr>
+  </table></div>
+
+  <h2 class="section-title">Vergleich: IST vs. Marktmiete (TE2-TE4)</h2>
+  <div class="stat-box" style="margin-bottom:22px"><h3>Mietvergleich bei verschiedenen Marktmieten</h3>
+  <table class="comp-table">
+    <tr><th>Szenario</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th><th>Differenz zu IST (1.200)</th></tr>
+    <tr class="hl-red"><td>IST-Miete (aktuell)</td><td>2,78</td><td>1.200 &euro;</td><td>14.400 &euro;</td><td>—</td></tr>
+    <tr><td>Ab Mai 2026</td><td id="vm_mai_sqm2">—</td><td>1.375 &euro;</td><td>16.502 &euro;</td><td style="color:var(--grn)">+2.102 &euro;/a</td></tr>
+    <tr><td>Marktmiete 5 &euro;/m&sup2;</td><td>5,00</td><td id="vm_m5m">—</td><td id="vm_m5a">—</td><td style="color:var(--grn)" id="vm_d5">—</td></tr>
+    <tr><td>Marktmiete 8 &euro;/m&sup2;</td><td>8,00</td><td id="vm_m8m">—</td><td id="vm_m8a">—</td><td style="color:var(--grn)" id="vm_d8">—</td></tr>
+    <tr><td>Marktmiete 10 &euro;/m&sup2;</td><td>10,00</td><td id="vm_m10m">—</td><td id="vm_m10a">—</td><td style="color:var(--grn)" id="vm_d10">—</td></tr>
+    <tr><td>Marktmiete 12,10 &euro;/m&sup2;</td><td>12,10</td><td id="vm_m12m">—</td><td id="vm_m12a">—</td><td style="color:var(--grn)" id="vm_d12">—</td></tr>
+    <tr class="hl-green"><td><strong>Marktmiete 15 &euro;/m&sup2;</strong></td><td>15,00</td><td id="vm_m15m">—</td><td id="vm_m15a">—</td><td style="color:var(--grn);font-weight:700" id="vm_d15">—</td></tr>
+  </table></div>
+
+  <h2 class="section-title">Vorteil Eigennutzung vs. Marktmiete</h2>
+  <div class="two-col">
+    <div class="result-card rc-ek"><h3>Ersparnisse durch Eigennutzung</h3><table>
+      <tr><td>IST-Miete p.a.</td><td>14.400 &euro;</td></tr>
+      <tr><td>Ab Mai 2026 p.a.</td><td>16.502 &euro;</td></tr>
+      <tr class="sep"><td><strong>Marktmiete 15 &euro;/m&sup2; p.a.</strong></td><td id="vm_markt15a"><strong>—</strong></td></tr>
+      <tr><td style="color:var(--grn)">Ersparnis vs. Markt (IST)</td><td style="color:var(--grn);font-weight:700" id="vm_ersparnis">—</td></tr>
+      <tr><td style="color:var(--grn)">Ersparnis in 10 Jahren</td><td style="color:var(--grn);font-weight:700" id="vm_ersparnis10">—</td></tr>
+      <tr><td style="color:var(--grn)">Ersparnis in 30 Jahren</td><td style="color:var(--grn);font-weight:700" id="vm_ersparnis30">—</td></tr>
+    </table></div>
+    <div class="result-card rc-summe"><h3>Indexmietvertrag — Prognose</h3><table>
+      <tr><td>Basis VPI 2020</td><td>100,0</td></tr>
+      <tr><td>VPI 2025 (geschaetzt)</td><td>~118,0</td></tr>
+      <tr><td>Anpassung</td><td>+14,6% (auf 1.375,20 &euro;)</td></tr>
+      <tr class="sep"><td>Vorteil Indexmiete</td><td style="color:var(--grn)">Unter Markt, aber steigend</td></tr>
+      <tr><td>Risiko</td><td style="color:var(--org)">Inflation treibt Miete nach oben</td></tr>
+      <tr><td>Chance</td><td style="color:var(--grn)">Langfristig deutlich unter Markt</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- ─── KAEUFER ─── -->
+<div class="page" id="buyer">
+  <div class="page-header"><h1>Kaeufer &amp; Verkaufsstatus</h1><a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')">&#x1F4CB; Trello Board</a></div>
+  <h2 class="section-title">Wohnen — WEG-Kaeufer</h2>
+  <div class="buyer-card" style="border-left:3px solid var(--grn)"><span class="tag tag-green">Heissester Interessent</span><h3>Jan-Philip Roedger</h3><div class="unit-info">&#x1F4E7; <a href="mailto:jp.saltero@gmail.com" style="color:var(--acc)">jp.saltero@gmail.com</a></div>
+    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Naechste Schritte (0/4)</div><div class="collapse-body"><div class="checklist-item">Erstgespraech / Besichtigung</div><div class="checklist-item">Unterlagen zusenden</div><div class="checklist-item">Kaufpreisverhandlung</div><div class="checklist-item">Notartermin vereinbaren</div></div></div></div>
+  <div class="buyer-card"><span class="tag tag-orange">In Arbeit</span><h3>Kolja — EG rechts / WE2</h3><div class="unit-info">106,70 m&sup2; &middot; 3 ZKB, Balkon, ~50 m&sup2; Garten &middot; Bezugsfrei</div><div class="price">554.840 &euro; (5.200 &euro;/m&sup2;)</div>
+    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Abstimmung (0/5)</div><div class="collapse-body"><div class="checklist-item">NDA</div><div class="checklist-item">Grundrisse</div><div class="checklist-item">Mieterliste</div><div class="checklist-item">Teilungserklaerung</div><div class="checklist-item">Expose</div></div></div>
+    <div class="due-date">Termin: 28.01.2026 (stattgefunden)</div></div>
+  <div class="buyer-card"><span class="tag tag-orange">In Arbeit</span><span class="tag tag-red">Prio</span><h3>Lina — 1. OG / WE3</h3><div class="unit-info">138,31 m&sup2; &middot; 5 ZKB &middot; Bezugsfrei</div><div class="price">677.719 &euro; (4.900 &euro;/m&sup2;)</div>
+    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Abstimmung (2/4)</div><div class="collapse-body"><div class="checklist-item done">Grundrisse</div><div class="checklist-item done">Mieterliste</div><div class="checklist-item">Teilungserklaerung</div><div class="checklist-item">Expose</div></div></div></div>
+  <div class="buyer-card"><h3>Morits Schmitt — 50% DG / WE4</h3><div class="unit-info">69,50 m&sup2; (50% von 139 m&sup2;) &middot; Rohling &middot; EK-Partner</div><div class="price">100.000 &euro; fuer 50% DG Rohling &middot; 100.000 &euro; EK-Beitrag</div>
+    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Status (0/4)</div><div class="collapse-body"><div class="checklist-item">Kaufpreis 50% DG festlegen</div><div class="checklist-item">EK-Vereinbarung</div><div class="checklist-item">Notartermin</div><div class="checklist-item">DG-Ausbau spaeter planen</div></div></div>
+    <div class="alert-warn">Aufschiebende Bedingung WEG / Baugenehmigung</div>
+    <div class="alert-info">DG-Ausbau wird spaeter kalkuliert — zunaechst Rohling-Verkauf</div></div>
+  <h2 class="section-title">Gewerbe — Eigennutzung</h2>
+  <div class="buyer-card cyan"><span class="tag tag-green">Eigennutzung</span><h3>Tante Frizzante — TE2-TE4</h3><div class="unit-info">Indexmietvertrag Basis 2020 &middot; IST: 1.200 &euro;/Mon (2,78 &euro;/m&sup2;) &middot; Ab Mai 2026: 1.375,20 &euro;</div></div>
+  <div class="buyer-card cyan"><span class="tag tag-green">Eigennutzung</span><h3>Buero — TE1</h3><div class="unit-info">57,53 m&sup2; &middot; Eigennutzung</div></div>
+  <div class="buyer-card cyan"><span class="tag tag-green">Eigennutzung</span><h3>WE1 — EG links</h3><div class="unit-info">59,56 m&sup2; &middot; Vermietet (329 &euro;/Mon)</div></div>
+</div>
+
+<!-- ─── FINANZEN ─── -->
+<div class="page" id="fin">
+  <div class="page-header"><h1>Finanzen &amp; Wirtschaftlichkeit</h1><a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')">&#x1F4CB; Trello Board</a></div>
+  <h2 class="section-title">Eigenkapital &amp; Finanzierung</h2>
+  <div class="two-col">
+    <div class="result-card rc-ek"><h3>Eigenkapital — 250.000 &euro;</h3><table>
+      <tr><td>Andreas (eigen)</td><td>150.000 &euro;</td></tr>
+      <tr><td>Morits (fuer 50% DG Rohling)</td><td>100.000 &euro;</td></tr>
+      <tr class="sep"><td><strong>EK Gesamt</strong></td><td style="color:var(--grn)"><strong>250.000 &euro;</strong></td></tr>
+    </table></div>
+    <div class="result-card rc-summe"><h3>Finanzierung — Status</h3><table>
+      <tr><td>BaufiTeam (Liebhardt)</td><td style="color:var(--grn)">aktiv</td></tr>
+      <tr><td>IBB (Frau Mueller)</td><td style="color:var(--grn)">Kontakt</td></tr>
+      <tr><td>Interhyp</td><td style="color:var(--red)">offen</td></tr>
+      <tr><td>Dr. Klein</td><td style="color:var(--red)">offen</td></tr>
+      <tr><td>Sparkasse</td><td style="color:var(--red)">offen</td></tr>
+      <tr><td>KfW</td><td style="color:var(--red)">offen</td></tr>
+    </table></div>
+  </div>
+  <h2 class="section-title">Renovierungskosten — Gewerbe</h2>
+  <div class="result-card rc-gewerbe" style="margin-bottom:22px"><h3>Renovierung Gewerbe (Richardstr. 72)</h3><table>
+    <tr><td>Heizung</td><td>50.000 &euro;</td></tr>
+    <tr><td>Strom / Elektrik</td><td>12.000 &euro;</td></tr>
+    <tr><td>Solaranlage</td><td>40.000 &euro;</td></tr>
+    <tr><td>Daemmung Flachdach Haus 3 &amp; Haus 4<br><small style="color:var(--mut)">(Musiker 1. OG / Scharnier 1. OG)</small></td><td>35.000 &euro;</td></tr>
+    <tr class="sep"><td><strong>Summe Gewerbe</strong></td><td style="color:var(--org)"><strong>137.000 &euro;</strong></td></tr>
+  </table></div>
+  <h2 class="section-title">Investitionskosten — Wohnen</h2>
+  <div class="result-card rc-wohnen" style="margin-bottom:22px"><h3>Sanierung Wohnen (Haus 1)</h3><table>
+    <tr><td>Investitionskosten</td><td style="font-weight:700;color:var(--acc)">300.000 &euro;</td></tr>
+    <tr><td>DG-Ausbau</td><td style="color:var(--mut)">spaeter kalkulieren</td></tr>
+  </table></div>
+  <h2 class="section-title">Ertraege — Gewerbe vs. Wohnen</h2>
+  <div class="two-col">
+    <div class="result-card rc-wohnen"><h3>Mieteinnahmen Wohnen</h3><table>
+      <tr><td>WE1 (vermietet)</td><td>329 &euro;/Mon</td></tr>
+      <tr class="sep"><td><strong>IST Wohnen</strong></td><td><strong>3.948 &euro;/a</strong></td></tr>
+    </table></div>
+    <div class="result-card rc-gewerbe"><h3>Mieteinnahmen Gewerbe</h3><table>
+      <tr><td>TF (TE2-TE4)</td><td>1.200 &euro;/Mon (ab Mai: 1.375)</td></tr>
+      <tr><td>Musikstudio</td><td>210 &euro;/Mon</td></tr>
+      <tr><td>7 Stellplaetze</td><td>455 &euro;/Mon</td></tr>
+      <tr class="sep"><td><strong>IST Gewerbe</strong></td><td><strong>17.580 &euro;/a</strong></td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- ─── DUE DILIGENCE ─── -->
+<div class="page" id="dd">
+  <div class="page-header"><h1>Due Diligence</h1><div class="meta">Rechtlich (1/65) &middot; Technisch (0/82) <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')" style="margin-left:8px">&#x1F4CB; Trello Board</a></div></div>
+  <div class="card-grid">
+    <div class="card"><h3>Rechtliche DD</h3><div class="progress-bar"><div class="progress-fill red" style="width:1.5%"></div></div><div class="progress-text">1 von 65 (1,5%)</div>
+      <div style="margin-top:12px">
+        <div class="collapse-header" onclick="toggleCollapse(this)">Eigentum &amp; Grundbuch (0/10)</div><div class="collapse-body"><div class="checklist-item">Grundbuchauszug</div><div class="checklist-item">Verkaeufer = Eigentuemer</div><div class="checklist-item">Flurstck</div><div class="checklist-item">Abt. I</div><div class="checklist-item">Abt. II Dienstbarkeiten</div><div class="checklist-item">Abt. II Niessbrauch</div><div class="checklist-item">Abt. II Vorkaufsrechte</div><div class="checklist-item">Abt. III Grundschulden</div><div class="checklist-item">Loeschungsbewilligungen</div><div class="checklist-item">Abloesebetraege</div></div>
+        <div class="collapse-header" onclick="toggleCollapse(this)">Mietvertraege Wohnen (1/7)</div><div class="collapse-body"><div class="checklist-item">Mietvertraege</div><div class="checklist-item">Laufzeiten</div><div class="checklist-item">Kuendigungsausschluesse</div><div class="checklist-item">Mietanpassungen</div><div class="checklist-item">Kautionen</div><div class="checklist-item">Nebenkostenregelungen</div><div class="checklist-item done">Mietrueckstaende</div></div>
+        <div class="collapse-header" onclick="toggleCollapse(this)">Mietvertraege Gewerbe (0/6)</div><div class="collapse-body"><div class="checklist-item">Gewerbemietvertraege</div><div class="checklist-item">Laufzeiten</div><div class="checklist-item">Sonderkuendigungsrechte</div><div class="checklist-item">Indexmiete</div><div class="checklist-item">Nutzungszweck</div><div class="checklist-item">Untervermietung</div></div>
+      </div>
+    </div>
+    <div class="card"><h3>Technische DD</h3><div class="progress-bar"><div class="progress-fill red" style="width:0%"></div></div><div class="progress-text">0 von 82 (0%)</div>
+      <div style="margin-top:12px">
+        <div class="collapse-header" onclick="toggleCollapse(this)">Tragwerk, Dach, Fassade (0/22)</div><div class="collapse-body"><div class="checklist-item">Fundament</div><div class="checklist-item">Decken</div><div class="checklist-item">Waende</div><div class="checklist-item">Risse</div><div class="checklist-item">Statik DG</div><div class="checklist-item">Dachkonstruktion</div><div class="checklist-item">Eindeckung</div><div class="checklist-item">Abdichtung</div><div class="checklist-item">Daemmung</div><div class="checklist-item">DG moeglich</div><div class="checklist-item">Fassade</div><div class="checklist-item">Fenster</div></div>
+        <div class="collapse-header" onclick="toggleCollapse(this)">Heizung, Sanitaer, Elektro (0/16)</div><div class="collapse-body"><div class="checklist-item">Heizungsart</div><div class="checklist-item">Baujahr Heizung</div><div class="checklist-item">Verteilung</div><div class="checklist-item">Wasser</div><div class="checklist-item">Abwasser</div><div class="checklist-item">Steigleitungen</div><div class="checklist-item">Elektro</div><div class="checklist-item">Sicherungen</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TRELLO ─── -->
+<div class="page" id="trello">
+  <div class="page-header"><h1>Trello Board</h1></div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+    <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('dash')">&#x1F4CA; Uebersicht</a>
+    <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('buyer')">&#x1F3E0; Kaeufer</a>
+    <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('fin')">&#x1F4B0; Finanzen</a>
+    <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('dd')">&#x1F50D; Due Diligence</a>
+    <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('gantt')">&#x1F4C5; Projektstrukturplan</a>
+    <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('dokumente')">&#x1F4C1; Dokumente</a>
+  </div>
+  <input class="search-input" type="text" placeholder="Karten durchsuchen ..." id="tsearch" oninput="filterTrello()">
+  <div id="tboard"></div>
+</div>
+
+<!-- ─── GALERIE ─── -->
+<div class="page" id="gal">
+  <div class="page-header"><h1>Bildergalerie</h1><div class="meta" id="imgcount"></div></div>
+  <div class="gallery-grid" id="gallery"></div>
+  <div class="lightbox" id="lb" onclick="closeLightbox()"><button class="close-btn" onclick="closeLightbox()">&times;</button><img id="lbi" src="" alt=""></div>
+</div>
+
+<!-- ─── KONTAKTE ─── -->
+<div class="page" id="contact">
+  <div class="page-header"><h1>Kontakte</h1></div>
+  <h2 class="section-title">Kaeufer (Wohnen)</h2>
+  <div class="contact-grid" style="margin-bottom:24px">
+    <div class="contact-card"><h4>Lina</h4><div class="role">1. OG / WE3</div><div class="detail">138,31 m&sup2; &middot; 677.719 &euro;</div></div>
+    <div class="contact-card"><h4>Kolja</h4><div class="role">EG / WE2</div><div class="detail">106,70 m&sup2; &middot; 554.840 &euro;</div></div>
+    <div class="contact-card"><h4>Morits Schmitt</h4><div class="role">50% DG + EK-Partner</div><div class="detail">100k EK &middot; 50% DG Rohling</div></div>
+  </div>
+  <h2 class="section-title">Gewerbe</h2>
+  <div class="contact-grid" style="margin-bottom:24px">
+    <div class="contact-card"><h4>Tante Frizzante</h4><div class="role">TE2-TE4 Eigennutzung</div><div class="detail">Index 2020 &middot; 1.200&euro;/Mon (ab Mai: 1.375&euro;)</div></div>
+  </div>
+  <h2 class="section-title">Verkaeufer &amp; Notar</h2>
+  <div class="contact-grid" style="margin-bottom:24px">
+    <div class="contact-card"><h4>Herr Finck</h4><div class="role">Verkaeufer</div></div>
+    <div class="contact-card"><h4>Notar Bombitzky</h4><div class="role">Notar</div></div>
+  </div>
+  <h2 class="section-title">Finanzierung &amp; Gutachter</h2>
+  <div class="contact-grid">
+    <div class="contact-card"><h4>Gunter Liebhardt</h4><div class="role">BaufiTeam</div></div>
+    <div class="contact-card"><h4>Kati Mueller</h4><div class="role">IBB</div></div>
+    <div class="contact-card"><h4>Martin Drescher</h4><div class="role">Gutachter &middot; 1.900.000 &euro;</div></div>
+    <div class="contact-card"><h4>Svenja Bluethgen</h4><div class="role">Bauamt &middot; Milieuschutz</div></div>
+  </div>
+</div>
+
+<!-- ─── NOTIZEN ─── -->
+<div class="page" id="notes">
+  <div class="page-header"><h1>Notizen</h1><div class="meta"><button class="btn btn-secondary" onclick="addNote()">+ Neue Notiz</button> <button class="btn btn-primary" id="sbtn" onclick="saveNotes()">Speichern</button></div></div>
+  <div id="nc"></div>
+</div>
+
+<!-- ─── ENERGIEKONZEPT ─── -->
+<div class="page" id="energie">
+  <div class="page-header"><h1>Energiekonzept-Analyse</h1><div class="meta">Heizungsversorgung &amp; Photovoltaik — Flurstck 260, Berlin-Neukoelln — Maerz 2026</div></div>
+  <div id="energie-content"></div>
+</div>
+
+<!-- ─── FINANZIERUNGSRECHNER ─── -->
+<div class="page" id="finrechner">
+  <div class="page-header"><h1>Finanzierungsrechner</h1><div class="meta">Multi-Darlehen &middot; KfW / IBB / Nachrang &middot; Tilgungsplan &middot; Live-Aktualisierung</div></div>
+  <div class="editable-hint">Alle blau umrandeten Felder koennen bearbeitet werden. Darlehen per Checkbox aktivieren/deaktivieren.</div>
+
+  <!-- Mieteinnahmen -->
+  <div class="invest-box" style="margin-bottom:1.5rem">
+    <h3>Mieteinnahmen</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:22px;margin-top:12px;align-items:end">
+      <div>
+        <span style="font-size:12px;color:var(--mut)">Mieteinnahmen pro Monat (&euro;):</span><br>
+        <input type="number" class="input-field input-lg" id="fin_miete_mon" value="4677" step="100" min="0" oninput="calcFin()">
+      </div>
+      <div>
+        <span style="font-size:12px;color:var(--mut)">= pro Jahr:</span><br>
+        <span style="font-size:1.1rem;font-weight:700;color:var(--grn)" id="fin_miete_pa_display">&mdash;</span>
+      </div>
+      <div>
+        <span style="font-size:12px;color:var(--mut)">Betriebskosten p.a. (&euro;):</span><br>
+        <input type="number" class="input-field input-lg" id="fin_bk" value="23674" step="500" min="0" oninput="calcFin()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Darlehens-Tabelle -->
+  <h2 class="section-title">Darlehen (bis zu 5 Tranchen)</h2>
+  <div class="stat-box" style="overflow-x:auto;margin-bottom:1.5rem">
+    <table class="comp-table fin-loans-table">
+      <thead>
+        <tr>
+          <th style="width:30px">Aktiv</th>
+          <th style="min-width:130px">Bezeichnung</th>
+          <th>Betrag (&euro;)</th>
+          <th>Zins (%)</th>
+          <th>Tilgung (%)</th>
+          <th>Bindung (J.)</th>
+          <th>Sondertilg. (&euro;/a)</th>
+          <th style="text-align:right">Rate/Mon</th>
+          <th style="text-align:right">Rate/Jahr</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="loan_row_1" class="loan-row active">
+          <td><input type="checkbox" id="loan_on_1" checked onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_1" value="Hauptdarlehen" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_1" value="1750000" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_1" value="3.50" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_1" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_1" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_1" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_m_1">&mdash;</td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_a_1">&mdash;</td>
+        </tr>
+        <tr id="loan_row_2" class="loan-row active">
+          <td><input type="checkbox" id="loan_on_2" checked onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_2" value="KfW 261 (BEG)" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_2" value="150000" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_2" value="1.90" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_2" value="3.33" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_2" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_2" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_m_2">&mdash;</td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_a_2">&mdash;</td>
+        </tr>
+        <tr id="loan_row_3" class="loan-row active">
+          <td><input type="checkbox" id="loan_on_3" checked onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_3" value="IBB Foerderdarlehen" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_3" value="200000" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_3" value="2.50" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_3" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_3" value="15" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_3" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_m_3">&mdash;</td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_a_3">&mdash;</td>
+        </tr>
+        <tr id="loan_row_4" class="loan-row">
+          <td><input type="checkbox" id="loan_on_4" onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_4" value="Nachrangdarlehen" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_4" value="0" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_4" value="5.00" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_4" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_4" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_4" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_m_4">&mdash;</td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_a_4">&mdash;</td>
+        </tr>
+        <tr id="loan_row_5" class="loan-row">
+          <td><input type="checkbox" id="loan_on_5" onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_5" value="Sonstiges" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_5" value="0" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_5" value="4.00" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_5" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_5" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_5" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_m_5">&mdash;</td>
+          <td style="text-align:right;font-weight:600" id="loan_rate_a_5">&mdash;</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr style="font-weight:700;border-top:2px solid var(--brd)">
+          <td></td>
+          <td>Gesamt</td>
+          <td id="loan_sum_betrag">&mdash;</td>
+          <td id="loan_avg_zins" style="color:var(--txt2)">&mdash;</td>
+          <td></td><td></td><td></td>
+          <td style="text-align:right;color:var(--acc)" id="loan_sum_rate_m">&mdash;</td>
+          <td style="text-align:right;color:var(--acc)" id="loan_sum_rate_a">&mdash;</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- Uebersicht KPIs -->
+  <h2 class="section-title">Gesamt-Uebersicht</h2>
+  <div class="invest-kpi" style="margin-bottom:22px">
+    <div class="kpi-card"><div class="kpi-value" id="fin_rate">&mdash;</div><div class="kpi-label">Monatsrate gesamt</div></div>
+    <div class="kpi-card"><div class="kpi-value" id="fin_rate_a">&mdash;</div><div class="kpi-label">Jahresbelastung</div></div>
+    <div class="kpi-card"><div class="kpi-value" id="fin_sum_darlehen">&mdash;</div><div class="kpi-label">Darlehenssumme</div></div>
+    <div class="kpi-card"><div class="kpi-value" id="fin_zins_a">&mdash;</div><div class="kpi-label">Zinsen Jahr 1</div></div>
+    <div class="kpi-card"><div class="kpi-value" id="fin_tilg_a">&mdash;</div><div class="kpi-label">Tilgung Jahr 1</div></div>
+    <div class="kpi-card"><div class="kpi-value" id="fin_avg_zins">&mdash;</div><div class="kpi-label">&Oslash; Zinssatz (gewichtet)</div></div>
+  </div>
+
+  <!-- Cashflow & Kennzahlen -->
+  <div class="stat-grid">
+    <div class="stat-box"><h3>Cashflow-Analyse (p.a.)</h3><table>
+      <tr><td>Mieteinnahmen p.a.</td><td style="color:var(--grn)" id="fin_cf_miete">&mdash;</td></tr>
+      <tr><td>Betriebskosten p.a.</td><td style="color:var(--red)" id="fin_cf_bk">&mdash;</td></tr>
+      <tr><td>= NOI (Net Operating Income)</td><td style="font-weight:700" id="fin_cf_noi">&mdash;</td></tr>
+      <tr class="sep"><td>Darlehensraten p.a. (gesamt)</td><td style="color:var(--red)" id="fin_cf_rate">&mdash;</td></tr>
+      <tr style="font-weight:700"><td>Cashflow vor Steuern</td><td id="fin_cf_netto"><strong>&mdash;</strong></td></tr>
+      <tr><td>Cashflow / Monat</td><td id="fin_cf_mon">&mdash;</td></tr>
+    </table></div>
+    <div class="stat-box"><h3>Kennzahlen</h3><table>
+      <tr><td>&Oslash; Annuitaet (gewichtet)</td><td id="fin_annuitaet">&mdash;</td></tr>
+      <tr><td>DSCR (Debt Service Coverage)</td><td id="fin_dscr">&mdash;</td></tr>
+      <tr><td>Yield on Debt (Mietrendite / Zins)</td><td id="fin_yod">&mdash;</td></tr>
+      <tr><td>LTV (Loan to Value)</td><td id="fin_ltv">&mdash;</td></tr>
+      <tr><td>Eigenkapitalrendite (Cash-on-Cash)</td><td id="fin_ek_rendite">&mdash;</td></tr>
+    </table></div>
+  </div>
+
+  <!-- Einzelauswertung pro Darlehen -->
+  <h2 class="section-title">Auswertung pro Darlehen</h2>
+  <div id="fin_loan_details" class="stat-grid"></div>
+
+  <!-- Tilgungsplan Gesamt -->
+  <h2 class="section-title">Tilgungsplan (Gesamt, alle Darlehen)</h2>
+  <div class="stat-box" style="overflow-x:auto"><table class="comp-table" id="fin_tilgplan">
+    <thead><tr><th>Jahr</th><th>Restschuld Anfang</th><th>Zinsen</th><th>Tilgung</th><th>Sondertilg.</th><th>Rate gesamt</th><th>Restschuld Ende</th></tr></thead>
+    <tbody id="fin_tbody"></tbody>
+  </table></div>
+</div>
+
+<!-- ─── DOKUMENTE ─── -->
+<div class="page" id="dokumente">
+  <div class="page-header"><h1>Dokumente</h1><div class="meta">Wichtige Projektdokumente &amp; Entwuerfe <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')" style="margin-left:8px">&#x1F4CB; Trello Board</a></div></div>
+  <div id="dokumente-content"></div>
+</div>
+
+<!-- ─── FLAECHENBERECHNUNG ─── -->
+<div class="page" id="flaechen">
+  <div class="page-header">
+    <h1>Flaechenberechnung</h1>
+    <div class="meta">Detaillierte Flaechenberechnung aller Einheiten &amp; Betriebskosten</div>
+  </div>
+
+  <!-- KPI Summary -->
+  <div class="kpi-grid" id="flaechen-kpis"></div>
+
+  <!-- Filter -->
+  <div class="stat-box" style="margin-bottom:1.5rem">
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+      <div style="flex:1;min-width:150px">
+        <label style="font-size:.85rem;color:var(--txt2);display:block;margin-bottom:.3rem">Haus</label>
+        <select id="fl_filter_haus" class="input-field" style="width:100%" onchange="renderFlaechen()">
+          <option value="">Alle</option>
+          <option value="Haus 1">Haus 1</option>
+          <option value="Haus 2">Haus 2</option>
+          <option value="Haus 3">Haus 3</option>
+          <option value="Haus 4">Haus 4</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:150px">
+        <label style="font-size:.85rem;color:var(--txt2);display:block;margin-bottom:.3rem">Nutzung</label>
+        <select id="fl_filter_nutzung" class="input-field" style="width:100%" onchange="renderFlaechen()">
+          <option value="">Alle</option>
+          <option value="Wohnen">Wohnen</option>
+          <option value="Gewerbe">Gewerbe</option>
+          <option value="Garage">Garage</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:150px">
+        <label style="font-size:.85rem;color:var(--txt2);display:block;margin-bottom:.3rem">Eigentum</label>
+        <select id="fl_filter_eigentum" class="input-field" style="width:100%" onchange="renderFlaechen()">
+          <option value="">Alle</option>
+          <option value="Sondereigentum">Sondereigentum</option>
+          <option value="Teileigentum">Teileigentum</option>
+          <option value="Gemeinschaftseigentum">Gemeinschaftseigentum</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flaechentabelle -->
+  <h2 class="section-title">Flaechendetails</h2>
+  <div class="stat-box" style="overflow-x:auto">
+    <table class="comp-table" id="fl_table">
+      <thead>
+        <tr>
+          <th>Nr.</th>
+          <th>Lage</th>
+          <th>Einheit</th>
+          <th>Bezeichnung</th>
+          <th>Raum</th>
+          <th>MEA</th>
+          <th>Nutzung</th>
+          <th>Flaeche m&sup2;</th>
+          <th>Hoehe m</th>
+          <th>Faktor</th>
+          <th>Angerechnet m&sup2;</th>
+        </tr>
+      </thead>
+      <tbody id="fl_tbody"></tbody>
+      <tfoot id="fl_tfoot"></tfoot>
+    </table>
+  </div>
+
+  <!-- Zusammenfassung nach Einheit -->
+  <h2 class="section-title" style="margin-top:2rem">Zusammenfassung nach Einheit</h2>
+  <div class="kpi-grid" id="fl_units_summary"></div>
+
+  <!-- Betriebskosten -->
+  <h2 class="section-title" style="margin-top:2rem">Betriebskosten (p.a.)</h2>
+  <div class="stat-box" style="overflow-x:auto">
+    <table class="comp-table" id="bk_table">
+      <thead>
+        <tr><th>Nr.</th><th>Position</th><th>Betrag / Jahr</th></tr>
+      </thead>
+      <tbody id="bk_tbody"></tbody>
+      <tfoot>
+        <tr style="font-weight:700;border-top:2px solid var(--brd)">
+          <td></td><td>Gesamt</td><td id="bk_total"></td>
+        </tr>
+        <tr style="color:var(--acc)">
+          <td></td><td>pro Monat</td><td id="bk_monthly"></td>
+        </tr>
+        <tr style="color:var(--txt2)">
+          <td></td><td>pro m&sup2; Wohnflaeche</td><td id="bk_sqm"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- ─── PROJEKTSTRUKTURPLAN ─── -->
+<div class="page" id="gantt">
+  <div class="page-header">
+    <h1>Projektstrukturplan</h1>
+    <div class="meta">Gantt-Chart &middot; Maerz — Dezember 2026 &middot; Alle Phasen &amp; Meilensteine <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')" style="margin-left:8px">&#x1F4CB; Trello Board</a></div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row" id="gantt-kpis"></div>
+
+  <!-- Legende -->
+  <div class="stat-box" style="margin-bottom:1.5rem;padding:12px 16px">
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:12px">
+      <span style="font-weight:600;color:var(--txt)">Legende:</span>
+      <span><span class="gantt-legend-bar" style="background:var(--acc)"></span> Ankauf &amp; DD</span>
+      <span><span class="gantt-legend-bar" style="background:var(--pur)"></span> WEG-Teilung</span>
+      <span><span class="gantt-legend-bar" style="background:var(--grn)"></span> Finanzierung</span>
+      <span><span class="gantt-legend-bar" style="background:var(--org)"></span> Sanierung Gewerbe</span>
+      <span><span class="gantt-legend-bar" style="background:var(--cyn)"></span> Sanierung Wohnen</span>
+      <span><span class="gantt-legend-bar" style="background:var(--red)"></span> Verkauf WE</span>
+      <span><span class="gantt-legend-bar" style="background:#a3e635"></span> Abschluss</span>
+      <span><span style="color:var(--red);font-size:14px">&#x25C6;</span> Meilenstein</span>
+      <span><span style="color:var(--red);font-weight:700">|</span> Heute</span>
+    </div>
+  </div>
+
+  <!-- Gantt Chart -->
+  <div class="gantt-container" id="gantt-chart"></div>
+
+  <!-- Meilensteine -->
+  <h2 class="section-title" style="margin-top:2rem">Meilensteine</h2>
+  <div id="gantt-milestones"></div>
+
+  <!-- Phasen-Detail -->
+  <h2 class="section-title" style="margin-top:2rem">Phasen-Detail</h2>
+  <div id="gantt-details" class="stat-grid"></div>
+</div>
+
+</main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
