@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Zum Inhalt springen</a>
 
 <!-- ═══ PASSWORD GATE ═══ -->
 <div class="auth-gate" id="authGate">
@@ -17,19 +18,19 @@
     <h1>Richardstr. 72</h1>
     <p>Projekt-Wissensdatenbank</p>
     <form id="authForm" onsubmit="return checkAuth()">
-      <input type="password" id="authPw" placeholder="Passwort eingeben" autocomplete="current-password" autofocus>
+      <input type="password" id="authPw" placeholder="Passwort eingeben" autocomplete="current-password" autofocus aria-label="Passwort">
       <button type="submit">Zugang</button>
     </form>
-    <div class="auth-error" id="authError"></div>
+    <div class="auth-error" id="authError" aria-live="polite"></div>
   </div>
 </div>
 
-<button class="menu-toggle" id="menuToggle">&#9776;</button>
+<button class="menu-toggle" id="menuToggle" aria-label="Navigation oeffnen">&#9776;</button>
 
 <div class="app" id="appMain" style="display:none">
 
 <!-- ═══ SIDEBAR ═══ -->
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar" id="sidebar" aria-label="Hauptnavigation">
   <div class="sidebar-brand">
     <h2>Richardstr. 72</h2>
     <small>12055 Berlin-Neukoelln</small>
@@ -60,7 +61,7 @@
 </nav>
 
 <!-- ═══ MAIN CONTENT ═══ -->
-<main class="main-content">
+<main class="main-content" id="main-content">
 
 <!-- ─── DASHBOARD ─── -->
 <div class="page active" id="dash">
@@ -111,7 +112,7 @@
 
   <div style="margin-bottom:22px;display:flex;align-items:center;gap:12px">
     <span style="font-size:12px;color:var(--mut)">Eigener Kaufpreis:</span>
-    <input type="number" class="custom-kp-input" id="ckp" placeholder="z.B. 2050000" step="50000">
+    <input type="number" class="custom-kp-input" id="ckp" placeholder="z.B. 2050000" step="50000" aria-label="Eigener Kaufpreis">
     <button class="btn btn-secondary" onclick="setCust()" style="padding:7px 16px;font-size:12px">Berechnen</button>
   </div>
   <div class="editable-hint">Alle blau umrandeten Felder koennen bearbeitet werden.</div>
@@ -121,10 +122,10 @@
     <div class="stat-box">
       <h3>Wohneinheiten</h3>
       <table>
-        <tr style="font-size:11px;color:var(--mut)"><td>Einheit</td><td>m&sup2;</td><td>&euro;/m&sup2;</td><td style="text-align:right">Preis</td></tr>
-        <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="weg_p1" value="4900" step="100" oninput="calcWEG()"></td><td style="text-align:right" id="we1p">&mdash;</td></tr>
-        <tr><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="weg_p2" value="5200" step="100" oninput="calcWEG()"></td><td style="text-align:right" id="we2p">&mdash;</td></tr>
-        <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="weg_p3" value="4900" step="100" oninput="calcWEG()"></td><td style="text-align:right" id="we3p">&mdash;</td></tr>
+        <tr style="font-size:11px;color:var(--mut)"><th scope="col">Einheit</th><th scope="col">m&sup2;</th><th scope="col">&euro;/m&sup2;</th><th scope="col" style="text-align:right">Preis</th></tr>
+        <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="weg_p1" value="4900" step="100" oninput="calcWEG()" aria-label="WE1 Preis pro m2"></td><td style="text-align:right" id="we1p">&mdash;</td></tr>
+        <tr><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="weg_p2" value="5200" step="100" oninput="calcWEG()" aria-label="WE2 Preis pro m2"></td><td style="text-align:right" id="we2p">&mdash;</td></tr>
+        <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="weg_p3" value="4900" step="100" oninput="calcWEG()" aria-label="WE3 Preis pro m2"></td><td style="text-align:right" id="we3p">&mdash;</td></tr>
         <tr style="font-weight:700"><td>Summe</td><td>304,57</td><td id="avgsqm">&mdash;</td><td style="text-align:right;color:var(--acc)" id="twoh">&mdash;</td></tr>
       </table>
     </div>
@@ -136,10 +137,10 @@
       <h3>Eigennutzung</h3>
       <div class="editable-hint" style="margin-bottom:8px">Flaechen editierbar — Summe wird automatisch berechnet.</div>
       <table>
-        <tr style="font-size:11px;color:var(--mut)"><td>Bereich</td><td>m&sup2;</td></tr>
-        <tr><td>DG / WE4</td><td><input type="number" class="input-field input-sm" id="weg_dg" value="120.00" step="1" oninput="calcWEG()"></td></tr>
-        <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td><input type="number" class="input-field input-sm" id="weg_te15" value="619.86" step="1" oninput="calcWEG()"></td></tr>
-        <tr><td>Garagen</td><td><input type="number" class="input-field input-sm" id="weg_gar" value="197.60" step="1" oninput="calcWEG()"></td></tr>
+        <tr style="font-size:11px;color:var(--mut)"><th scope="col">Bereich</th><th scope="col">m&sup2;</th></tr>
+        <tr><td>DG / WE4</td><td><input type="number" class="input-field input-sm" id="weg_dg" value="120.00" step="1" oninput="calcWEG()" aria-label="DG WE4 Flaeche m2"></td></tr>
+        <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td><input type="number" class="input-field input-sm" id="weg_te15" value="619.86" step="1" oninput="calcWEG()" aria-label="TE1-TE5 Flaeche m2"></td></tr>
+        <tr><td>Garagen</td><td><input type="number" class="input-field input-sm" id="weg_gar" value="197.60" step="1" oninput="calcWEG()" aria-label="Garagen Flaeche m2"></td></tr>
         <tr style="font-weight:700"><td>Summe</td><td id="weg_eig_sqm">&mdash;</td></tr>
       </table>
       <div style="margin-top:10px;font-size:14px;font-weight:700;color:var(--grn)" id="teig">&mdash;</div>
@@ -192,9 +193,9 @@
     <p style="font-size:12px;color:var(--mut);margin-bottom:14px">Kaufpreis / Faktor = notwendige Jahresmiete</p>
     <div style="margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div><span style="font-size:12px;color:var(--mut)">Kaufpreis:</span><br>
-        <input type="number" class="input-field input-lg" id="inp_kp" value="2200000" step="50000" oninput="calcF20()"></div>
+        <input type="number" class="input-field input-lg" id="inp_kp" value="2200000" step="50000" oninput="calcF20()" aria-label="Kaufpreis"></div>
       <div><span style="font-size:12px;color:var(--mut)">Faktor (Jahre):</span><br>
-        <input type="number" class="input-field input-sm" id="inp_faktor" value="20" step="1" min="1" max="50" oninput="calcF20()"></div>
+        <input type="number" class="input-field input-sm" id="inp_faktor" value="20" step="1" min="1" max="50" oninput="calcF20()" aria-label="Kaufpreisfaktor in Jahren"></div>
     </div>
     <div class="invest-kpi">
       <div class="kpi-card"><div class="kpi-value" id="inv_kp">&mdash;</div><div class="kpi-label">Kaufpreis</div></div>
@@ -210,9 +211,9 @@
   <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen IST</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2; netto kalt</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
-    <tr><td>WE1 (EG links) — vermietet</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_we1" value="7.00" step="0.50" oninput="calcF20()"></td><td id="ist_we1m">&mdash;</td><td id="ist_we1a">&mdash;</td></tr>
+    <tr><td>WE1 (EG links) — vermietet</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 IST Miete pro m2"></td><td id="ist_we1m">&mdash;</td><td id="ist_we1a">&mdash;</td></tr>
     <tr class="hl-red"><td>WE2 (EG rechts) — leerstehend</td><td>106,70</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
-    <tr><td>WE3 (1. OG) — vermietet</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_we3" value="10.00" step="0.50" oninput="calcF20()"></td><td id="ist_we3m">&mdash;</td><td id="ist_we3a">&mdash;</td></tr>
+    <tr><td>WE3 (1. OG) — vermietet</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 IST Miete pro m2"></td><td id="ist_we3m">&mdash;</td><td id="ist_we3a">&mdash;</td></tr>
     <tr><td>WE4/DG (50% eigen, Rohling)</td><td>120,00</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
     <tr class="hl"><td><strong>IST Wohnen</strong></td><td>424,57</td><td></td><td id="ist_wm"><strong>&mdash;</strong></td><td id="ist_wa"><strong>&mdash;</strong></td></tr>
   </table></div>
@@ -225,7 +226,7 @@
     <tr><td>Tante Frizzante (TE2-TE4)</td><td>387,55</td><td>2,78</td><td>1.200 &euro;</td><td>14.400 &euro;</td></tr>
     <tr><td>Musikstudio</td><td>&mdash;</td><td>&mdash;</td><td>210 &euro;</td><td>2.520 &euro;</td></tr>
     <tr><td>TE6 Garage</td><td>57,91</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
-    <tr><td>Scheune DG (Lager)</td><td>116,25</td><td><input type="number" class="input-field input-sm" id="inp_scheune_ist" value="5.00" step="0.50" oninput="calcF20()"></td><td id="ist_sdgm">&mdash;</td><td id="ist_sdga">&mdash;</td></tr>
+    <tr><td>Scheune DG (Lager)</td><td>116,25</td><td><input type="number" class="input-field input-sm" id="inp_scheune_ist" value="5.00" step="0.50" oninput="calcF20()" aria-label="Scheune DG IST Miete pro m2"></td><td id="ist_sdgm">&mdash;</td><td id="ist_sdga">&mdash;</td></tr>
     <tr><td>7 Stellplaetze</td><td>&mdash;</td><td>&agrave; 65 &euro;</td><td>455 &euro;</td><td>5.460 &euro;</td></tr>
     <tr class="hl"><td><strong>IST Gewerbe</strong></td><td></td><td></td><td id="ist_gew_m"><strong>&mdash;</strong></td><td id="ist_gew_a"><strong>&mdash;</strong></td></tr>
   </table></div>
@@ -252,19 +253,19 @@
   <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen SOLL (ohne DG)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th><th>Status</th></tr>
-    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_a_we1" value="7.00" step="0.50" oninput="calcF20()"></td><td id="a_we1m">&mdash;</td><td id="a_we1a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
-    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_a_we2" value="12.00" step="0.50" oninput="calcF20()"></td><td id="a_we2m">&mdash;</td><td id="a_we2a">&mdash;</td><td><span class="tag tag-orange">SOLL</span></td></tr>
-    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_a_we3" value="10.00" step="0.50" oninput="calcF20()"></td><td id="a_we3m">&mdash;</td><td id="a_we3a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
-    <tr><td>WE4/DG Wohnen (50%)</td><td>60,00</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td><td><span class="tag tag-red">Rohling</span></td></tr>
+    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_a_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 SOLL A Miete pro m2"></td><td id="a_we1m">&mdash;</td><td id="a_we1a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_a_we2" value="12.00" step="0.50" oninput="calcF20()" aria-label="WE2 SOLL A Miete pro m2"></td><td id="a_we2m">&mdash;</td><td id="a_we2a">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL</span></td></tr>
+    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_a_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 SOLL A Miete pro m2"></td><td id="a_we3m">&mdash;</td><td id="a_we3a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr><td>WE4/DG Wohnen (50%)</td><td>60,00</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td><td><span class="tag tag-red">&#x26A0; Rohling</span></td></tr>
     <tr class="hl"><td><strong>SOLL Wohnen A</strong></td><td>364,57</td><td></td><td id="a_wm"><strong>&mdash;</strong></td><td id="a_wa"><strong>&mdash;</strong></td><td></td></tr>
   </table></div>
 
   <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe SOLL (inkl. Scheune DG ausgebaut)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
-    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_a_te15" value="15.00" step="0.50" oninput="calcF20()"></td><td id="a_te15m">&mdash;</td><td id="a_te15a">&mdash;</td></tr>
-    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_a_te6" value="15.00" step="0.50" oninput="calcF20()"></td><td id="a_te6m">&mdash;</td><td id="a_te6a">&mdash;</td></tr>
-    <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_a_sp_n" value="10" step="1" min="0" oninput="calcF20()"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_a_sp_p" value="150" step="10" oninput="calcF20()"> &euro;</td><td id="a_spm">&mdash;</td><td id="a_spa">&mdash;</td></tr>
+    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_a_te15" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE1-5 SOLL A Miete pro m2"></td><td id="a_te15m">&mdash;</td><td id="a_te15a">&mdash;</td></tr>
+    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_a_te6" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE6 SOLL A Miete pro m2"></td><td id="a_te6m">&mdash;</td><td id="a_te6a">&mdash;</td></tr>
+    <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_a_sp_n" value="10" step="1" min="0" oninput="calcF20()" aria-label="Stellplaetze Anzahl SOLL A"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_a_sp_p" value="150" step="10" oninput="calcF20()" aria-label="Stellplaetze Preis SOLL A"> &euro;</td><td id="a_spm">&mdash;</td><td id="a_spa">&mdash;</td></tr>
     <tr class="hl"><td><strong>SOLL Gewerbe A</strong></td><td></td><td></td><td id="a_gm"><strong>&mdash;</strong></td><td id="a_ga"><strong>&mdash;</strong></td></tr>
   </table></div>
 
@@ -290,19 +291,19 @@
   <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen SOLL (mit DG-Ausbau)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th><th>Status</th></tr>
-    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_b_we1" value="7.00" step="0.50" oninput="calcF20()"></td><td id="b_we1m">&mdash;</td><td id="b_we1a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
-    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_b_we2" value="12.00" step="0.50" oninput="calcF20()"></td><td id="b_we2m">&mdash;</td><td id="b_we2a">&mdash;</td><td><span class="tag tag-orange">SOLL</span></td></tr>
-    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_b_we3" value="10.00" step="0.50" oninput="calcF20()"></td><td id="b_we3m">&mdash;</td><td id="b_we3a">&mdash;</td><td><span class="tag tag-green">IST</span></td></tr>
-    <tr class="hl-green"><td>WE4/DG (50% von 120 m&sup2;)</td><td><input type="number" class="input-field input-sm" id="inp_b_dg_sqm" value="60" step="1" oninput="calcF20()"> m&sup2;</td><td><input type="number" class="input-field input-sm" id="inp_b_dg" value="12.00" step="0.50" oninput="calcF20()"></td><td id="b_dgm">&mdash;</td><td id="b_dga">&mdash;</td><td><span class="tag tag-orange">SOLL DG</span></td></tr>
+    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_b_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 SOLL B Miete pro m2"></td><td id="b_we1m">&mdash;</td><td id="b_we1a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_b_we2" value="12.00" step="0.50" oninput="calcF20()" aria-label="WE2 SOLL B Miete pro m2"></td><td id="b_we2m">&mdash;</td><td id="b_we2a">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL</span></td></tr>
+    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_b_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 SOLL B Miete pro m2"></td><td id="b_we3m">&mdash;</td><td id="b_we3a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr class="hl-green"><td>WE4/DG (50% von 120 m&sup2;)</td><td><input type="number" class="input-field input-sm" id="inp_b_dg_sqm" value="60" step="1" oninput="calcF20()" aria-label="DG Flaeche SOLL B m2"> m&sup2;</td><td><input type="number" class="input-field input-sm" id="inp_b_dg" value="12.00" step="0.50" oninput="calcF20()" aria-label="DG SOLL B Miete pro m2"></td><td id="b_dgm">&mdash;</td><td id="b_dga">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL DG</span></td></tr>
     <tr class="hl"><td><strong>SOLL Wohnen B</strong></td><td id="b_sqm_total">&mdash;</td><td></td><td id="b_wm"><strong>&mdash;</strong></td><td id="b_wa"><strong>&mdash;</strong></td><td></td></tr>
   </table></div>
 
   <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe SOLL (inkl. Scheune DG ausgebaut)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
-    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_b_te15" value="15.00" step="0.50" oninput="calcF20()"></td><td id="b_te15m">&mdash;</td><td id="b_te15a">&mdash;</td></tr>
-    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_b_te6" value="15.00" step="0.50" oninput="calcF20()"></td><td id="b_te6m">&mdash;</td><td id="b_te6a">&mdash;</td></tr>
-    <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_b_sp_n" value="10" step="1" min="0" oninput="calcF20()"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_b_sp_p" value="150" step="10" oninput="calcF20()"> &euro;</td><td id="b_spm">&mdash;</td><td id="b_spa">&mdash;</td></tr>
+    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_b_te15" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE1-5 SOLL B Miete pro m2"></td><td id="b_te15m">&mdash;</td><td id="b_te15a">&mdash;</td></tr>
+    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_b_te6" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE6 SOLL B Miete pro m2"></td><td id="b_te6m">&mdash;</td><td id="b_te6a">&mdash;</td></tr>
+    <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_b_sp_n" value="10" step="1" min="0" oninput="calcF20()" aria-label="Stellplaetze Anzahl SOLL B"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_b_sp_p" value="150" step="10" oninput="calcF20()" aria-label="Stellplaetze Preis SOLL B"> &euro;</td><td id="b_spm">&mdash;</td><td id="b_spa">&mdash;</td></tr>
     <tr class="hl"><td><strong>SOLL Gewerbe B</strong></td><td></td><td></td><td id="b_gm"><strong>&mdash;</strong></td><td id="b_ga"><strong>&mdash;</strong></td></tr>
   </table></div>
 
@@ -450,21 +451,21 @@
 <div class="page" id="buyer">
   <div class="page-header"><h1>Kaeufer &amp; Verkaufsstatus</h1><a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')">&#x1F4CB; Trello Board</a></div>
   <h2 class="section-title">Wohnen — WEG-Kaeufer</h2>
-  <div class="buyer-card" style="border-left:3px solid var(--grn)"><span class="tag tag-green">Heissester Interessent</span><h3>Jan-Philip Roedger</h3><div class="unit-info">&#x1F4E7; <a href="mailto:jp.saltero@gmail.com" style="color:var(--acc)">jp.saltero@gmail.com</a></div>
+  <div class="buyer-card" style="border-left:3px solid var(--grn)"><span class="tag tag-green">&#x2713; Heissester Interessent</span><h3>Jan-Philip Roedger</h3><div class="unit-info">&#x1F4E7; <a href="mailto:jp.saltero@gmail.com" style="color:var(--acc)">jp.saltero@gmail.com</a></div>
     <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Naechste Schritte (0/4)</div><div class="collapse-body"><div class="checklist-item">Erstgespraech / Besichtigung</div><div class="checklist-item">Unterlagen zusenden</div><div class="checklist-item">Kaufpreisverhandlung</div><div class="checklist-item">Notartermin vereinbaren</div></div></div></div>
-  <div class="buyer-card"><span class="tag tag-orange">In Arbeit</span><h3>Kolja — EG rechts / WE2</h3><div class="unit-info">106,70 m&sup2; &middot; 3 ZKB, Balkon, ~50 m&sup2; Garten &middot; Bezugsfrei</div><div class="price">554.840 &euro; (5.200 &euro;/m&sup2;)</div>
+  <div class="buyer-card"><span class="tag tag-orange">&#x25CB; In Arbeit</span><h3>Kolja — EG rechts / WE2</h3><div class="unit-info">106,70 m&sup2; &middot; 3 ZKB, Balkon, ~50 m&sup2; Garten &middot; Bezugsfrei</div><div class="price">554.840 &euro; (5.200 &euro;/m&sup2;)</div>
     <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Abstimmung (0/5)</div><div class="collapse-body"><div class="checklist-item">NDA</div><div class="checklist-item">Grundrisse</div><div class="checklist-item">Mieterliste</div><div class="checklist-item">Teilungserklaerung</div><div class="checklist-item">Expose</div></div></div>
     <div class="due-date">Termin: 28.01.2026 (stattgefunden)</div></div>
-  <div class="buyer-card"><span class="tag tag-orange">In Arbeit</span><span class="tag tag-red">Prio</span><h3>Lina — 1. OG / WE3</h3><div class="unit-info">138,31 m&sup2; &middot; 5 ZKB &middot; Bezugsfrei</div><div class="price">677.719 &euro; (4.900 &euro;/m&sup2;)</div>
+  <div class="buyer-card"><span class="tag tag-orange">&#x25CB; In Arbeit</span><span class="tag tag-red">&#x26A0; Prio</span><h3>Lina — 1. OG / WE3</h3><div class="unit-info">138,31 m&sup2; &middot; 5 ZKB &middot; Bezugsfrei</div><div class="price">677.719 &euro; (4.900 &euro;/m&sup2;)</div>
     <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Abstimmung (2/4)</div><div class="collapse-body"><div class="checklist-item done">Grundrisse</div><div class="checklist-item done">Mieterliste</div><div class="checklist-item">Teilungserklaerung</div><div class="checklist-item">Expose</div></div></div></div>
   <div class="buyer-card"><h3>Morits Schmitt — 50% DG / WE4</h3><div class="unit-info">69,50 m&sup2; (50% von 139 m&sup2;) &middot; Rohling &middot; EK-Partner</div><div class="price">100.000 &euro; fuer 50% DG Rohling &middot; 100.000 &euro; EK-Beitrag</div>
     <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Status (0/4)</div><div class="collapse-body"><div class="checklist-item">Kaufpreis 50% DG festlegen</div><div class="checklist-item">EK-Vereinbarung</div><div class="checklist-item">Notartermin</div><div class="checklist-item">DG-Ausbau spaeter planen</div></div></div>
     <div class="alert-warn">Aufschiebende Bedingung WEG / Baugenehmigung</div>
     <div class="alert-info">DG-Ausbau wird spaeter kalkuliert — zunaechst Rohling-Verkauf</div></div>
   <h2 class="section-title">Gewerbe — Eigennutzung</h2>
-  <div class="buyer-card cyan"><span class="tag tag-green">Eigennutzung</span><h3>Tante Frizzante — TE2-TE4</h3><div class="unit-info">Indexmietvertrag Basis 2020 &middot; IST: 1.200 &euro;/Mon (2,78 &euro;/m&sup2;) &middot; Ab Mai 2026: 1.375,20 &euro;</div></div>
-  <div class="buyer-card cyan"><span class="tag tag-green">Eigennutzung</span><h3>Buero — TE1</h3><div class="unit-info">57,53 m&sup2; &middot; Eigennutzung</div></div>
-  <div class="buyer-card cyan"><span class="tag tag-green">Eigennutzung</span><h3>WE1 — EG links</h3><div class="unit-info">59,56 m&sup2; &middot; Vermietet (329 &euro;/Mon)</div></div>
+  <div class="buyer-card cyan"><span class="tag tag-green">&#x2713; Eigennutzung</span><h3>Tante Frizzante — TE2-TE4</h3><div class="unit-info">Indexmietvertrag Basis 2020 &middot; IST: 1.200 &euro;/Mon (2,78 &euro;/m&sup2;) &middot; Ab Mai 2026: 1.375,20 &euro;</div></div>
+  <div class="buyer-card cyan"><span class="tag tag-green">&#x2713; Eigennutzung</span><h3>Buero — TE1</h3><div class="unit-info">57,53 m&sup2; &middot; Eigennutzung</div></div>
+  <div class="buyer-card cyan"><span class="tag tag-green">&#x2713; Eigennutzung</span><h3>WE1 — EG links</h3><div class="unit-info">59,56 m&sup2; &middot; Vermietet (329 &euro;/Mon)</div></div>
 </div>
 
 <!-- ─── FINANZEN ─── -->
@@ -538,7 +539,7 @@
     <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('gantt')">&#x1F4C5; Projektstrukturplan</a>
     <a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('dokumente')">&#x1F4C1; Dokumente</a>
   </div>
-  <input class="search-input" type="text" placeholder="Karten durchsuchen ..." id="tsearch" oninput="filterTrello()">
+  <input class="search-input" type="text" placeholder="Karten durchsuchen ..." id="tsearch" oninput="filterTrello()" aria-label="Trello-Karten durchsuchen">
   <div id="tboard"></div>
 </div>
 
@@ -546,7 +547,7 @@
 <div class="page" id="gal">
   <div class="page-header"><h1>Bildergalerie</h1><div class="meta" id="imgcount"></div></div>
   <div class="gallery-grid" id="gallery"></div>
-  <div class="lightbox" id="lb" onclick="closeLightbox()"><button class="close-btn" onclick="closeLightbox()">&times;</button><img id="lbi" src="" alt=""></div>
+  <div class="lightbox" id="lb" onclick="closeLightbox()"><button class="close-btn" onclick="closeLightbox()" aria-label="Lightbox schliessen">&times;</button><img id="lbi" src="" alt="Vergroessertes Galeriebild"></div>
 </div>
 
 <!-- ─── KONTAKTE ─── -->
@@ -608,19 +609,19 @@
       </thead>
       <tbody>
         <tr class="fin-unit-header" style="background:var(--acc)15"><td colspan="5" style="color:var(--acc);font-weight:700;font-size:12px">WOHNEN</td></tr>
-        <tr><td>WE1 (EG links)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we1" value="59.56" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we1" value="5.52" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we1_m">&mdash;</td><td style="text-align:right" id="fu_we1_a">&mdash;</td></tr>
-        <tr><td>WE2 (EG rechts)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we2" value="106.70" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we2" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we2_m">&mdash;</td><td style="text-align:right" id="fu_we2_a">&mdash;</td></tr>
-        <tr><td>WE3 (1. OG)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we3" value="138.31" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we3" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we3_m">&mdash;</td><td style="text-align:right" id="fu_we3_a">&mdash;</td></tr>
-        <tr><td>WE4 / DG (Rohling)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we4" value="139.00" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we4" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we4_m">&mdash;</td><td style="text-align:right" id="fu_we4_a">&mdash;</td></tr>
+        <tr><td>WE1 (EG links)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we1" value="59.56" step="0.01" min="0" oninput="calcFin()" aria-label="WE1 Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we1" value="5.52" step="0.50" min="0" oninput="calcFin()" aria-label="WE1 Miete pro m2"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we1_m">&mdash;</td><td style="text-align:right" id="fu_we1_a">&mdash;</td></tr>
+        <tr><td>WE2 (EG rechts)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we2" value="106.70" step="0.01" min="0" oninput="calcFin()" aria-label="WE2 Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we2" value="9.50" step="0.50" min="0" oninput="calcFin()" aria-label="WE2 Miete pro m2"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we2_m">&mdash;</td><td style="text-align:right" id="fu_we2_a">&mdash;</td></tr>
+        <tr><td>WE3 (1. OG)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we3" value="138.31" step="0.01" min="0" oninput="calcFin()" aria-label="WE3 Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we3" value="9.50" step="0.50" min="0" oninput="calcFin()" aria-label="WE3 Miete pro m2"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we3_m">&mdash;</td><td style="text-align:right" id="fu_we3_a">&mdash;</td></tr>
+        <tr><td>WE4 / DG (Rohling)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we4" value="139.00" step="0.01" min="0" oninput="calcFin()" aria-label="WE4 DG Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we4" value="0.00" step="0.50" min="0" oninput="calcFin()" aria-label="WE4 DG Miete pro m2"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we4_m">&mdash;</td><td style="text-align:right" id="fu_we4_a">&mdash;</td></tr>
         <tr class="sep" style="font-weight:700"><td>Summe Wohnen</td><td style="text-align:right;color:var(--acc)" id="fu_sqm_w">&mdash;</td><td></td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_m">&mdash;</td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_a">&mdash;</td></tr>
 
         <tr class="fin-unit-header" style="background:var(--org)15"><td colspan="5" style="color:var(--org);font-weight:700;font-size:12px">GEWERBE</td></tr>
-        <tr><td>TE1 (Buero)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te1" value="57.53" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te1" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_te1_m">&mdash;</td><td style="text-align:right" id="fu_te1_a">&mdash;</td></tr>
-        <tr><td>TE2-TE4 (Tante Frizzante)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te24" value="432.00" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te24" value="1200" step="50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te24_m">&mdash;</td><td style="text-align:right" id="fu_te24_a">&mdash;</td></tr>
-        <tr><td>TE5 (Musiker-Studio)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te5" value="58.00" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te5" value="210" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te5_m">&mdash;</td><td style="text-align:right" id="fu_te5_a">&mdash;</td></tr>
-        <tr><td>Scheune DG (Haus 4)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_sdg" value="116.25" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sdg" value="4.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_sdg_m">&mdash;</td><td style="text-align:right" id="fu_sdg_a">&mdash;</td></tr>
-        <tr><td>TE6 (Doppelgarage)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te6" value="57.91" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te6" value="0" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te6_m">&mdash;</td><td style="text-align:right" id="fu_te6_a">&mdash;</td></tr>
-        <tr><td>9 Stellplaetze (TE7-TE14+)</td><td style="text-align:right;color:var(--mut)">&mdash;</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sp" value="455" step="25" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_sp_m">&mdash;</td><td style="text-align:right" id="fu_sp_a">&mdash;</td></tr>
+        <tr><td>TE1 (Buero)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te1" value="57.53" step="0.01" min="0" oninput="calcFin()" aria-label="TE1 Buero Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te1" value="0.00" step="0.50" min="0" oninput="calcFin()" aria-label="TE1 Buero Miete pro m2"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_te1_m">&mdash;</td><td style="text-align:right" id="fu_te1_a">&mdash;</td></tr>
+        <tr><td>TE2-TE4 (Tante Frizzante)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te24" value="432.00" step="0.01" min="0" oninput="calcFin()" aria-label="TE2-TE4 Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te24" value="1200" step="50" min="0" oninput="calcFin()" aria-label="TE2-TE4 Miete pro Monat"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te24_m">&mdash;</td><td style="text-align:right" id="fu_te24_a">&mdash;</td></tr>
+        <tr><td>TE5 (Musiker-Studio)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te5" value="58.00" step="0.01" min="0" oninput="calcFin()" aria-label="TE5 Studio Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te5" value="210" step="10" min="0" oninput="calcFin()" aria-label="TE5 Studio Miete pro Monat"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te5_m">&mdash;</td><td style="text-align:right" id="fu_te5_a">&mdash;</td></tr>
+        <tr><td>Scheune DG (Haus 4)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_sdg" value="116.25" step="0.01" min="0" oninput="calcFin()" aria-label="Scheune DG Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sdg" value="4.00" step="0.50" min="0" oninput="calcFin()" aria-label="Scheune DG Miete pro m2"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_sdg_m">&mdash;</td><td style="text-align:right" id="fu_sdg_a">&mdash;</td></tr>
+        <tr><td>TE6 (Doppelgarage)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te6" value="57.91" step="0.01" min="0" oninput="calcFin()" aria-label="TE6 Doppelgarage Flaeche m2"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te6" value="0" step="10" min="0" oninput="calcFin()" aria-label="TE6 Doppelgarage Miete pro Monat"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te6_m">&mdash;</td><td style="text-align:right" id="fu_te6_a">&mdash;</td></tr>
+        <tr><td>9 Stellplaetze (TE7-TE14+)</td><td style="text-align:right;color:var(--mut)">&mdash;</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sp" value="455" step="25" min="0" oninput="calcFin()" aria-label="Stellplaetze Miete pro Monat"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_sp_m">&mdash;</td><td style="text-align:right" id="fu_sp_a">&mdash;</td></tr>
         <tr class="sep" style="font-weight:700"><td>Summe Gewerbe</td><td style="text-align:right;color:var(--org)" id="fu_sqm_g">&mdash;</td><td></td><td style="text-align:right;color:var(--org)" id="fu_sum_g_m">&mdash;</td><td style="text-align:right;color:var(--org)" id="fu_sum_g_a">&mdash;</td></tr>
       </tbody>
       <tfoot>
@@ -633,13 +634,13 @@
         <tr class="fin-unit-header" style="background:var(--red)10"><td colspan="5" style="color:var(--red);font-weight:700;font-size:12px">BETRIEBSKOSTEN</td></tr>
         <tr>
           <td>Umlagefaehig <span style="font-size:10px;color:var(--mut)">(Grundsteuer, Wasser, Muell, Versicherung, Hauswart etc.)</span></td><td></td>
-          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk_umlage" value="18000" step="500" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
+          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk_umlage" value="18000" step="500" min="0" oninput="calcFin()" aria-label="Umlagefaehige Betriebskosten pro Jahr"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
           <td></td>
           <td style="text-align:right;color:var(--txt2)" id="fu_bk_umlage_display">&mdash;</td>
         </tr>
         <tr>
           <td>Nicht umlagefaehig <span style="font-size:10px;color:var(--mut)">(Verwaltung, Instandhaltung, Reparaturen)</span></td><td></td>
-          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk_nicht" value="5674" step="500" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
+          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk_nicht" value="5674" step="500" min="0" oninput="calcFin()" aria-label="Nicht umlagefaehige Betriebskosten pro Jahr"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
           <td></td>
           <td style="text-align:right;color:var(--red)" id="fu_bk_nicht_display">&mdash;</td>
         </tr>
@@ -670,57 +671,57 @@
       </thead>
       <tbody>
         <tr id="loan_row_1" class="loan-row active">
-          <td><input type="checkbox" id="loan_on_1" checked onchange="calcFin()"></td>
-          <td><input type="text" class="input-field" id="loan_name_1" value="Hauptdarlehen" style="width:120px;text-align:left"></td>
-          <td><input type="number" class="input-field input-lg" id="loan_betrag_1" value="1750000" step="10000" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_zins_1" value="3.50" step="0.10" min="0" max="15" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_tilg_1" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_bind_1" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_sonder_1" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td><input type="checkbox" id="loan_on_1" aria-label="Darlehen 1 aktivieren" checked onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_1" aria-label="Darlehen 1 Bezeichnung" value="Hauptdarlehen" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_1" aria-label="Darlehen 1 Betrag" value="1750000" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_1" aria-label="Darlehen 1 Zinssatz" value="3.50" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_1" aria-label="Darlehen 1 Tilgung" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_1" aria-label="Darlehen 1 Zinsbindung" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_1" aria-label="Darlehen 1 Sondertilgung" value="0" step="5000" min="0" oninput="calcFin()"></td>
           <td style="text-align:right;font-weight:600" id="loan_rate_m_1">&mdash;</td>
           <td style="text-align:right;font-weight:600" id="loan_rate_a_1">&mdash;</td>
         </tr>
         <tr id="loan_row_2" class="loan-row active">
-          <td><input type="checkbox" id="loan_on_2" checked onchange="calcFin()"></td>
-          <td><input type="text" class="input-field" id="loan_name_2" value="KfW 261 (BEG)" style="width:120px;text-align:left"></td>
-          <td><input type="number" class="input-field input-lg" id="loan_betrag_2" value="150000" step="10000" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_zins_2" value="1.90" step="0.10" min="0" max="15" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_tilg_2" value="3.33" step="0.25" min="0" max="10" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_bind_2" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_sonder_2" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td><input type="checkbox" id="loan_on_2" aria-label="Darlehen 2 aktivieren" checked onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_2" aria-label="Darlehen 2 Bezeichnung" value="KfW 261 (BEG)" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_2" aria-label="Darlehen 2 Betrag" value="150000" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_2" aria-label="Darlehen 2 Zinssatz" value="1.90" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_2" aria-label="Darlehen 2 Tilgung" value="3.33" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_2" aria-label="Darlehen 2 Zinsbindung" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_2" aria-label="Darlehen 2 Sondertilgung" value="0" step="5000" min="0" oninput="calcFin()"></td>
           <td style="text-align:right;font-weight:600" id="loan_rate_m_2">&mdash;</td>
           <td style="text-align:right;font-weight:600" id="loan_rate_a_2">&mdash;</td>
         </tr>
         <tr id="loan_row_3" class="loan-row active">
-          <td><input type="checkbox" id="loan_on_3" checked onchange="calcFin()"></td>
-          <td><input type="text" class="input-field" id="loan_name_3" value="IBB Foerderdarlehen" style="width:120px;text-align:left"></td>
-          <td><input type="number" class="input-field input-lg" id="loan_betrag_3" value="200000" step="10000" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_zins_3" value="2.50" step="0.10" min="0" max="15" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_tilg_3" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_bind_3" value="15" step="1" min="1" max="30" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_sonder_3" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td><input type="checkbox" id="loan_on_3" aria-label="Darlehen 3 aktivieren" checked onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_3" aria-label="Darlehen 3 Bezeichnung" value="IBB Foerderdarlehen" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_3" aria-label="Darlehen 3 Betrag" value="200000" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_3" aria-label="Darlehen 3 Zinssatz" value="2.50" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_3" aria-label="Darlehen 3 Tilgung" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_3" aria-label="Darlehen 3 Zinsbindung" value="15" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_3" aria-label="Darlehen 3 Sondertilgung" value="0" step="5000" min="0" oninput="calcFin()"></td>
           <td style="text-align:right;font-weight:600" id="loan_rate_m_3">&mdash;</td>
           <td style="text-align:right;font-weight:600" id="loan_rate_a_3">&mdash;</td>
         </tr>
         <tr id="loan_row_4" class="loan-row">
-          <td><input type="checkbox" id="loan_on_4" onchange="calcFin()"></td>
-          <td><input type="text" class="input-field" id="loan_name_4" value="Nachrangdarlehen" style="width:120px;text-align:left"></td>
-          <td><input type="number" class="input-field input-lg" id="loan_betrag_4" value="0" step="10000" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_zins_4" value="5.00" step="0.10" min="0" max="15" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_tilg_4" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_bind_4" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_sonder_4" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td><input type="checkbox" id="loan_on_4" aria-label="Darlehen 4 aktivieren" onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_4" aria-label="Darlehen 4 Bezeichnung" value="Nachrangdarlehen" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_4" aria-label="Darlehen 4 Betrag" value="0" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_4" aria-label="Darlehen 4 Zinssatz" value="5.00" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_4" aria-label="Darlehen 4 Tilgung" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_4" aria-label="Darlehen 4 Zinsbindung" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_4" aria-label="Darlehen 4 Sondertilgung" value="0" step="5000" min="0" oninput="calcFin()"></td>
           <td style="text-align:right;font-weight:600" id="loan_rate_m_4">&mdash;</td>
           <td style="text-align:right;font-weight:600" id="loan_rate_a_4">&mdash;</td>
         </tr>
         <tr id="loan_row_5" class="loan-row">
-          <td><input type="checkbox" id="loan_on_5" onchange="calcFin()"></td>
-          <td><input type="text" class="input-field" id="loan_name_5" value="Sonstiges" style="width:120px;text-align:left"></td>
-          <td><input type="number" class="input-field input-lg" id="loan_betrag_5" value="0" step="10000" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_zins_5" value="4.00" step="0.10" min="0" max="15" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_tilg_5" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_bind_5" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
-          <td><input type="number" class="input-field input-sm" id="loan_sonder_5" value="0" step="5000" min="0" oninput="calcFin()"></td>
+          <td><input type="checkbox" id="loan_on_5" aria-label="Darlehen 5 aktivieren" onchange="calcFin()"></td>
+          <td><input type="text" class="input-field" id="loan_name_5" aria-label="Darlehen 5 Bezeichnung" value="Sonstiges" style="width:120px;text-align:left"></td>
+          <td><input type="number" class="input-field input-lg" id="loan_betrag_5" aria-label="Darlehen 5 Betrag" value="0" step="10000" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_zins_5" aria-label="Darlehen 5 Zinssatz" value="4.00" step="0.10" min="0" max="15" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_tilg_5" aria-label="Darlehen 5 Tilgung" value="2.00" step="0.25" min="0" max="10" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_bind_5" aria-label="Darlehen 5 Zinsbindung" value="10" step="1" min="1" max="30" oninput="calcFin()"></td>
+          <td><input type="number" class="input-field input-sm" id="loan_sonder_5" aria-label="Darlehen 5 Sondertilgung" value="0" step="5000" min="0" oninput="calcFin()"></td>
           <td style="text-align:right;font-weight:600" id="loan_rate_m_5">&mdash;</td>
           <td style="text-align:right;font-weight:600" id="loan_rate_a_5">&mdash;</td>
         </tr>
@@ -803,7 +804,7 @@
     <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
       <div style="flex:1;min-width:150px">
         <label style="font-size:.85rem;color:var(--txt2);display:block;margin-bottom:.3rem">Haus</label>
-        <select id="fl_filter_haus" class="input-field" style="width:100%" onchange="renderFlaechen()">
+        <select id="fl_filter_haus" class="input-field" style="width:100%" onchange="renderFlaechen()" aria-label="Filter nach Haus">
           <option value="">Alle</option>
           <option value="Haus 1">Haus 1</option>
           <option value="Haus 2">Haus 2</option>
@@ -813,7 +814,7 @@
       </div>
       <div style="flex:1;min-width:150px">
         <label style="font-size:.85rem;color:var(--txt2);display:block;margin-bottom:.3rem">Nutzung</label>
-        <select id="fl_filter_nutzung" class="input-field" style="width:100%" onchange="renderFlaechen()">
+        <select id="fl_filter_nutzung" class="input-field" style="width:100%" onchange="renderFlaechen()" aria-label="Filter nach Nutzung">
           <option value="">Alle</option>
           <option value="Wohnen">Wohnen</option>
           <option value="Gewerbe">Gewerbe</option>
@@ -822,7 +823,7 @@
       </div>
       <div style="flex:1;min-width:150px">
         <label style="font-size:.85rem;color:var(--txt2);display:block;margin-bottom:.3rem">Eigentum</label>
-        <select id="fl_filter_eigentum" class="input-field" style="width:100%" onchange="renderFlaechen()">
+        <select id="fl_filter_eigentum" class="input-field" style="width:100%" onchange="renderFlaechen()" aria-label="Filter nach Eigentum">
           <option value="">Alle</option>
           <option value="Sondereigentum">Sondereigentum</option>
           <option value="Teileigentum">Teileigentum</option>

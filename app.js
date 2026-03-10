@@ -670,7 +670,8 @@ function renderTrello(filter) {
       var c = fc[i];
       var lb = (c.lb || []).map(function (l) {
         var cl = l.includes('Bearbeitung') ? 'tag-orange' : l.includes('Dringend') ? 'tag-red' : 'tag-blue';
-        return '<span class="tag ' + cl + '">' + l + '</span>';
+        var icon = cl === 'tag-red' ? '\u26A0 ' : cl === 'tag-orange' ? '\u25CB ' : '\u2139 ';
+        return '<span class="tag ' + cl + '">' + icon + l + '</span>';
       }).join(' ');
       var ch = '';
       if (c.cl) {
@@ -715,19 +716,21 @@ function renderGallery() {
   var count = 0;
 
   galleryFiles.forEach(function (name) {
-    html += '<div class="gallery-item" onclick="openLightbox(\'images/' + name + '\')">' +
-      '<img src="images/' + name + '" loading="lazy" alt="' + name + '">' +
-      '<div class="caption">' + name + '</div></div>';
     count++;
+    var altText = 'Projektfoto ' + count + ' — Richardstr. 72';
+    html += '<div class="gallery-item" onclick="openLightbox(\'images/' + name + '\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')openLightbox(\'images/' + name + '\')">' +
+      '<img src="images/' + name + '" loading="lazy" alt="' + altText + '">' +
+      '<div class="caption">' + name + '</div></div>';
   });
 
   gallerySubfolders.forEach(function (sub) {
     sub.files.forEach(function (name) {
-      var path = 'images/' + sub.folder + '/' + name;
-      html += '<div class="gallery-item" onclick="openLightbox(\'' + path + '\')">' +
-        '<img src="' + path + '" loading="lazy" alt="' + name + '">' +
-        '<div class="caption">' + sub.folder + '/' + name + '</div></div>';
       count++;
+      var path = 'images/' + sub.folder + '/' + name;
+      var altText = sub.folder + ' — Foto ' + count;
+      html += '<div class="gallery-item" onclick="openLightbox(\'' + path + '\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')openLightbox(\'' + path + '\')">' +
+        '<img src="' + path + '" loading="lazy" alt="' + altText + '">' +
+        '<div class="caption">' + sub.folder + '/' + name + '</div></div>';
     });
   });
 
@@ -1022,13 +1025,13 @@ function renderDokumente() {
     '<h2 class="section-title">Status &amp; Naechste Schritte</h2>' +
     '<div class="stat-box"><table class="comp-table">' +
     '<tr><th>Dokument</th><th>Status</th><th>Aktion</th></tr>' +
-    '<tr><td>Teilungserklaerung</td><td><span class="tag tag-orange">Entwurf</span></td><td>Notar-Abstimmung erforderlich</td></tr>' +
-    '<tr><td>Abgeschlossenheitsbescheinigung</td><td><span class="tag tag-red">Ausstehend</span></td><td>Beim Bauamt beantragen</td></tr>' +
-    '<tr><td>Aufteilungsplan</td><td><span class="tag tag-red">Ausstehend</span></td><td>Vom Architekten erstellen lassen</td></tr>' +
-    '<tr><td>Genehmigung \u00A7 250 BauGB</td><td><span class="tag tag-red">Ausstehend</span></td><td>Bezirksamt Neukoelln</td></tr>' +
-    '<tr><td>Energiekonzept</td><td><span class="tag tag-green">Fertig</span></td><td>Siehe Tab "Energiekonzept"</td></tr>' +
-    '<tr><td>Flaechenberechnung</td><td><span class="tag tag-green">Fertig</span></td><td>Detail-Excel vorhanden</td></tr>' +
-    '<tr><td>FHW-Machbarkeitsanfrage</td><td><span class="tag tag-red">Ausstehend</span></td><td>Bei FHW Neukoelln einreichen</td></tr></table></div>';
+    '<tr><td>Teilungserklaerung</td><td><span class="tag tag-orange">\u25CB Entwurf</span></td><td>Notar-Abstimmung erforderlich</td></tr>' +
+    '<tr><td>Abgeschlossenheitsbescheinigung</td><td><span class="tag tag-red">\u26A0 Ausstehend</span></td><td>Beim Bauamt beantragen</td></tr>' +
+    '<tr><td>Aufteilungsplan</td><td><span class="tag tag-red">\u26A0 Ausstehend</span></td><td>Vom Architekten erstellen lassen</td></tr>' +
+    '<tr><td>Genehmigung \u00A7 250 BauGB</td><td><span class="tag tag-red">\u26A0 Ausstehend</span></td><td>Bezirksamt Neukoelln</td></tr>' +
+    '<tr><td>Energiekonzept</td><td><span class="tag tag-green">\u2713 Fertig</span></td><td>Siehe Tab "Energiekonzept"</td></tr>' +
+    '<tr><td>Flaechenberechnung</td><td><span class="tag tag-green">\u2713 Fertig</span></td><td>Detail-Excel vorhanden</td></tr>' +
+    '<tr><td>FHW-Machbarkeitsanfrage</td><td><span class="tag tag-red">\u26A0 Ausstehend</span></td><td>Bei FHW Neukoelln einreichen</td></tr></table></div>';
 }
 
 // ═══════════════════════════════════════════
@@ -1142,7 +1145,7 @@ function renderFlaechen() {
       '<td style="font-size:.85rem">' + r.bez + '</td>' +
       '<td>' + r.raum + '</td>' +
       '<td style="font-size:.8rem;color:var(--txt2)">' + r.mea + '</td>' +
-      '<td><span class="tag ' + (r.nutzung === 'Wohnen' ? 'tag-blue' : r.nutzung === 'Gewerbe' ? 'tag-orange' : 'tag-purple') + '">' + r.nutzung + '</span></td>' +
+      '<td><span class="tag ' + (r.nutzung === 'Wohnen' ? 'tag-blue' : r.nutzung === 'Gewerbe' ? 'tag-orange' : 'tag-purple') + '">' + (r.nutzung === 'Wohnen' ? '\u2302 ' : r.nutzung === 'Gewerbe' ? '\u2692 ' : '\u25A3 ') + r.nutzung + '</span></td>' +
       '<td style="text-align:right">' + r.flaeche.toFixed(2) + '</td>' +
       '<td style="text-align:right">' + (r.hoehe > 0 ? r.hoehe.toFixed(2) : '-') + '</td>' +
       '<td style="text-align:right">' + r.faktor + '</td>' +
@@ -1336,8 +1339,8 @@ function renderGantt() {
       if (colEnd > GANTT_COLS + 1) colEnd = GANTT_COLS + 1;
 
       var statusTag = '';
-      if (task.status === 'aktiv') statusTag = '<span class="tag tag-orange" style="margin-left:6px;font-size:8px">aktiv</span>';
-      else if (task.status === 'done') statusTag = '<span class="tag tag-green" style="margin-left:6px;font-size:8px">fertig</span>';
+      if (task.status === 'aktiv') statusTag = '<span class="tag tag-orange" style="margin-left:6px;font-size:8px">\u25CB aktiv</span>';
+      else if (task.status === 'done') statusTag = '<span class="tag tag-green" style="margin-left:6px;font-size:8px">\u2713 fertig</span>';
 
       h += '<div class="gantt-row">';
       h += '<div class="gantt-label">' + task.name + statusTag + '</div>';
@@ -1545,9 +1548,10 @@ function renderDashboard() {
     for (var k = 0; k < todos.length; k++) {
       var td = todos[k];
       var tagCls = td.prio === 1 ? 'tag-red' : 'tag-orange';
+      var tagIcon = td.prio === 1 ? '\u26A0 ' : '\u25CB ';
       tdH += '<div class="dash-todo-item">';
       tdH += '<div class="dash-todo-head">';
-      tdH += '<span class="tag ' + tagCls + '" style="font-size:9px">' + td.tag + '</span>';
+      tdH += '<span class="tag ' + tagCls + '" style="font-size:9px">' + tagIcon + td.tag + '</span>';
       tdH += '<span class="dash-todo-list">' + td.list + '</span>';
       tdH += '</div>';
       tdH += '<div class="dash-todo-title">' + td.name + '</div>';

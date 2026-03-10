@@ -30,7 +30,7 @@
   font-weight: 700;
 }
 .auth-box p {
-  color: #6b7089;
+  color: #9398B0;
   font-size: 13px;
   margin: 0 0 28px;
 }
@@ -47,14 +47,15 @@
   color: #e2e4ed;
   font-size: 15px;
   text-align: center;
-  outline: none;
   transition: border-color 0.2s;
 }
 .auth-box input:focus {
-  border-color: #6c8cff;
+  border-color: #89AAFF;
+  outline: 2px solid #89AAFF;
+  outline-offset: 1px;
 }
 .auth-box button {
-  background: #6c8cff;
+  background: #4466DD;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -65,7 +66,7 @@
   transition: background 0.2s;
 }
 .auth-box button:hover {
-  background: #5a7af0;
+  background: #5577EE;
 }
 .auth-error {
   color: #f87171;
@@ -81,11 +82,11 @@
   --card2: #222633;
   --brd: #2a2e3d;
   --txt: #e4e6ed;
-  --mut: #8b8fa3;
+  --mut: #9398B0;
   --dim: #555a6e;
-  --acc: #6c8cff;
-  --accd: #3a4a8a;
-  --accbg: rgba(108, 140, 255, 0.1);
+  --acc: #89AAFF;
+  --accd: #4466DD;
+  --accbg: rgba(137, 170, 255, 0.1);
   --grn: #4ade80;
   --grnd: #166534;
   --org: #fb923c;
@@ -95,7 +96,7 @@
   --pur: #c084fc;
   --purd: #581c87;
   --cyn: #22d3ee;
-  --txt2: #6b7089;
+  --txt2: #9398B0;
   --r: 10px;
   --sidebar-w: 260px;
   --transition: 0.2s ease;
@@ -108,6 +109,36 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* ─── Global Focus Styles (WCAG 2.4.7) ─── */
+*:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Skip Navigation (WCAG 2.4.1) ─── */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 16px;
+  z-index: 10000;
+  background: var(--acc);
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 0 0 8px 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
 }
 
 /* ─── Base ─── */
@@ -698,8 +729,8 @@ a:hover { text-decoration: underline; }
 
 .input-field:focus {
   border-color: var(--acc);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(108, 140, 255, 0.25);
+  outline: 2px solid var(--acc);
+  outline-offset: 1px;
 }
 
 .input-xs { width: 55px; font-size: 11px; }
@@ -752,12 +783,13 @@ select.input-field {
   color: var(--txt);
   font-size: 15px;
   width: 180px;
-  outline: none;
   transition: border-color var(--transition);
 }
 
 .custom-kp-input:focus {
   border-color: var(--acc);
+  outline: 2px solid var(--acc);
+  outline-offset: 1px;
 }
 
 /* ─── Buttons ─── */
@@ -800,12 +832,13 @@ select.input-field {
   color: var(--txt);
   font-size: 13px;
   margin-bottom: 18px;
-  outline: none;
   transition: border-color var(--transition);
 }
 
 .search-input:focus {
   border-color: var(--acc);
+  outline: 2px solid var(--acc);
+  outline-offset: 1px;
 }
 
 /* ─── Gallery ─── */
@@ -924,11 +957,12 @@ select.input-field {
   font-family: inherit;
   line-height: 1.6;
   resize: vertical;
-  outline: none;
   transition: border-color var(--transition);
 }
 
 .note-textarea:focus {
+  outline: 2px solid var(--acc);
+  outline-offset: 1px;
   border-color: var(--acc);
 }
 
