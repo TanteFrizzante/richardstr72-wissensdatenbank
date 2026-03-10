@@ -3,6 +3,48 @@
    Navigation, Calculators, Data
    ═══════════════════════════════════════════ */
 
+// ─── Auth Gate ───
+var AUTH_HASH = '5bbca397783413aa728391e8917d5c6078d5d0ce5e6d61300ffccab0f2fcb4be';
+
+async function sha256(str) {
+  var buf = new TextEncoder().encode(str);
+  var hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+}
+
+async function checkAuth() {
+  var pw = document.getElementById('authPw').value;
+  var hash = await sha256(pw);
+  if (hash === AUTH_HASH) {
+    sessionStorage.setItem('r72_auth', '1');
+    showApp();
+  } else {
+    document.getElementById('authError').textContent = 'Falsches Passwort';
+    document.getElementById('authPw').value = '';
+    document.getElementById('authPw').focus();
+  }
+  return false;
+}
+
+function showApp() {
+  var gate = document.getElementById('authGate');
+  var app = document.getElementById('appMain');
+  var toggle = document.getElementById('menuToggle');
+  if (gate) gate.style.display = 'none';
+  if (app) app.style.display = '';
+  if (toggle) toggle.style.display = '';
+}
+
+// Auto-login if already authenticated in this session
+if (sessionStorage.getItem('r72_auth') === '1') {
+  document.addEventListener('DOMContentLoaded', showApp);
+} else {
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('menuToggle');
+    if (toggle) toggle.style.display = 'none';
+  });
+}
+
 // ─── Navigation ───
 function navigateToPage(pageId) {
   var pages = document.querySelectorAll('.page');

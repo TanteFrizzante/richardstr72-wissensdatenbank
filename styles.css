@@ -3,6 +3,77 @@
    Modern Dark Theme
    ═══════════════════════════════════════════ */
 
+/* ─── Auth Gate ─── */
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0a0b10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-box {
+  text-align: center;
+  padding: 40px;
+  max-width: 360px;
+  width: 90%;
+}
+.auth-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.auth-box h1 {
+  font-size: 24px;
+  color: #e2e4ed;
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.auth-box p {
+  color: #6b7089;
+  font-size: 13px;
+  margin: 0 0 28px;
+}
+.auth-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-box input {
+  background: #1a1d27;
+  border: 1px solid #2a2e3d;
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #e2e4ed;
+  font-size: 15px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.auth-box input:focus {
+  border-color: #6c8cff;
+}
+.auth-box button {
+  background: #6c8cff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.auth-box button:hover {
+  background: #5a7af0;
+}
+.auth-error {
+  color: #f87171;
+  font-size: 13px;
+  margin-top: 12px;
+  min-height: 18px;
+}
+
 :root {
   --bg: #0f1117;
   --bg2: #13151d;

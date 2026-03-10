@@ -10,9 +10,23 @@
 </head>
 <body>
 
+<!-- ═══ PASSWORD GATE ═══ -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <div class="auth-icon">&#x1F3E0;</div>
+    <h1>Richardstr. 72</h1>
+    <p>Projekt-Wissensdatenbank</p>
+    <form id="authForm" onsubmit="return checkAuth()">
+      <input type="password" id="authPw" placeholder="Passwort eingeben" autocomplete="current-password" autofocus>
+      <button type="submit">Zugang</button>
+    </form>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
+
 <button class="menu-toggle" id="menuToggle">&#9776;</button>
 
-<div class="app">
+<div class="app" id="appMain" style="display:none">
 
 <!-- ═══ SIDEBAR ═══ -->
 <nav class="sidebar" id="sidebar">
