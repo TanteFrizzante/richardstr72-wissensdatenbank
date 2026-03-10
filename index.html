@@ -333,57 +333,36 @@
     <tr class="hl"><td><strong>Wohn-DG Mehrertrag / Jahr</strong></td><td colspan="3" style="text-align:center;font-weight:700;color:var(--grn)" id="cmp_dg_plus">&mdash;</td></tr>
   </table></div>
 
-  <!-- Investitionskosten -->
+  <!-- Investitionskosten (dynamisch vom Kalkulationsboard) -->
   <h2 class="section-title">Investitionskosten</h2>
   <div class="two-col">
-    <div class="result-card rc-gewerbe"><h3>Renovierung Gewerbe</h3><table>
-      <tr><td>Heizung</td><td>50.000 &euro;</td></tr>
-      <tr><td>Strom / Elektrik</td><td>12.000 &euro;</td></tr>
-      <tr><td>Solaranlage</td><td>40.000 &euro;</td></tr>
-      <tr><td>Daemmung Flachdach Haus 3 &amp; Haus 4<br><small style="color:var(--mut)">(Musiker 1. OG / Scharnier 1. OG)</small></td><td>35.000 &euro;</td></tr>
-      <tr class="sep"><td><strong>Summe Gewerbe</strong></td><td style="color:var(--org)"><strong>137.000 &euro;</strong></td></tr>
-      <tr><td>Scheune DG Ausbau</td><td style="font-weight:700;color:var(--org)">300.000 &euro;</td></tr>
-      <tr><td>Sanierung DG Scheune<br><small style="color:var(--mut)">(Haus 4 Scheune, 1. OG)</small></td><td style="font-weight:700;color:var(--org)">350.000 &euro;</td></tr>
-      <tr class="sep"><td><strong>Gewerbe + Scheune DG</strong></td><td style="color:var(--org)"><strong>787.000 &euro;</strong></td></tr>
-    </table></div>
-    <div class="result-card rc-wohnen"><h3>Sanierung Wohnen (Haus 1)</h3><table>
-      <tr><td>Investition Wohngebaeude</td><td style="font-weight:700;color:var(--acc)">300.000 &euro;</td></tr>
-      <tr><td>DG-Ausbau Wohnen (Var. B)</td><td style="color:var(--org)">300.000 &euro;</td></tr>
-      <tr class="sep"><td><strong>Wohnen + DG (Var. B)</strong></td><td style="color:var(--org)"><strong>600.000 &euro;</strong></td></tr>
-    </table></div>
+    <div class="result-card rc-gewerbe"><h3>Renovierung Gewerbe</h3>
+      <div id="inv_gew_list"></div>
+      <table><tr class="sep"><td><strong>Summe Gewerbe</strong></td><td style="color:var(--org);font-weight:700" id="inv_sum_gew">&mdash;</td></tr></table>
+    </div>
+    <div class="result-card rc-wohnen"><h3>Sanierung Wohnen</h3>
+      <div id="inv_wohn_list"></div>
+      <table><tr class="sep"><td><strong>Summe Wohnen</strong></td><td style="color:var(--acc);font-weight:700" id="inv_sum_wohn">&mdash;</td></tr></table>
+    </div>
   </div>
 
   <!-- Gesamtrechnung -->
   <h2 class="section-title">Gesamtrechnung &amp; Finanzierung</h2>
   <div class="stat-grid">
-    <div class="stat-box"><h3>Mittelverwendung A (ohne Wohn-DG)</h3><table>
+    <div class="stat-box"><h3>Mittelverwendung (Gesamt)</h3><table>
       <tr><td>Kaufpreis</td><td id="inv_kp2">&mdash;</td></tr>
       <tr><td>GrESt (6%)</td><td id="inv_grest">&mdash;</td></tr>
       <tr><td>Notar (~1,5%)</td><td id="inv_notar">&mdash;</td></tr>
-      <tr><td>Renovierung Gewerbe</td><td>137.000 &euro;</td></tr>
-      <tr><td>Scheune DG Ausbau</td><td>300.000 &euro;</td></tr>
-      <tr><td>Sanierung DG Scheune</td><td>350.000 &euro;</td></tr>
-      <tr><td>Sanierung Wohnen</td><td>300.000 &euro;</td></tr>
-      <tr class="sep"><td><strong>Gesamtinvestition A</strong></td><td style="color:var(--pur)" id="inv_total_a"><strong>&mdash;</strong></td></tr>
-    </table></div>
-    <div class="stat-box"><h3>Mittelverwendung B (mit Wohn-DG)</h3><table>
-      <tr><td>Kaufpreis</td><td id="inv_kp3">&mdash;</td></tr>
-      <tr><td>GrESt (6%)</td><td id="inv_grest2">&mdash;</td></tr>
-      <tr><td>Notar (~1,5%)</td><td id="inv_notar2">&mdash;</td></tr>
-      <tr><td>Renovierung Gewerbe</td><td>137.000 &euro;</td></tr>
-      <tr><td>Scheune DG Ausbau</td><td>300.000 &euro;</td></tr>
-      <tr><td>Sanierung DG Scheune</td><td>350.000 &euro;</td></tr>
-      <tr><td>Sanierung Wohnen</td><td>300.000 &euro;</td></tr>
-      <tr><td>DG-Ausbau Wohnen</td><td>300.000 &euro;</td></tr>
-      <tr class="sep"><td><strong>Gesamtinvestition B</strong></td><td style="color:var(--pur)" id="inv_total_b"><strong>&mdash;</strong></td></tr>
+      <tr><td>Renovierung Gewerbe</td><td id="inv_mv_gew">&mdash;</td></tr>
+      <tr><td>Sanierung Wohnen</td><td id="inv_mv_wohn">&mdash;</td></tr>
+      <tr class="sep"><td><strong>Gesamtinvestition</strong></td><td style="color:var(--pur)" id="inv_total_a"><strong>&mdash;</strong></td></tr>
     </table></div>
     <div class="stat-box"><h3>Finanzierung</h3><table>
       <tr><td>Eigenkapital (Andreas)</td><td style="color:var(--grn)">150.000 &euro;</td></tr>
       <tr><td>Eigenkapital (Morits)</td><td style="color:var(--grn)">100.000 &euro;</td></tr>
       <tr><td>= 50% DG Rohling</td><td style="font-size:10px;color:var(--mut)">Verkauf an Morits</td></tr>
       <tr style="font-weight:700"><td>Eigene Mittel</td><td style="color:var(--grn)">250.000 &euro;</td></tr>
-      <tr class="sep"><td>FK Variante A</td><td style="color:var(--red);font-weight:700" id="inv_fk_a">&mdash;</td></tr>
-      <tr><td>FK Variante B</td><td style="color:var(--red);font-weight:700" id="inv_fk_b">&mdash;</td></tr>
+      <tr class="sep"><td>Fremdkapitalbedarf</td><td style="color:var(--red);font-weight:700" id="inv_fk_a">&mdash;</td></tr>
     </table></div>
   </div>
 
@@ -507,19 +486,12 @@
       <tr><td>KfW</td><td style="color:var(--red)">offen</td></tr>
     </table></div>
   </div>
-  <h2 class="section-title">Renovierungskosten — Gewerbe</h2>
-  <div class="result-card rc-gewerbe" style="margin-bottom:22px"><h3>Renovierung Gewerbe (Richardstr. 72)</h3><table>
-    <tr><td>Heizung</td><td>50.000 &euro;</td></tr>
-    <tr><td>Strom / Elektrik</td><td>12.000 &euro;</td></tr>
-    <tr><td>Solaranlage</td><td>40.000 &euro;</td></tr>
-    <tr><td>Daemmung Flachdach Haus 3 &amp; Haus 4<br><small style="color:var(--mut)">(Musiker 1. OG / Scharnier 1. OG)</small></td><td>35.000 &euro;</td></tr>
-    <tr class="sep"><td><strong>Summe Gewerbe</strong></td><td style="color:var(--org)"><strong>137.000 &euro;</strong></td></tr>
-  </table></div>
-  <h2 class="section-title">Investitionskosten — Wohnen</h2>
-  <div class="result-card rc-wohnen" style="margin-bottom:22px"><h3>Sanierung Wohnen (Haus 1)</h3><table>
-    <tr><td>Investitionskosten</td><td style="font-weight:700;color:var(--acc)">300.000 &euro;</td></tr>
-    <tr><td>DG-Ausbau</td><td style="color:var(--mut)">spaeter kalkulieren</td></tr>
-  </table></div>
+  <h2 class="section-title">Kalkulationsboard — Renovierung &amp; Investitionen</h2>
+  <div class="editable-hint">Massnahmen und Preise koennen bearbeitet, hinzugefuegt und entfernt werden. Aenderungen aktualisieren die Gesamtrechnung live.</div>
+  <div class="two-col" style="margin-bottom:22px">
+    <div id="renov-board-gewerbe"></div>
+    <div id="renov-board-wohnen"></div>
+  </div>
   <h2 class="section-title">Ertraege — Gewerbe vs. Wohnen</h2>
   <div class="two-col">
     <div class="result-card rc-wohnen"><h3>Mieteinnahmen Wohnen</h3><table>
@@ -636,24 +608,25 @@
       </thead>
       <tbody>
         <tr class="fin-unit-header" style="background:var(--acc)15"><td colspan="5" style="color:var(--acc);font-weight:700;font-size:12px">WOHNEN</td></tr>
-        <tr><td>WE1 (EG links)</td><td style="text-align:right;color:var(--mut)">59,56</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we1" value="5.52" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we1_m">&mdash;</td><td style="text-align:right" id="fu_we1_a">&mdash;</td></tr>
-        <tr><td>WE2 (EG rechts)</td><td style="text-align:right;color:var(--mut)">106,70</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we2" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we2_m">&mdash;</td><td style="text-align:right" id="fu_we2_a">&mdash;</td></tr>
-        <tr><td>WE3 (1. OG)</td><td style="text-align:right;color:var(--mut)">138,31</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we3" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we3_m">&mdash;</td><td style="text-align:right" id="fu_we3_a">&mdash;</td></tr>
-        <tr><td>WE4 / DG (Rohling)</td><td style="text-align:right;color:var(--mut)">139,00</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we4" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we4_m">&mdash;</td><td style="text-align:right" id="fu_we4_a">&mdash;</td></tr>
-        <tr class="sep" style="font-weight:700"><td>Summe Wohnen</td><td style="text-align:right;color:var(--mut)">443,57</td><td></td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_m">&mdash;</td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_a">&mdash;</td></tr>
+        <tr><td>WE1 (EG links)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we1" value="59.56" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we1" value="5.52" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we1_m">&mdash;</td><td style="text-align:right" id="fu_we1_a">&mdash;</td></tr>
+        <tr><td>WE2 (EG rechts)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we2" value="106.70" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we2" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we2_m">&mdash;</td><td style="text-align:right" id="fu_we2_a">&mdash;</td></tr>
+        <tr><td>WE3 (1. OG)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we3" value="138.31" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we3" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we3_m">&mdash;</td><td style="text-align:right" id="fu_we3_a">&mdash;</td></tr>
+        <tr><td>WE4 / DG (Rohling)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_we4" value="139.00" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we4" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we4_m">&mdash;</td><td style="text-align:right" id="fu_we4_a">&mdash;</td></tr>
+        <tr class="sep" style="font-weight:700"><td>Summe Wohnen</td><td style="text-align:right;color:var(--acc)" id="fu_sqm_w">&mdash;</td><td></td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_m">&mdash;</td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_a">&mdash;</td></tr>
 
         <tr class="fin-unit-header" style="background:var(--org)15"><td colspan="5" style="color:var(--org);font-weight:700;font-size:12px">GEWERBE</td></tr>
-        <tr><td>TE1 (Buero)</td><td style="text-align:right;color:var(--mut)">57,53</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te1" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_te1_m">&mdash;</td><td style="text-align:right" id="fu_te1_a">&mdash;</td></tr>
-        <tr><td>TE2-TE4 (Tante Frizzante)</td><td style="text-align:right;color:var(--mut)">432,00</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te24" value="1200" step="50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te24_m">&mdash;</td><td style="text-align:right" id="fu_te24_a">&mdash;</td></tr>
-        <tr><td>TE5 (Musiker-Studio)</td><td style="text-align:right;color:var(--mut)">58,00</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te5" value="210" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te5_m">&mdash;</td><td style="text-align:right" id="fu_te5_a">&mdash;</td></tr>
-        <tr><td>Scheune DG (Haus 4)</td><td style="text-align:right;color:var(--mut)">116,25</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sdg" value="4.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_sdg_m">&mdash;</td><td style="text-align:right" id="fu_sdg_a">&mdash;</td></tr>
-        <tr><td>TE6 (Doppelgarage)</td><td style="text-align:right;color:var(--mut)">57,91</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te6" value="0" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te6_m">&mdash;</td><td style="text-align:right" id="fu_te6_a">&mdash;</td></tr>
+        <tr><td>TE1 (Buero)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te1" value="57.53" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te1" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_te1_m">&mdash;</td><td style="text-align:right" id="fu_te1_a">&mdash;</td></tr>
+        <tr><td>TE2-TE4 (Tante Frizzante)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te24" value="432.00" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te24" value="1200" step="50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te24_m">&mdash;</td><td style="text-align:right" id="fu_te24_a">&mdash;</td></tr>
+        <tr><td>TE5 (Musiker-Studio)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te5" value="58.00" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te5" value="210" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te5_m">&mdash;</td><td style="text-align:right" id="fu_te5_a">&mdash;</td></tr>
+        <tr><td>Scheune DG (Haus 4)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_sdg" value="116.25" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sdg" value="4.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_sdg_m">&mdash;</td><td style="text-align:right" id="fu_sdg_a">&mdash;</td></tr>
+        <tr><td>TE6 (Doppelgarage)</td><td style="text-align:right"><input type="number" class="input-field input-xs" id="fu_sqm_te6" value="57.91" step="0.01" min="0" oninput="calcFin()"></td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te6" value="0" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te6_m">&mdash;</td><td style="text-align:right" id="fu_te6_a">&mdash;</td></tr>
         <tr><td>9 Stellplaetze (TE7-TE14+)</td><td style="text-align:right;color:var(--mut)">&mdash;</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sp" value="455" step="25" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_sp_m">&mdash;</td><td style="text-align:right" id="fu_sp_a">&mdash;</td></tr>
-        <tr class="sep" style="font-weight:700"><td>Summe Gewerbe</td><td></td><td></td><td style="text-align:right;color:var(--org)" id="fu_sum_g_m">&mdash;</td><td style="text-align:right;color:var(--org)" id="fu_sum_g_a">&mdash;</td></tr>
+        <tr class="sep" style="font-weight:700"><td>Summe Gewerbe</td><td style="text-align:right;color:var(--org)" id="fu_sqm_g">&mdash;</td><td></td><td style="text-align:right;color:var(--org)" id="fu_sum_g_m">&mdash;</td><td style="text-align:right;color:var(--org)" id="fu_sum_g_a">&mdash;</td></tr>
       </tbody>
       <tfoot>
         <tr style="font-weight:700;border-top:2px solid var(--brd)">
-          <td>GESAMT Mieteinnahmen</td><td></td><td></td>
+          <td>GESAMT Mieteinnahmen</td>
+          <td style="text-align:right;color:var(--grn)" id="fu_sqm_total">&mdash;</td><td></td>
           <td style="text-align:right;color:var(--grn);font-size:1.05rem" id="fu_total_m">&mdash;</td>
           <td style="text-align:right;color:var(--grn);font-size:1.05rem" id="fu_total_a">&mdash;</td>
         </tr>

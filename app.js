@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
   renderGallery();
   renderNotes();
   renderEnergie();
+  renderRenovBoard();
   renderDokumente();
   renderFlaechen();
   renderGantt();
@@ -192,16 +193,18 @@ function setCust() {
 // ═══════════════════════════════════
 var WE1_SQM = 59.56, WE2_SQM = 106.70, WE3_SQM = 138.31;
 var TE15_SQM = 619.86, TE6_SQM = 57.91, SDG_SQM = 116.25;
-var RENOV_GEW = 137000, INVEST_WOHN = 300000, DG_AUSBAU_WOHN = 300000, SDG_AUSBAU = 300000, SDG_SANIERUNG = 350000;
-var EK_TOTAL = 250000, BK_PA = 23674;
+// RENOV_GEW und INVEST_WOHN werden dynamisch vom Kalkulationsboard aktualisiert
+var RENOV_GEW = 787000, INVEST_WOHN = 600000;
+var EK_TOTAL = 250000, BK_PA = 5674; // Nur nicht-umlagefaehige BK (Verwaltung, Instandhaltung)
 
 function calcF20() {
   var kp = getVal('inp_kp'); if (kp <= 0) kp = 2200000;
   var faktor = getVal('inp_faktor'); if (faktor <= 0) faktor = 20;
   var ziel_pa = kp / faktor, ziel_mon = ziel_pa / 12;
   var grest = kp * 0.06, notar = kp * 0.015;
-  var total_a = kp + grest + notar + RENOV_GEW + SDG_AUSBAU + SDG_SANIERUNG + INVEST_WOHN;
-  var total_b = total_a + DG_AUSBAU_WOHN;
+  // RENOV_GEW = alle Gewerbe-Positionen (inkl. Scheune), INVEST_WOHN = alle Wohn-Positionen (inkl. DG)
+  var total_a = kp + grest + notar + RENOV_GEW + INVEST_WOHN;
+  var total_b = total_a; // Alle Positionen bereits im Board enthalten
   var fk_a = total_a - EK_TOTAL, fk_b = total_b - EK_TOTAL;
 
   // IST Wohnen
@@ -328,12 +331,36 @@ function calcF20() {
   setEl('cmp_d_ren', '+' + (b_ren - a_ren).toFixed(2) + ' %');
   setEl('cmp_dg_plus', '+' + fmtN(Math.round(b_tot_pa - a_tot_pa)) + ' \u20AC/a durch Wohn-DG-Ausbau');
 
-  // FINANZIERUNG
-  setEl('inv_kp2', fmt(kp)); setEl('inv_kp3', fmt(kp));
-  setEl('inv_grest', fmt(grest)); setEl('inv_grest2', fmt(grest));
-  setEl('inv_notar', fmt(notar)); setEl('inv_notar2', fmt(notar));
-  setEl('inv_total_a', fmt(total_a)); setEl('inv_total_b', fmt(total_b));
-  setEl('inv_fk_a', fmt(fk_a)); setEl('inv_fk_b', fmt(fk_b));
+  // FINANZIERUNG — Mittelverwendung (dynamisch vom Kalkulationsboard)
+  setEl('inv_kp2', fmt(kp));
+  setEl('inv_grest', fmt(grest));
+  setEl('inv_notar', fmt(notar));
+  setEl('inv_mv_gew', fmt(RENOV_GEW));
+  setEl('inv_mv_wohn', fmt(INVEST_WOHN));
+  setEl('inv_total_a', fmt(total_a));
+  setEl('inv_fk_a', fmt(fk_a));
+
+  // Investitionskosten-Uebersicht (kauf_weg Seite) — dynamisch vom Board
+  var gewListEl = $('inv_gew_list');
+  if (gewListEl) {
+    var gh = '<table style="font-size:12px">';
+    for (var gi = 0; gi < renovGewItems.length; gi++) {
+      gh += '<tr><td>' + renovGewItems[gi].name + '</td><td style="text-align:right">' + fmtN(renovGewItems[gi].preis) + ' \u20AC</td></tr>';
+    }
+    gh += '</table>';
+    gewListEl.innerHTML = gh;
+  }
+  setEl('inv_sum_gew', fmt(RENOV_GEW));
+  var wohnListEl = $('inv_wohn_list');
+  if (wohnListEl) {
+    var wh = '<table style="font-size:12px">';
+    for (var wi = 0; wi < renovWohnItems.length; wi++) {
+      wh += '<tr><td>' + renovWohnItems[wi].name + '</td><td style="text-align:right">' + fmtN(renovWohnItems[wi].preis) + ' \u20AC</td></tr>';
+    }
+    wh += '</table>';
+    wohnListEl.innerHTML = wh;
+  }
+  setEl('inv_sum_wohn', fmt(INVEST_WOHN));
 
   // CASHFLOW
   var noi_a = a_tot_pa - BK_PA, zins_a = fk_a * 0.035, cf_a = noi_a - zins_a;
@@ -391,29 +418,39 @@ function calcVM() {
 // ═══════════════════════════════════
 function calcFin() {
   // ─── Mieteinnahmen nach Einheiten ───
+  // Flaechen aus Inputs lesen
+  var sqm_we1 = getVal('fu_sqm_we1'), sqm_we2 = getVal('fu_sqm_we2');
+  var sqm_we3 = getVal('fu_sqm_we3'), sqm_we4 = getVal('fu_sqm_we4');
+  var sqm_te1 = getVal('fu_sqm_te1'), sqm_te24 = getVal('fu_sqm_te24');
+  var sqm_te5 = getVal('fu_sqm_te5'), sqm_sdg = getVal('fu_sqm_sdg');
+  var sqm_te6 = getVal('fu_sqm_te6');
+
   // Wohnen (€/m² → Miete)
-  var we1_m = 59.56 * getVal('fu_we1');
-  var we2_m = 106.70 * getVal('fu_we2');
-  var we3_m = 138.31 * getVal('fu_we3');
-  var we4_m = 139.00 * getVal('fu_we4');
+  var we1_m = sqm_we1 * getVal('fu_we1');
+  var we2_m = sqm_we2 * getVal('fu_we2');
+  var we3_m = sqm_we3 * getVal('fu_we3');
+  var we4_m = sqm_we4 * getVal('fu_we4');
   var sumW_m = we1_m + we2_m + we3_m + we4_m;
   var sumW_a = sumW_m * 12;
+  var sqmW = sqm_we1 + sqm_we2 + sqm_we3 + sqm_we4;
 
   setEl('fu_we1_m', fmtN(Math.round(we1_m)) + ' \u20AC'); setEl('fu_we1_a', fmtN(Math.round(we1_m * 12)) + ' \u20AC');
   setEl('fu_we2_m', fmtN(Math.round(we2_m)) + ' \u20AC'); setEl('fu_we2_a', fmtN(Math.round(we2_m * 12)) + ' \u20AC');
   setEl('fu_we3_m', fmtN(Math.round(we3_m)) + ' \u20AC'); setEl('fu_we3_a', fmtN(Math.round(we3_m * 12)) + ' \u20AC');
   setEl('fu_we4_m', fmtN(Math.round(we4_m)) + ' \u20AC'); setEl('fu_we4_a', fmtN(Math.round(we4_m * 12)) + ' \u20AC');
   setEl('fu_sum_w_m', fmtN(Math.round(sumW_m)) + ' \u20AC'); setEl('fu_sum_w_a', fmtN(Math.round(sumW_a)) + ' \u20AC');
+  setEl('fu_sqm_w', sqmW.toFixed(2).replace('.', ',') + ' m\u00B2');
 
   // Gewerbe (€/m² oder Festbetrag)
-  var te1_m = 57.53 * getVal('fu_te1');
+  var te1_m = sqm_te1 * getVal('fu_te1');
   var te24_m = getVal('fu_te24');  // Festbetrag
   var te5_m = getVal('fu_te5');    // Festbetrag
-  var sdg_m = 116.25 * getVal('fu_sdg');
+  var sdg_m = sqm_sdg * getVal('fu_sdg');
   var te6_m = getVal('fu_te6');    // Festbetrag
   var sp_m = getVal('fu_sp');      // Festbetrag
   var sumG_m = te1_m + te24_m + te5_m + sdg_m + te6_m + sp_m;
   var sumG_a = sumG_m * 12;
+  var sqmG = sqm_te1 + sqm_te24 + sqm_te5 + sqm_sdg + sqm_te6;
 
   setEl('fu_te1_m', fmtN(Math.round(te1_m)) + ' \u20AC'); setEl('fu_te1_a', fmtN(Math.round(te1_m * 12)) + ' \u20AC');
   setEl('fu_te24_m', fmtN(Math.round(te24_m)) + ' \u20AC'); setEl('fu_te24_a', fmtN(Math.round(te24_m * 12)) + ' \u20AC');
@@ -422,6 +459,10 @@ function calcFin() {
   setEl('fu_te6_m', fmtN(Math.round(te6_m)) + ' \u20AC'); setEl('fu_te6_a', fmtN(Math.round(te6_m * 12)) + ' \u20AC');
   setEl('fu_sp_m', fmtN(Math.round(sp_m)) + ' \u20AC'); setEl('fu_sp_a', fmtN(Math.round(sp_m * 12)) + ' \u20AC');
   setEl('fu_sum_g_m', fmtN(Math.round(sumG_m)) + ' \u20AC'); setEl('fu_sum_g_a', fmtN(Math.round(sumG_a)) + ' \u20AC');
+  setEl('fu_sqm_g', sqmG.toFixed(2).replace('.', ',') + ' m\u00B2');
+
+  // Gesamtflaeche
+  setEl('fu_sqm_total', (sqmW + sqmG).toFixed(2).replace('.', ',') + ' m\u00B2');
 
   // Gesamt
   var mieteMon = sumW_m + sumG_m;
@@ -521,12 +562,12 @@ function calcFin() {
   setEl('fin_dscr', dscr.toFixed(2) + 'x');
   var dscEl = $('fin_dscr');
   if (dscEl) dscEl.style.color = dscr >= 1.2 ? 'var(--grn)' : dscr >= 1.0 ? 'var(--org)' : 'var(--red)';
-  var kaufpreis = 2200000; // Basis-KP fuer LTV
+  var kaufpreis = getVal('inp_kp'); if (kaufpreis <= 0) kaufpreis = 2200000;
   var ltv = kaufpreis > 0 ? (sumBetrag / kaufpreis) * 100 : 0;
   setEl('fin_ltv', ltv.toFixed(1) + ' % (KP ' + fmtN(kaufpreis) + ' \u20AC)');
   var yod = sumBetrag > 0 ? (noi / sumBetrag) * 100 : 0;
   setEl('fin_yod', yod.toFixed(2) + ' %');
-  var ek = 250000;
+  var ek = EK_TOTAL;
   var ekRendite = ek > 0 ? (cfNetto / ek) * 100 : 0;
   setEl('fin_ek_rendite', ekRendite.toFixed(1) + ' % (EK ' + fmtN(ek) + ' \u20AC)');
   var ekrEl = $('fin_ek_rendite');
@@ -802,6 +843,101 @@ function renderEnergie() {
     '<tr><td>6.</td><td>PV-Anlage 18 kWp</td><td style="text-align:right">40.937 \u20AC</td></tr>' +
     '<tr><td>7.</td><td>FHW-Anschluss realisieren</td><td style="text-align:right">~20.000-40.000 \u20AC</td></tr>' +
     '<tr><td>8.</td><td>DG-Ausbau Haus 1</td><td style="text-align:right">~120.000-200.000 \u20AC</td></tr></table></div></div>';
+}
+
+// ═══════════════════════════════════
+// KALKULATIONSBOARD (Renovierung)
+// ═══════════════════════════════════
+var renovGewItems = [
+  {name: 'Heizung', preis: 50000},
+  {name: 'Strom / Elektrik', preis: 12000},
+  {name: 'Solaranlage', preis: 40000},
+  {name: 'Daemmung Flachdach Haus 3 & Haus 4', preis: 35000},
+  {name: 'Scheune DG Ausbau', preis: 300000},
+  {name: 'Sanierung DG Scheune (Haus 4, 1. OG)', preis: 350000}
+];
+var renovWohnItems = [
+  {name: 'Sanierung Wohngebaeude (Haus 1)', preis: 300000},
+  {name: 'DG-Ausbau Wohnen (WE4)', preis: 300000}
+];
+
+function renderRenovBoard() {
+  renderRenovTable('renov-board-gewerbe', 'gew', 'Renovierung Gewerbe', renovGewItems, 'var(--org)');
+  renderRenovTable('renov-board-wohnen', 'wohn', 'Sanierung Wohnen', renovWohnItems, 'var(--acc)');
+}
+
+function renderRenovTable(containerId, prefix, title, items, color) {
+  var el = $(containerId);
+  if (!el) return;
+  var html = '<div class="stat-box" style="border-left:3px solid ' + color + '">' +
+    '<h3 style="margin-bottom:10px">' + title + '</h3>' +
+    '<table class="comp-table renov-table">' +
+    '<thead><tr><th style="text-align:left;width:60%">Massnahme</th><th style="text-align:right">Gesamtpreis</th><th style="width:36px"></th></tr></thead><tbody>';
+
+  for (var i = 0; i < items.length; i++) {
+    html += '<tr>' +
+      '<td><input type="text" class="input-field renov-input-name" value="' + items[i].name.replace(/"/g, '&quot;') + '" data-prefix="' + prefix + '" data-idx="' + i + '" onchange="updateRenovItem(this)"></td>' +
+      '<td style="text-align:right"><input type="number" class="input-field input-sm renov-input-preis" value="' + items[i].preis + '" step="1000" min="0" data-prefix="' + prefix + '" data-idx="' + i + '" oninput="updateRenovPreis(this)"> &euro;</td>' +
+      '<td style="text-align:center"><button class="renov-del-btn" onclick="removeRenovItem(\'' + prefix + '\',' + i + ')" title="Entfernen">&times;</button></td>' +
+      '</tr>';
+  }
+
+  // Summe
+  var summe = 0;
+  for (var j = 0; j < items.length; j++) summe += items[j].preis;
+  html += '</tbody><tfoot><tr style="font-weight:700;border-top:2px solid var(--brd)">' +
+    '<td>Summe</td>' +
+    '<td style="text-align:right;color:' + color + '" id="renov_sum_' + prefix + '">' + fmtN(summe) + ' \u20AC</td>' +
+    '<td></td></tr></tfoot></table>' +
+    '<button class="renov-add-btn" onclick="addRenovItem(\'' + prefix + '\')" style="margin-top:8px">+ Massnahme hinzufuegen</button>' +
+    '</div>';
+  el.innerHTML = html;
+}
+
+function updateRenovItem(input) {
+  var prefix = input.getAttribute('data-prefix');
+  var idx = parseInt(input.getAttribute('data-idx'));
+  var items = prefix === 'gew' ? renovGewItems : renovWohnItems;
+  items[idx].name = input.value;
+}
+
+function updateRenovPreis(input) {
+  var prefix = input.getAttribute('data-prefix');
+  var idx = parseInt(input.getAttribute('data-idx'));
+  var items = prefix === 'gew' ? renovGewItems : renovWohnItems;
+  items[idx].preis = parseFloat(input.value) || 0;
+  updateRenovSums();
+}
+
+function addRenovItem(prefix) {
+  var items = prefix === 'gew' ? renovGewItems : renovWohnItems;
+  items.push({name: 'Neue Massnahme', preis: 0});
+  renderRenovBoard();
+  updateRenovSums();
+}
+
+function removeRenovItem(prefix, idx) {
+  var items = prefix === 'gew' ? renovGewItems : renovWohnItems;
+  if (items.length <= 1) return; // mindestens 1 Position behalten
+  items.splice(idx, 1);
+  renderRenovBoard();
+  updateRenovSums();
+}
+
+function updateRenovSums() {
+  var sumGew = 0, sumWohn = 0;
+  for (var i = 0; i < renovGewItems.length; i++) sumGew += renovGewItems[i].preis;
+  for (var j = 0; j < renovWohnItems.length; j++) sumWohn += renovWohnItems[j].preis;
+
+  setEl('renov_sum_gew', fmtN(sumGew) + ' \u20AC');
+  setEl('renov_sum_wohn', fmtN(sumWohn) + ' \u20AC');
+
+  // Globale Konstanten aktualisieren fuer calcF20()
+  RENOV_GEW = sumGew;
+  INVEST_WOHN = sumWohn;
+
+  // Mittelverwendung & Cashflow neu berechnen
+  calcF20();
 }
 
 // ═══════════════════════════════════
