@@ -621,23 +621,50 @@
   <div class="page-header"><h1>Finanzierungsrechner</h1><div class="meta">Multi-Darlehen &middot; KfW / IBB / Nachrang &middot; Tilgungsplan &middot; Live-Aktualisierung</div></div>
   <div class="editable-hint">Alle blau umrandeten Felder koennen bearbeitet werden. Darlehen per Checkbox aktivieren/deaktivieren.</div>
 
-  <!-- Mieteinnahmen -->
-  <div class="invest-box" style="margin-bottom:1.5rem">
-    <h3>Mieteinnahmen</h3>
-    <div style="display:flex;flex-wrap:wrap;gap:22px;margin-top:12px;align-items:end">
-      <div>
-        <span style="font-size:12px;color:var(--mut)">Mieteinnahmen pro Monat (&euro;):</span><br>
-        <input type="number" class="input-field input-lg" id="fin_miete_mon" value="4677" step="100" min="0" oninput="calcFin()">
-      </div>
-      <div>
-        <span style="font-size:12px;color:var(--mut)">= pro Jahr:</span><br>
-        <span style="font-size:1.1rem;font-weight:700;color:var(--grn)" id="fin_miete_pa_display">&mdash;</span>
-      </div>
-      <div>
-        <span style="font-size:12px;color:var(--mut)">Betriebskosten p.a. (&euro;):</span><br>
-        <input type="number" class="input-field input-lg" id="fin_bk" value="23674" step="500" min="0" oninput="calcFin()">
-      </div>
-    </div>
+  <!-- Mieteinnahmen nach Einheiten -->
+  <h2 class="section-title">Mieteinnahmen nach Einheiten</h2>
+  <div class="stat-box" style="overflow-x:auto;margin-bottom:1.5rem">
+    <table class="comp-table fin-units-table">
+      <thead>
+        <tr>
+          <th style="text-align:left;min-width:140px">Einheit</th>
+          <th style="text-align:right">m&sup2;</th>
+          <th style="text-align:center">Eingabe</th>
+          <th style="text-align:right">Miete/Mon</th>
+          <th style="text-align:right">Miete/Jahr</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="fin-unit-header" style="background:var(--acc)15"><td colspan="5" style="color:var(--acc);font-weight:700;font-size:12px">WOHNEN</td></tr>
+        <tr><td>WE1 (EG links)</td><td style="text-align:right;color:var(--mut)">59,56</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we1" value="5.52" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we1_m">&mdash;</td><td style="text-align:right" id="fu_we1_a">&mdash;</td></tr>
+        <tr><td>WE2 (EG rechts)</td><td style="text-align:right;color:var(--mut)">106,70</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we2" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we2_m">&mdash;</td><td style="text-align:right" id="fu_we2_a">&mdash;</td></tr>
+        <tr><td>WE3 (1. OG)</td><td style="text-align:right;color:var(--mut)">138,31</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we3" value="9.50" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we3_m">&mdash;</td><td style="text-align:right" id="fu_we3_a">&mdash;</td></tr>
+        <tr><td>WE4 / DG (Rohling)</td><td style="text-align:right;color:var(--mut)">139,00</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_we4" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_we4_m">&mdash;</td><td style="text-align:right" id="fu_we4_a">&mdash;</td></tr>
+        <tr class="sep" style="font-weight:700"><td>Summe Wohnen</td><td style="text-align:right;color:var(--mut)">443,57</td><td></td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_m">&mdash;</td><td style="text-align:right;color:var(--acc)" id="fu_sum_w_a">&mdash;</td></tr>
+
+        <tr class="fin-unit-header" style="background:var(--org)15"><td colspan="5" style="color:var(--org);font-weight:700;font-size:12px">GEWERBE</td></tr>
+        <tr><td>TE1 (Buero)</td><td style="text-align:right;color:var(--mut)">57,53</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te1" value="0.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_te1_m">&mdash;</td><td style="text-align:right" id="fu_te1_a">&mdash;</td></tr>
+        <tr><td>TE2-TE4 (Tante Frizzante)</td><td style="text-align:right;color:var(--mut)">432,00</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te24" value="1200" step="50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te24_m">&mdash;</td><td style="text-align:right" id="fu_te24_a">&mdash;</td></tr>
+        <tr><td>TE5 (Musiker-Studio)</td><td style="text-align:right;color:var(--mut)">58,00</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te5" value="210" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te5_m">&mdash;</td><td style="text-align:right" id="fu_te5_a">&mdash;</td></tr>
+        <tr><td>Scheune DG (Haus 4)</td><td style="text-align:right;color:var(--mut)">116,25</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sdg" value="4.00" step="0.50" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/m&sup2;</span></td><td style="text-align:right" id="fu_sdg_m">&mdash;</td><td style="text-align:right" id="fu_sdg_a">&mdash;</td></tr>
+        <tr><td>TE6 (Doppelgarage)</td><td style="text-align:right;color:var(--mut)">57,91</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_te6" value="0" step="10" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_te6_m">&mdash;</td><td style="text-align:right" id="fu_te6_a">&mdash;</td></tr>
+        <tr><td>9 Stellplaetze (TE7-TE14+)</td><td style="text-align:right;color:var(--mut)">&mdash;</td><td style="text-align:center"><input type="number" class="input-field input-sm" id="fu_sp" value="455" step="25" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Mon</span></td><td style="text-align:right" id="fu_sp_m">&mdash;</td><td style="text-align:right" id="fu_sp_a">&mdash;</td></tr>
+        <tr class="sep" style="font-weight:700"><td>Summe Gewerbe</td><td></td><td></td><td style="text-align:right;color:var(--org)" id="fu_sum_g_m">&mdash;</td><td style="text-align:right;color:var(--org)" id="fu_sum_g_a">&mdash;</td></tr>
+      </tbody>
+      <tfoot>
+        <tr style="font-weight:700;border-top:2px solid var(--brd)">
+          <td>GESAMT Mieteinnahmen</td><td></td><td></td>
+          <td style="text-align:right;color:var(--grn);font-size:1.05rem" id="fu_total_m">&mdash;</td>
+          <td style="text-align:right;color:var(--grn);font-size:1.05rem" id="fu_total_a">&mdash;</td>
+        </tr>
+        <tr>
+          <td>Betriebskosten p.a.</td><td></td>
+          <td style="text-align:center"><input type="number" class="input-field input-sm" id="fin_bk" value="23674" step="500" min="0" oninput="calcFin()"> <span style="font-size:10px;color:var(--mut)">&euro;/Jahr</span></td>
+          <td></td>
+          <td style="text-align:right;color:var(--red)" id="fu_bk_display">&mdash;</td>
+        </tr>
+      </tfoot>
+    </table>
   </div>
 
   <!-- Darlehens-Tabelle -->

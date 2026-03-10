@@ -390,10 +390,47 @@ function calcVM() {
 // FINANZIERUNGSRECHNER
 // ═══════════════════════════════════
 function calcFin() {
-  var mieteMon = getVal('fin_miete_mon');
+  // ─── Mieteinnahmen nach Einheiten ───
+  // Wohnen (€/m² → Miete)
+  var we1_m = 59.56 * getVal('fu_we1');
+  var we2_m = 106.70 * getVal('fu_we2');
+  var we3_m = 138.31 * getVal('fu_we3');
+  var we4_m = 139.00 * getVal('fu_we4');
+  var sumW_m = we1_m + we2_m + we3_m + we4_m;
+  var sumW_a = sumW_m * 12;
+
+  setEl('fu_we1_m', fmtN(Math.round(we1_m)) + ' \u20AC'); setEl('fu_we1_a', fmtN(Math.round(we1_m * 12)) + ' \u20AC');
+  setEl('fu_we2_m', fmtN(Math.round(we2_m)) + ' \u20AC'); setEl('fu_we2_a', fmtN(Math.round(we2_m * 12)) + ' \u20AC');
+  setEl('fu_we3_m', fmtN(Math.round(we3_m)) + ' \u20AC'); setEl('fu_we3_a', fmtN(Math.round(we3_m * 12)) + ' \u20AC');
+  setEl('fu_we4_m', fmtN(Math.round(we4_m)) + ' \u20AC'); setEl('fu_we4_a', fmtN(Math.round(we4_m * 12)) + ' \u20AC');
+  setEl('fu_sum_w_m', fmtN(Math.round(sumW_m)) + ' \u20AC'); setEl('fu_sum_w_a', fmtN(Math.round(sumW_a)) + ' \u20AC');
+
+  // Gewerbe (€/m² oder Festbetrag)
+  var te1_m = 57.53 * getVal('fu_te1');
+  var te24_m = getVal('fu_te24');  // Festbetrag
+  var te5_m = getVal('fu_te5');    // Festbetrag
+  var sdg_m = 116.25 * getVal('fu_sdg');
+  var te6_m = getVal('fu_te6');    // Festbetrag
+  var sp_m = getVal('fu_sp');      // Festbetrag
+  var sumG_m = te1_m + te24_m + te5_m + sdg_m + te6_m + sp_m;
+  var sumG_a = sumG_m * 12;
+
+  setEl('fu_te1_m', fmtN(Math.round(te1_m)) + ' \u20AC'); setEl('fu_te1_a', fmtN(Math.round(te1_m * 12)) + ' \u20AC');
+  setEl('fu_te24_m', fmtN(Math.round(te24_m)) + ' \u20AC'); setEl('fu_te24_a', fmtN(Math.round(te24_m * 12)) + ' \u20AC');
+  setEl('fu_te5_m', fmtN(Math.round(te5_m)) + ' \u20AC'); setEl('fu_te5_a', fmtN(Math.round(te5_m * 12)) + ' \u20AC');
+  setEl('fu_sdg_m', fmtN(Math.round(sdg_m)) + ' \u20AC'); setEl('fu_sdg_a', fmtN(Math.round(sdg_m * 12)) + ' \u20AC');
+  setEl('fu_te6_m', fmtN(Math.round(te6_m)) + ' \u20AC'); setEl('fu_te6_a', fmtN(Math.round(te6_m * 12)) + ' \u20AC');
+  setEl('fu_sp_m', fmtN(Math.round(sp_m)) + ' \u20AC'); setEl('fu_sp_a', fmtN(Math.round(sp_m * 12)) + ' \u20AC');
+  setEl('fu_sum_g_m', fmtN(Math.round(sumG_m)) + ' \u20AC'); setEl('fu_sum_g_a', fmtN(Math.round(sumG_a)) + ' \u20AC');
+
+  // Gesamt
+  var mieteMon = sumW_m + sumG_m;
   var mietePA = mieteMon * 12;
+  setEl('fu_total_m', fmtN(Math.round(mieteMon)) + ' \u20AC');
+  setEl('fu_total_a', fmtN(Math.round(mietePA)) + ' \u20AC');
+
   var bk = getVal('fin_bk');
-  setEl('fin_miete_pa_display', fmtN(Math.round(mietePA)) + ' \u20AC/a');
+  setEl('fu_bk_display', '-' + fmtN(Math.round(bk)) + ' \u20AC');
 
   // Collect all active loans
   var loans = [];

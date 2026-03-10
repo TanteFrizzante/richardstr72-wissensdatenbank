@@ -1189,6 +1189,21 @@ select.input-field {
   background: var(--dim);
 }
 
+/* ─── Finanzierungsrechner Einheiten-Tabelle ─── */
+.fin-units-table td,
+.fin-units-table th {
+  padding: 6px 8px;
+  font-size: 13px;
+}
+.fin-units-table .input-sm {
+  width: 70px;
+  text-align: right;
+}
+.fin-unit-header td {
+  padding: 10px 8px 4px !important;
+  border-bottom: none !important;
+}
+
 /* ─── Smooth Page Transitions ─── */
 html {
   scroll-behavior: smooth;
