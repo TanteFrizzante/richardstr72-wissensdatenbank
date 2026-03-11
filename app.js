@@ -109,13 +109,51 @@ function $(id) {
 
 function setEl(id, txt) {
   var e = $(id);
-  if (e) e.textContent = txt;
+  if (!e) return;
+  if (e.tagName === 'INPUT') {
+    var s = String(txt).replace(/[^0-9.,\-+]/g, '');
+    s = s.replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(s);
+    e.value = isNaN(n) ? 0 : n;
+  } else {
+    e.textContent = txt;
+  }
 }
 
 function getVal(id) {
   var e = $(id);
   if (!e) return 0;
   return parseFloat(e.value) || 0;
+}
+
+// ─── Back-calculation: Miete/Mon or /Jahr → €/m² ───
+function revSqm(monId, sqmId, rateId) {
+  var mon = getVal(monId), sqm = getVal(sqmId);
+  if (sqm > 0) $(rateId).value = (mon / sqm).toFixed(2);
+  calcF20();
+}
+function revSqmA(jahrId, sqmId, rateId) {
+  var jahr = getVal(jahrId), sqm = getVal(sqmId);
+  if (sqm > 0) $(rateId).value = (jahr / 12 / sqm).toFixed(2);
+  calcF20();
+}
+function revFlat(monId, inputId) {
+  $(inputId).value = getVal(monId);
+  calcF20();
+}
+function revFlatA(jahrId, inputId) {
+  $(inputId).value = Math.round(getVal(jahrId) / 12);
+  calcF20();
+}
+function revSp(monId, countId, priceId) {
+  var n = getVal(countId);
+  if (n > 0) $(priceId).value = Math.round(getVal(monId) / n);
+  calcF20();
+}
+function revSpA(jahrId, countId, priceId) {
+  var n = getVal(countId);
+  if (n > 0) $(priceId).value = Math.round(getVal(jahrId) / 12 / n);
+  calcF20();
 }
 
 // ─── Collapsible sections ───
