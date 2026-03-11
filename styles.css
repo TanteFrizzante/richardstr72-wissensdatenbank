@@ -733,8 +733,9 @@ a:hover { text-decoration: underline; }
   outline-offset: 1px;
 }
 
-.input-xs { width: 55px; font-size: 11px; }
+.input-xs { width: 78px; font-size: 11px; }
 .input-sm { width: 65px; }
+.input-md { width: 95px; }
 .input-lg { width: 110px; }
 
 select.input-field {
@@ -1233,6 +1234,17 @@ select.input-field {
 .fin-units-table .input-sm {
   width: 70px;
   text-align: right;
+}
+.fin-units-table .input-md {
+  width: 95px;
+  text-align: right;
+}
+.fin-units-table .soll-col {
+  background: rgba(137, 170, 255, 0.04);
+}
+.fin-units-table thead .soll-header {
+  color: var(--acc);
+  font-size: 12px;
 }
 .fin-unit-header td {
   padding: 10px 8px 4px !important;

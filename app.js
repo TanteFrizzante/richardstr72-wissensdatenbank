@@ -441,6 +441,19 @@ function calcFin() {
   setEl('fu_sum_w_m', fmtN(Math.round(sumW_m)) + ' \u20AC'); setEl('fu_sum_w_a', fmtN(Math.round(sumW_a)) + ' \u20AC');
   setEl('fu_sqm_w', sqmW.toFixed(2).replace('.', ',') + ' m\u00B2');
 
+  // SOLL Wohnen
+  var swe1_m = sqm_we1 * getVal('fs_we1');
+  var swe2_m = sqm_we2 * getVal('fs_we2');
+  var swe3_m = sqm_we3 * getVal('fs_we3');
+  var swe4_m = sqm_we4 * getVal('fs_we4');
+  var ssumW_m = swe1_m + swe2_m + swe3_m + swe4_m;
+  var ssumW_a = ssumW_m * 12;
+  setEl('fs_we1_m', fmtN(Math.round(swe1_m)) + ' \u20AC'); setEl('fs_we1_a', fmtN(Math.round(swe1_m * 12)) + ' \u20AC');
+  setEl('fs_we2_m', fmtN(Math.round(swe2_m)) + ' \u20AC'); setEl('fs_we2_a', fmtN(Math.round(swe2_m * 12)) + ' \u20AC');
+  setEl('fs_we3_m', fmtN(Math.round(swe3_m)) + ' \u20AC'); setEl('fs_we3_a', fmtN(Math.round(swe3_m * 12)) + ' \u20AC');
+  setEl('fs_we4_m', fmtN(Math.round(swe4_m)) + ' \u20AC'); setEl('fs_we4_a', fmtN(Math.round(swe4_m * 12)) + ' \u20AC');
+  setEl('fs_sum_w_m', fmtN(Math.round(ssumW_m)) + ' \u20AC'); setEl('fs_sum_w_a', fmtN(Math.round(ssumW_a)) + ' \u20AC');
+
   // Gewerbe (€/m² oder Festbetrag)
   var te1_m = sqm_te1 * getVal('fu_te1');
   var te24_m = getVal('fu_te24');  // Festbetrag
@@ -461,14 +474,37 @@ function calcFin() {
   setEl('fu_sum_g_m', fmtN(Math.round(sumG_m)) + ' \u20AC'); setEl('fu_sum_g_a', fmtN(Math.round(sumG_a)) + ' \u20AC');
   setEl('fu_sqm_g', sqmG.toFixed(2).replace('.', ',') + ' m\u00B2');
 
+  // SOLL Gewerbe
+  var ste1_m = sqm_te1 * getVal('fs_te1');
+  var ste24_m = getVal('fs_te24');  // Festbetrag
+  var ste5_m = getVal('fs_te5');    // Festbetrag
+  var ssdg_m = sqm_sdg * getVal('fs_sdg');
+  var ste6_m = getVal('fs_te6');    // Festbetrag
+  var ssp_m = getVal('fs_sp');      // Festbetrag
+  var ssumG_m = ste1_m + ste24_m + ste5_m + ssdg_m + ste6_m + ssp_m;
+  var ssumG_a = ssumG_m * 12;
+  setEl('fs_te1_m', fmtN(Math.round(ste1_m)) + ' \u20AC'); setEl('fs_te1_a', fmtN(Math.round(ste1_m * 12)) + ' \u20AC');
+  setEl('fs_te24_m', fmtN(Math.round(ste24_m)) + ' \u20AC'); setEl('fs_te24_a', fmtN(Math.round(ste24_m * 12)) + ' \u20AC');
+  setEl('fs_te5_m', fmtN(Math.round(ste5_m)) + ' \u20AC'); setEl('fs_te5_a', fmtN(Math.round(ste5_m * 12)) + ' \u20AC');
+  setEl('fs_sdg_m', fmtN(Math.round(ssdg_m)) + ' \u20AC'); setEl('fs_sdg_a', fmtN(Math.round(ssdg_m * 12)) + ' \u20AC');
+  setEl('fs_te6_m', fmtN(Math.round(ste6_m)) + ' \u20AC'); setEl('fs_te6_a', fmtN(Math.round(ste6_m * 12)) + ' \u20AC');
+  setEl('fs_sp_m', fmtN(Math.round(ssp_m)) + ' \u20AC'); setEl('fs_sp_a', fmtN(Math.round(ssp_m * 12)) + ' \u20AC');
+  setEl('fs_sum_g_m', fmtN(Math.round(ssumG_m)) + ' \u20AC'); setEl('fs_sum_g_a', fmtN(Math.round(ssumG_a)) + ' \u20AC');
+
   // Gesamtflaeche
   setEl('fu_sqm_total', (sqmW + sqmG).toFixed(2).replace('.', ',') + ' m\u00B2');
 
-  // Gesamt
+  // Gesamt IST
   var mieteMon = sumW_m + sumG_m;
   var mietePA = mieteMon * 12;
   setEl('fu_total_m', fmtN(Math.round(mieteMon)) + ' \u20AC');
   setEl('fu_total_a', fmtN(Math.round(mietePA)) + ' \u20AC');
+
+  // Gesamt SOLL
+  var sollMon = ssumW_m + ssumG_m;
+  var sollPA = sollMon * 12;
+  setEl('fs_total_m', fmtN(Math.round(sollMon)) + ' \u20AC');
+  setEl('fs_total_a', fmtN(Math.round(sollPA)) + ' \u20AC');
 
   // Betriebskosten: umlagefaehig vs. nicht umlagefaehig
   var bkUmlage = getVal('fin_bk_umlage');
