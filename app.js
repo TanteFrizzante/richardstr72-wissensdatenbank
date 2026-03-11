@@ -202,28 +202,77 @@ function calcF20() {
   var faktor = getVal('inp_faktor'); if (faktor <= 0) faktor = 20;
   var ziel_pa = kp / faktor, ziel_mon = ziel_pa / 12;
   var grest = kp * 0.06, notar = kp * 0.015;
+
+  // EK dynamisch aus Inputs
+  var ek_andreas = getVal('ek_andreas'), ek_morits = getVal('ek_morits');
+  var ek_total = ek_andreas + ek_morits;
+  setEl('ek_total', fmt(ek_total));
+
+  // BK und Zinssatz dynamisch aus Inputs
+  var bk_pa = getVal('cf_bk');
+  var zinssatz = getVal('cf_zins') / 100;
+
   // RENOV_GEW = alle Gewerbe-Positionen (inkl. Scheune), INVEST_WOHN = alle Wohn-Positionen (inkl. DG)
   var total_a = kp + grest + notar + RENOV_GEW + INVEST_WOHN;
   var total_b = total_a; // Alle Positionen bereits im Board enthalten
-  var fk_a = total_a - EK_TOTAL, fk_b = total_b - EK_TOTAL;
+  var fk_a = total_a - ek_total, fk_b = total_b - ek_total;
 
-  // IST Wohnen
-  var r_we1 = getVal('inp_we1'), r_we3 = getVal('inp_we3');
-  var ist_we1 = WE1_SQM * r_we1, ist_we3 = WE3_SQM * r_we3;
-  var ist_w_mon = ist_we1 + ist_we3, ist_w_pa = ist_w_mon * 12;
+  // ─── IST Wohnen ───
+  var ist_sqm_we1 = getVal('ist_sqm_we1'), ist_sqm_we2 = getVal('ist_sqm_we2');
+  var ist_sqm_we3 = getVal('ist_sqm_we3'), ist_sqm_we4 = getVal('ist_sqm_we4');
+  var r_we1 = getVal('inp_we1'), r_we2 = getVal('inp_we2');
+  var r_we3 = getVal('inp_we3'), r_we4 = getVal('inp_we4');
+  var ist_we1 = ist_sqm_we1 * r_we1, ist_we2 = ist_sqm_we2 * r_we2;
+  var ist_we3 = ist_sqm_we3 * r_we3, ist_we4 = ist_sqm_we4 * r_we4;
+  var ist_w_mon = ist_we1 + ist_we2 + ist_we3 + ist_we4, ist_w_pa = ist_w_mon * 12;
+  var ist_w_sqm_total = ist_sqm_we1 + ist_sqm_we2 + ist_sqm_we3 + ist_sqm_we4;
+  var ist_w_avg = ist_w_sqm_total > 0 ? ist_w_mon / ist_w_sqm_total : 0;
   setEl('ist_we1m', fmtN(Math.round(ist_we1)) + ' \u20AC');
   setEl('ist_we1a', fmtN(Math.round(ist_we1 * 12)) + ' \u20AC');
+  setEl('ist_we2m', fmtN(Math.round(ist_we2)) + ' \u20AC');
+  setEl('ist_we2a', fmtN(Math.round(ist_we2 * 12)) + ' \u20AC');
   setEl('ist_we3m', fmtN(Math.round(ist_we3)) + ' \u20AC');
   setEl('ist_we3a', fmtN(Math.round(ist_we3 * 12)) + ' \u20AC');
+  setEl('ist_we4m', fmtN(Math.round(ist_we4)) + ' \u20AC');
+  setEl('ist_we4a', fmtN(Math.round(ist_we4 * 12)) + ' \u20AC');
+  setEl('ist_w_sqm', ist_w_sqm_total.toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('ist_w_avg', ist_w_avg.toFixed(2).replace('.', ',') + ' \u20AC/m\u00B2');
   setEl('ist_wm', fmtN(Math.round(ist_w_mon)) + ' \u20AC');
   setEl('ist_wa', fmtN(Math.round(ist_w_pa)) + ' \u20AC');
 
-  // IST Gewerbe
-  var sdg_ist = SDG_SQM * getVal('inp_scheune_ist');
+  // ─── IST Gewerbe ───
+  var ist_sqm_te24 = getVal('ist_sqm_te24');
+  var ist_te24_mon = getVal('ist_te24');
+  setEl('ist_te24m', fmtN(Math.round(ist_te24_mon)) + ' \u20AC');
+  setEl('ist_te24a', fmtN(Math.round(ist_te24_mon * 12)) + ' \u20AC');
+
+  var ist_musik_mon = getVal('ist_musik');
+  setEl('ist_musikm', fmtN(Math.round(ist_musik_mon)) + ' \u20AC');
+  setEl('ist_musika', fmtN(Math.round(ist_musik_mon * 12)) + ' \u20AC');
+
+  var ist_sqm_te6 = getVal('ist_sqm_te6'), ist_r_te6 = getVal('ist_te6');
+  var ist_te6_mon = ist_sqm_te6 * ist_r_te6;
+  setEl('ist_te6m', fmtN(Math.round(ist_te6_mon)) + ' \u20AC');
+  setEl('ist_te6a', fmtN(Math.round(ist_te6_mon * 12)) + ' \u20AC');
+
+  var ist_sqm_sdg = getVal('ist_sqm_sdg');
+  var sdg_ist = ist_sqm_sdg * getVal('inp_scheune_ist');
   setEl('ist_sdgm', fmtN(Math.round(sdg_ist)) + ' \u20AC');
   setEl('ist_sdga', fmtN(Math.round(sdg_ist * 12)) + ' \u20AC');
-  var gew_ist_mon = 1200 + 210 + 0 + sdg_ist + 455;
+
+  var ist_sp_n = getVal('ist_sp_n'), ist_sp_p = getVal('ist_sp_p');
+  var ist_sp_mon = ist_sp_n * ist_sp_p;
+  setEl('ist_spm', fmtN(Math.round(ist_sp_mon)) + ' \u20AC');
+  setEl('ist_spa', fmtN(Math.round(ist_sp_mon * 12)) + ' \u20AC');
+
+  var gew_ist_mon = ist_te24_mon + ist_musik_mon + ist_te6_mon + sdg_ist + ist_sp_mon;
   var gew_ist_pa = gew_ist_mon * 12;
+  // Durchschnittsmiete Gewerbe: nur Flaechen mit m2 (TE2-4, TE6, Scheune DG)
+  var ist_gew_sqm_total = ist_sqm_te24 + ist_sqm_te6 + ist_sqm_sdg;
+  var ist_gew_rent_sqm = ist_te24_mon + ist_te6_mon + sdg_ist;
+  var ist_gew_avg = ist_gew_sqm_total > 0 ? ist_gew_rent_sqm / ist_gew_sqm_total : 0;
+  setEl('ist_gew_sqm', ist_gew_sqm_total.toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('ist_gew_avg', ist_gew_avg.toFixed(2).replace('.', ',') + ' \u20AC/m\u00B2');
   setEl('ist_gew_m', fmtN(Math.round(gew_ist_mon)) + ' \u20AC');
   setEl('ist_gew_a', fmtN(Math.round(gew_ist_pa)) + ' \u20AC');
 
@@ -249,21 +298,36 @@ function calcF20() {
   setEl('gap_delta_a', (gap_pa >= 0 ? '+' : '-') + fmtN(Math.round(Math.abs(gap_pa))) + ' \u20AC');
   setEl('gap_ist_faktor', ist_pa > 0 ? (kp / ist_pa).toFixed(1) + 'x' : '\u2014');
 
-  // VARIANTE A
-  var a_we1 = WE1_SQM * getVal('inp_a_we1'), a_we2 = WE2_SQM * getVal('inp_a_we2'), a_we3 = WE3_SQM * getVal('inp_a_we3');
-  var a_w_mon = a_we1 + a_we2 + a_we3, a_w_pa = a_w_mon * 12;
+  // ─── VARIANTE A Wohnen ───
+  var a_sqm_we1 = getVal('a_sqm_we1'), a_sqm_we2 = getVal('a_sqm_we2');
+  var a_sqm_we3 = getVal('a_sqm_we3'), a_sqm_we4 = getVal('a_sqm_we4');
+  var a_we1 = a_sqm_we1 * getVal('inp_a_we1'), a_we2 = a_sqm_we2 * getVal('inp_a_we2');
+  var a_we3 = a_sqm_we3 * getVal('inp_a_we3'), a_we4 = a_sqm_we4 * getVal('inp_a_we4');
+  var a_w_mon = a_we1 + a_we2 + a_we3 + a_we4, a_w_pa = a_w_mon * 12;
+  var a_w_sqm_total = a_sqm_we1 + a_sqm_we2 + a_sqm_we3 + a_sqm_we4;
+  var a_w_avg_val = a_w_sqm_total > 0 ? a_w_mon / a_w_sqm_total : 0;
   setEl('a_we1m', fmtN(Math.round(a_we1)) + ' \u20AC'); setEl('a_we1a', fmtN(Math.round(a_we1 * 12)) + ' \u20AC');
   setEl('a_we2m', fmtN(Math.round(a_we2)) + ' \u20AC'); setEl('a_we2a', fmtN(Math.round(a_we2 * 12)) + ' \u20AC');
   setEl('a_we3m', fmtN(Math.round(a_we3)) + ' \u20AC'); setEl('a_we3a', fmtN(Math.round(a_we3 * 12)) + ' \u20AC');
+  setEl('a_we4m', fmtN(Math.round(a_we4)) + ' \u20AC'); setEl('a_we4a', fmtN(Math.round(a_we4 * 12)) + ' \u20AC');
+  setEl('a_w_sqm', a_w_sqm_total.toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('a_w_avg', a_w_avg_val.toFixed(2).replace('.', ',') + ' \u20AC/m\u00B2');
   setEl('a_wm', fmtN(Math.round(a_w_mon)) + ' \u20AC'); setEl('a_wa', fmtN(Math.round(a_w_pa)) + ' \u20AC');
 
-  var a_te15 = TE15_SQM * getVal('inp_a_te15');
-  var a_te6 = TE6_SQM * getVal('inp_a_te6');
+  // ─── VARIANTE A Gewerbe ───
+  var a_sqm_te15 = getVal('a_sqm_te15'), a_sqm_te6 = getVal('a_sqm_te6');
+  var a_te15 = a_sqm_te15 * getVal('inp_a_te15');
+  var a_te6 = a_sqm_te6 * getVal('inp_a_te6');
   var a_sp_mon = getVal('inp_a_sp_n') * getVal('inp_a_sp_p');
   var a_g_mon = a_te15 + a_te6 + a_sp_mon, a_g_pa = a_g_mon * 12;
+  var a_g_sqm_total = a_sqm_te15 + a_sqm_te6;
+  var a_g_rent_sqm = a_te15 + a_te6;
+  var a_g_avg_val = a_g_sqm_total > 0 ? a_g_rent_sqm / a_g_sqm_total : 0;
   setEl('a_te15m', fmtN(Math.round(a_te15)) + ' \u20AC'); setEl('a_te15a', fmtN(Math.round(a_te15 * 12)) + ' \u20AC');
   setEl('a_te6m', fmtN(Math.round(a_te6)) + ' \u20AC'); setEl('a_te6a', fmtN(Math.round(a_te6 * 12)) + ' \u20AC');
   setEl('a_spm', fmtN(Math.round(a_sp_mon)) + ' \u20AC'); setEl('a_spa', fmtN(Math.round(a_sp_mon * 12)) + ' \u20AC');
+  setEl('a_g_sqm', a_g_sqm_total.toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('a_g_avg', a_g_avg_val.toFixed(2).replace('.', ',') + ' \u20AC/m\u00B2');
   setEl('a_gm', fmtN(Math.round(a_g_mon)) + ' \u20AC'); setEl('a_ga', fmtN(Math.round(a_g_pa)) + ' \u20AC');
 
   var a_tot_mon = a_w_mon + a_g_mon, a_tot_pa = a_tot_mon * 12;
@@ -282,24 +346,36 @@ function calcF20() {
   if (achk) achk.style.color = a_fak <= faktor ? 'var(--grn)' : 'var(--red)';
   setEl('a_f_ren', a_ren.toFixed(2) + ' %');
 
-  // VARIANTE B
-  var b_we1 = WE1_SQM * getVal('inp_b_we1'), b_we2 = WE2_SQM * getVal('inp_b_we2'), b_we3 = WE3_SQM * getVal('inp_b_we3');
-  var b_dg_sqm = getVal('inp_b_dg_sqm'), b_dg = b_dg_sqm * getVal('inp_b_dg');
+  // ─── VARIANTE B Wohnen ───
+  var b_sqm_we1v = getVal('b_sqm_we1'), b_sqm_we2v = getVal('b_sqm_we2'), b_sqm_we3v = getVal('b_sqm_we3');
+  var b_dg_sqm = getVal('inp_b_dg_sqm');
+  var b_we1 = b_sqm_we1v * getVal('inp_b_we1'), b_we2 = b_sqm_we2v * getVal('inp_b_we2');
+  var b_we3 = b_sqm_we3v * getVal('inp_b_we3'), b_dg = b_dg_sqm * getVal('inp_b_dg');
   var b_w_mon = b_we1 + b_we2 + b_we3 + b_dg, b_w_pa = b_w_mon * 12;
+  var b_w_sqm_total = b_sqm_we1v + b_sqm_we2v + b_sqm_we3v + b_dg_sqm;
+  var b_w_avg_val = b_w_sqm_total > 0 ? b_w_mon / b_w_sqm_total : 0;
   setEl('b_we1m', fmtN(Math.round(b_we1)) + ' \u20AC'); setEl('b_we1a', fmtN(Math.round(b_we1 * 12)) + ' \u20AC');
   setEl('b_we2m', fmtN(Math.round(b_we2)) + ' \u20AC'); setEl('b_we2a', fmtN(Math.round(b_we2 * 12)) + ' \u20AC');
   setEl('b_we3m', fmtN(Math.round(b_we3)) + ' \u20AC'); setEl('b_we3a', fmtN(Math.round(b_we3 * 12)) + ' \u20AC');
   setEl('b_dgm', fmtN(Math.round(b_dg)) + ' \u20AC'); setEl('b_dga', fmtN(Math.round(b_dg * 12)) + ' \u20AC');
-  setEl('b_sqm_total', (59.56 + 106.70 + 138.31 + b_dg_sqm).toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('b_sqm_total', b_w_sqm_total.toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('b_w_avg', b_w_avg_val.toFixed(2).replace('.', ',') + ' \u20AC/m\u00B2');
   setEl('b_wm', fmtN(Math.round(b_w_mon)) + ' \u20AC'); setEl('b_wa', fmtN(Math.round(b_w_pa)) + ' \u20AC');
 
-  var b_te15 = TE15_SQM * getVal('inp_b_te15');
-  var b_te6 = TE6_SQM * getVal('inp_b_te6');
+  // ─── VARIANTE B Gewerbe ───
+  var b_sqm_te15 = getVal('b_sqm_te15'), b_sqm_te6v = getVal('b_sqm_te6');
+  var b_te15 = b_sqm_te15 * getVal('inp_b_te15');
+  var b_te6 = b_sqm_te6v * getVal('inp_b_te6');
   var b_sp_mon = getVal('inp_b_sp_n') * getVal('inp_b_sp_p');
   var b_g_mon = b_te15 + b_te6 + b_sp_mon, b_g_pa = b_g_mon * 12;
+  var b_g_sqm_total = b_sqm_te15 + b_sqm_te6v;
+  var b_g_rent_sqm = b_te15 + b_te6;
+  var b_g_avg_val = b_g_sqm_total > 0 ? b_g_rent_sqm / b_g_sqm_total : 0;
   setEl('b_te15m', fmtN(Math.round(b_te15)) + ' \u20AC'); setEl('b_te15a', fmtN(Math.round(b_te15 * 12)) + ' \u20AC');
   setEl('b_te6m', fmtN(Math.round(b_te6)) + ' \u20AC'); setEl('b_te6a', fmtN(Math.round(b_te6 * 12)) + ' \u20AC');
   setEl('b_spm', fmtN(Math.round(b_sp_mon)) + ' \u20AC'); setEl('b_spa', fmtN(Math.round(b_sp_mon * 12)) + ' \u20AC');
+  setEl('b_g_sqm', b_g_sqm_total.toFixed(2).replace('.', ',') + ' m\u00B2');
+  setEl('b_g_avg', b_g_avg_val.toFixed(2).replace('.', ',') + ' \u20AC/m\u00B2');
   setEl('b_gm', fmtN(Math.round(b_g_mon)) + ' \u20AC'); setEl('b_ga', fmtN(Math.round(b_g_pa)) + ' \u20AC');
 
   var b_tot_mon = b_w_mon + b_g_mon, b_tot_pa = b_tot_mon * 12;
@@ -363,15 +439,17 @@ function calcF20() {
   setEl('inv_sum_wohn', fmt(INVEST_WOHN));
 
   // CASHFLOW
-  var noi_a = a_tot_pa - BK_PA, zins_a = fk_a * 0.035, cf_a = noi_a - zins_a;
+  var noi_a = a_tot_pa - bk_pa, zins_a = fk_a * zinssatz, cf_a = noi_a - zins_a;
   setEl('cf_a_soll', fmtN(Math.round(a_tot_pa)) + ' \u20AC/a');
   setEl('cf_a_noi', fmt(noi_a)); setEl('cf_a_zins', '-' + fmt(zins_a));
   setEl('cf_a_cf', fmt(cf_a));
   var cfa = $('cf_a_cf');
   if (cfa) cfa.style.color = cf_a >= 0 ? 'var(--grn)' : 'var(--red)';
 
-  var noi_b = b_tot_pa - BK_PA, zins_b = fk_b * 0.035, cf_b = noi_b - zins_b;
+  var noi_b = b_tot_pa - bk_pa, zins_b = fk_b * zinssatz, cf_b = noi_b - zins_b;
   setEl('cf_b_soll', fmtN(Math.round(b_tot_pa)) + ' \u20AC/a');
+  setEl('cf_b_bk', '-' + fmtN(Math.round(bk_pa)) + ' \u20AC');
+  setEl('cf_b_zins_pct', (zinssatz * 100).toFixed(1).replace('.', ','));
   setEl('cf_b_noi', fmt(noi_b)); setEl('cf_b_zins', '-' + fmt(zins_b));
   setEl('cf_b_cf', fmt(cf_b));
   var cfb = $('cf_b_cf');

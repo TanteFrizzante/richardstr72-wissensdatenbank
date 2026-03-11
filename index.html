@@ -211,24 +211,24 @@
   <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen IST</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2; netto kalt</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
-    <tr><td>WE1 (EG links) — vermietet</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 IST Miete pro m2"></td><td id="ist_we1m">&mdash;</td><td id="ist_we1a">&mdash;</td></tr>
-    <tr class="hl-red"><td>WE2 (EG rechts) — leerstehend</td><td>106,70</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
-    <tr><td>WE3 (1. OG) — vermietet</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 IST Miete pro m2"></td><td id="ist_we3m">&mdash;</td><td id="ist_we3a">&mdash;</td></tr>
-    <tr><td>WE4/DG (50% eigen, Rohling)</td><td>120,00</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
-    <tr class="hl"><td><strong>IST Wohnen</strong></td><td>424,57</td><td></td><td id="ist_wm"><strong>&mdash;</strong></td><td id="ist_wa"><strong>&mdash;</strong></td></tr>
+    <tr><td>WE1 (EG links) — vermietet</td><td><input type="number" class="input-field input-xs" id="ist_sqm_we1" value="59.56" step="0.01" oninput="calcF20()" aria-label="WE1 IST Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 IST Miete pro m2"></td><td id="ist_we1m">&mdash;</td><td id="ist_we1a">&mdash;</td></tr>
+    <tr class="hl-red"><td>WE2 (EG rechts) — leerstehend</td><td><input type="number" class="input-field input-xs" id="ist_sqm_we2" value="106.70" step="0.01" oninput="calcF20()" aria-label="WE2 IST Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_we2" value="0.00" step="0.50" oninput="calcF20()" aria-label="WE2 IST Miete pro m2"></td><td id="ist_we2m">&mdash;</td><td id="ist_we2a">&mdash;</td></tr>
+    <tr><td>WE3 (1. OG) — vermietet</td><td><input type="number" class="input-field input-xs" id="ist_sqm_we3" value="138.31" step="0.01" oninput="calcF20()" aria-label="WE3 IST Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 IST Miete pro m2"></td><td id="ist_we3m">&mdash;</td><td id="ist_we3a">&mdash;</td></tr>
+    <tr><td>WE4/DG (50% eigen, Rohling)</td><td><input type="number" class="input-field input-xs" id="ist_sqm_we4" value="120.00" step="0.01" oninput="calcF20()" aria-label="WE4 IST Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_we4" value="0.00" step="0.50" oninput="calcF20()" aria-label="WE4 IST Miete pro m2"></td><td id="ist_we4m">&mdash;</td><td id="ist_we4a">&mdash;</td></tr>
+    <tr class="hl"><td><strong>IST Wohnen</strong></td><td id="ist_w_sqm"><strong>&mdash;</strong></td><td id="ist_w_avg"><strong>&mdash;</strong></td><td id="ist_wm"><strong>&mdash;</strong></td><td id="ist_wa"><strong>&mdash;</strong></td></tr>
   </table></div>
 
   <!-- IST Gewerbe -->
   <h2 class="section-title">IST-Mieten — Gewerbe</h2>
   <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe IST</h3>
   <table class="comp-table">
-    <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
-    <tr><td>Tante Frizzante (TE2-TE4)</td><td>387,55</td><td>2,78</td><td>1.200 &euro;</td><td>14.400 &euro;</td></tr>
-    <tr><td>Musikstudio</td><td>&mdash;</td><td>&mdash;</td><td>210 &euro;</td><td>2.520 &euro;</td></tr>
-    <tr><td>TE6 Garage</td><td>57,91</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td></tr>
-    <tr><td>Scheune DG (Lager)</td><td>116,25</td><td><input type="number" class="input-field input-sm" id="inp_scheune_ist" value="5.00" step="0.50" oninput="calcF20()" aria-label="Scheune DG IST Miete pro m2"></td><td id="ist_sdgm">&mdash;</td><td id="ist_sdga">&mdash;</td></tr>
-    <tr><td>7 Stellplaetze</td><td>&mdash;</td><td>&agrave; 65 &euro;</td><td>455 &euro;</td><td>5.460 &euro;</td></tr>
-    <tr class="hl"><td><strong>IST Gewerbe</strong></td><td></td><td></td><td id="ist_gew_m"><strong>&mdash;</strong></td><td id="ist_gew_a"><strong>&mdash;</strong></td></tr>
+    <tr><th>Einheit</th><th>m&sup2;</th><th>Eingabe</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
+    <tr><td>Tante Frizzante (TE2-TE4)</td><td><input type="number" class="input-field input-xs" id="ist_sqm_te24" value="387.55" step="0.01" oninput="calcF20()" aria-label="TE2-4 IST Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="ist_te24" value="1200" step="10" oninput="calcF20()" aria-label="TE2-4 IST Miete Mon"> &euro;/Mon</td><td id="ist_te24m">&mdash;</td><td id="ist_te24a">&mdash;</td></tr>
+    <tr><td>Musikstudio</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="ist_musik" value="210" step="10" oninput="calcF20()" aria-label="Musikstudio IST Miete Mon"> &euro;/Mon</td><td id="ist_musikm">&mdash;</td><td id="ist_musika">&mdash;</td></tr>
+    <tr><td>TE6 Garage</td><td><input type="number" class="input-field input-xs" id="ist_sqm_te6" value="57.91" step="0.01" oninput="calcF20()" aria-label="TE6 IST Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="ist_te6" value="0.00" step="0.50" oninput="calcF20()" aria-label="TE6 IST Miete pro m2"> &euro;/m&sup2;</td><td id="ist_te6m">&mdash;</td><td id="ist_te6a">&mdash;</td></tr>
+    <tr><td>Scheune DG (Lager)</td><td><input type="number" class="input-field input-xs" id="ist_sqm_sdg" value="116.25" step="0.01" oninput="calcF20()" aria-label="Scheune DG IST Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_scheune_ist" value="5.00" step="0.50" oninput="calcF20()" aria-label="Scheune DG IST Miete pro m2"> &euro;/m&sup2;</td><td id="ist_sdgm">&mdash;</td><td id="ist_sdga">&mdash;</td></tr>
+    <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="ist_sp_n" value="7" step="1" min="0" oninput="calcF20()" aria-label="Stellplaetze IST Anzahl"> Stk &agrave; <input type="number" class="input-field input-sm" id="ist_sp_p" value="65" step="5" oninput="calcF20()" aria-label="Stellplaetze IST Preis"> &euro;</td><td id="ist_spm">&mdash;</td><td id="ist_spa">&mdash;</td></tr>
+    <tr class="hl"><td><strong>IST Gewerbe</strong></td><td id="ist_gew_sqm"><strong>&mdash;</strong></td><td id="ist_gew_avg"><strong>&mdash;</strong></td><td id="ist_gew_m"><strong>&mdash;</strong></td><td id="ist_gew_a"><strong>&mdash;</strong></td></tr>
   </table></div>
 
   <!-- Gap Analyse -->
@@ -253,20 +253,20 @@
   <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen SOLL (ohne DG)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th><th>Status</th></tr>
-    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_a_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 SOLL A Miete pro m2"></td><td id="a_we1m">&mdash;</td><td id="a_we1a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
-    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_a_we2" value="12.00" step="0.50" oninput="calcF20()" aria-label="WE2 SOLL A Miete pro m2"></td><td id="a_we2m">&mdash;</td><td id="a_we2a">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL</span></td></tr>
-    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_a_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 SOLL A Miete pro m2"></td><td id="a_we3m">&mdash;</td><td id="a_we3a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
-    <tr><td>WE4/DG Wohnen (50%)</td><td>60,00</td><td>&mdash;</td><td>0 &euro;</td><td>0 &euro;</td><td><span class="tag tag-red">&#x26A0; Rohling</span></td></tr>
-    <tr class="hl"><td><strong>SOLL Wohnen A</strong></td><td>364,57</td><td></td><td id="a_wm"><strong>&mdash;</strong></td><td id="a_wa"><strong>&mdash;</strong></td><td></td></tr>
+    <tr><td>WE1</td><td><input type="number" class="input-field input-xs" id="a_sqm_we1" value="59.56" step="0.01" oninput="calcF20()" aria-label="WE1 SOLL A Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_a_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 SOLL A Miete pro m2"></td><td id="a_we1m">&mdash;</td><td id="a_we1a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr class="hl-green"><td>WE2</td><td><input type="number" class="input-field input-xs" id="a_sqm_we2" value="106.70" step="0.01" oninput="calcF20()" aria-label="WE2 SOLL A Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_a_we2" value="12.00" step="0.50" oninput="calcF20()" aria-label="WE2 SOLL A Miete pro m2"></td><td id="a_we2m">&mdash;</td><td id="a_we2a">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL</span></td></tr>
+    <tr><td>WE3</td><td><input type="number" class="input-field input-xs" id="a_sqm_we3" value="138.31" step="0.01" oninput="calcF20()" aria-label="WE3 SOLL A Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_a_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 SOLL A Miete pro m2"></td><td id="a_we3m">&mdash;</td><td id="a_we3a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr><td>WE4/DG Wohnen (50%)</td><td><input type="number" class="input-field input-xs" id="a_sqm_we4" value="60.00" step="0.01" oninput="calcF20()" aria-label="WE4 SOLL A Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_a_we4" value="0.00" step="0.50" oninput="calcF20()" aria-label="WE4 SOLL A Miete pro m2"></td><td id="a_we4m">&mdash;</td><td id="a_we4a">&mdash;</td><td><span class="tag tag-red">&#x26A0; Rohling</span></td></tr>
+    <tr class="hl"><td><strong>SOLL Wohnen A</strong></td><td id="a_w_sqm"><strong>&mdash;</strong></td><td id="a_w_avg"><strong>&mdash;</strong></td><td id="a_wm"><strong>&mdash;</strong></td><td id="a_wa"><strong>&mdash;</strong></td><td></td></tr>
   </table></div>
 
   <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe SOLL (inkl. Scheune DG ausgebaut)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
-    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_a_te15" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE1-5 SOLL A Miete pro m2"></td><td id="a_te15m">&mdash;</td><td id="a_te15a">&mdash;</td></tr>
-    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_a_te6" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE6 SOLL A Miete pro m2"></td><td id="a_te6m">&mdash;</td><td id="a_te6a">&mdash;</td></tr>
+    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td><input type="number" class="input-field input-xs" id="a_sqm_te15" value="619.86" step="0.01" oninput="calcF20()" aria-label="TE1-5 SOLL A Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_a_te15" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE1-5 SOLL A Miete pro m2"></td><td id="a_te15m">&mdash;</td><td id="a_te15a">&mdash;</td></tr>
+    <tr><td>TE6 Garage</td><td><input type="number" class="input-field input-xs" id="a_sqm_te6" value="57.91" step="0.01" oninput="calcF20()" aria-label="TE6 SOLL A Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_a_te6" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE6 SOLL A Miete pro m2"></td><td id="a_te6m">&mdash;</td><td id="a_te6a">&mdash;</td></tr>
     <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_a_sp_n" value="10" step="1" min="0" oninput="calcF20()" aria-label="Stellplaetze Anzahl SOLL A"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_a_sp_p" value="150" step="10" oninput="calcF20()" aria-label="Stellplaetze Preis SOLL A"> &euro;</td><td id="a_spm">&mdash;</td><td id="a_spa">&mdash;</td></tr>
-    <tr class="hl"><td><strong>SOLL Gewerbe A</strong></td><td></td><td></td><td id="a_gm"><strong>&mdash;</strong></td><td id="a_ga"><strong>&mdash;</strong></td></tr>
+    <tr class="hl"><td><strong>SOLL Gewerbe A</strong></td><td id="a_g_sqm"><strong>&mdash;</strong></td><td id="a_g_avg"><strong>&mdash;</strong></td><td id="a_gm"><strong>&mdash;</strong></td><td id="a_ga"><strong>&mdash;</strong></td></tr>
   </table></div>
 
   <div class="stat-box" style="margin-bottom:22px"><h3>Variante A: Erreichung Faktor</h3>
@@ -291,20 +291,20 @@
   <div class="stat-box" style="margin-bottom:22px"><h3>Wohnen SOLL (mit DG-Ausbau)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th><th>Status</th></tr>
-    <tr><td>WE1</td><td>59,56</td><td><input type="number" class="input-field input-sm" id="inp_b_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 SOLL B Miete pro m2"></td><td id="b_we1m">&mdash;</td><td id="b_we1a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
-    <tr class="hl-green"><td>WE2</td><td>106,70</td><td><input type="number" class="input-field input-sm" id="inp_b_we2" value="12.00" step="0.50" oninput="calcF20()" aria-label="WE2 SOLL B Miete pro m2"></td><td id="b_we2m">&mdash;</td><td id="b_we2a">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL</span></td></tr>
-    <tr><td>WE3</td><td>138,31</td><td><input type="number" class="input-field input-sm" id="inp_b_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 SOLL B Miete pro m2"></td><td id="b_we3m">&mdash;</td><td id="b_we3a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
-    <tr class="hl-green"><td>WE4/DG (50% von 120 m&sup2;)</td><td><input type="number" class="input-field input-sm" id="inp_b_dg_sqm" value="60" step="1" oninput="calcF20()" aria-label="DG Flaeche SOLL B m2"> m&sup2;</td><td><input type="number" class="input-field input-sm" id="inp_b_dg" value="12.00" step="0.50" oninput="calcF20()" aria-label="DG SOLL B Miete pro m2"></td><td id="b_dgm">&mdash;</td><td id="b_dga">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL DG</span></td></tr>
-    <tr class="hl"><td><strong>SOLL Wohnen B</strong></td><td id="b_sqm_total">&mdash;</td><td></td><td id="b_wm"><strong>&mdash;</strong></td><td id="b_wa"><strong>&mdash;</strong></td><td></td></tr>
+    <tr><td>WE1</td><td><input type="number" class="input-field input-xs" id="b_sqm_we1" value="59.56" step="0.01" oninput="calcF20()" aria-label="WE1 SOLL B Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_b_we1" value="7.00" step="0.50" oninput="calcF20()" aria-label="WE1 SOLL B Miete pro m2"></td><td id="b_we1m">&mdash;</td><td id="b_we1a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr class="hl-green"><td>WE2</td><td><input type="number" class="input-field input-xs" id="b_sqm_we2" value="106.70" step="0.01" oninput="calcF20()" aria-label="WE2 SOLL B Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_b_we2" value="12.00" step="0.50" oninput="calcF20()" aria-label="WE2 SOLL B Miete pro m2"></td><td id="b_we2m">&mdash;</td><td id="b_we2a">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL</span></td></tr>
+    <tr><td>WE3</td><td><input type="number" class="input-field input-xs" id="b_sqm_we3" value="138.31" step="0.01" oninput="calcF20()" aria-label="WE3 SOLL B Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_b_we3" value="10.00" step="0.50" oninput="calcF20()" aria-label="WE3 SOLL B Miete pro m2"></td><td id="b_we3m">&mdash;</td><td id="b_we3a">&mdash;</td><td><span class="tag tag-green">&#x2713; IST</span></td></tr>
+    <tr class="hl-green"><td>WE4/DG (50% von 120 m&sup2;)</td><td><input type="number" class="input-field input-xs" id="inp_b_dg_sqm" value="60" step="0.01" oninput="calcF20()" aria-label="DG Flaeche SOLL B m2"></td><td><input type="number" class="input-field input-sm" id="inp_b_dg" value="12.00" step="0.50" oninput="calcF20()" aria-label="DG SOLL B Miete pro m2"></td><td id="b_dgm">&mdash;</td><td id="b_dga">&mdash;</td><td><span class="tag tag-orange">&#x25CB; SOLL DG</span></td></tr>
+    <tr class="hl"><td><strong>SOLL Wohnen B</strong></td><td id="b_sqm_total">&mdash;</td><td id="b_w_avg"><strong>&mdash;</strong></td><td id="b_wm"><strong>&mdash;</strong></td><td id="b_wa"><strong>&mdash;</strong></td><td></td></tr>
   </table></div>
 
   <div class="stat-box" style="margin-bottom:22px"><h3>Gewerbe SOLL (inkl. Scheune DG ausgebaut)</h3>
   <table class="comp-table">
     <tr><th>Einheit</th><th>m&sup2;</th><th>&euro;/m&sup2;</th><th>Miete/Mon</th><th>Miete/Jahr</th></tr>
-    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td>619,86</td><td><input type="number" class="input-field input-sm" id="inp_b_te15" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE1-5 SOLL B Miete pro m2"></td><td id="b_te15m">&mdash;</td><td id="b_te15a">&mdash;</td></tr>
-    <tr><td>TE6 Garage</td><td>57,91</td><td><input type="number" class="input-field input-sm" id="inp_b_te6" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE6 SOLL B Miete pro m2"></td><td id="b_te6m">&mdash;</td><td id="b_te6a">&mdash;</td></tr>
+    <tr><td>TE1-TE5 (inkl. Scheune DG)</td><td><input type="number" class="input-field input-xs" id="b_sqm_te15" value="619.86" step="0.01" oninput="calcF20()" aria-label="TE1-5 SOLL B Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_b_te15" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE1-5 SOLL B Miete pro m2"></td><td id="b_te15m">&mdash;</td><td id="b_te15a">&mdash;</td></tr>
+    <tr><td>TE6 Garage</td><td><input type="number" class="input-field input-xs" id="b_sqm_te6" value="57.91" step="0.01" oninput="calcF20()" aria-label="TE6 SOLL B Flaeche m2"></td><td><input type="number" class="input-field input-sm" id="inp_b_te6" value="15.00" step="0.50" oninput="calcF20()" aria-label="TE6 SOLL B Miete pro m2"></td><td id="b_te6m">&mdash;</td><td id="b_te6a">&mdash;</td></tr>
     <tr><td>Stellplaetze</td><td>&mdash;</td><td><input type="number" class="input-field input-sm" id="inp_b_sp_n" value="10" step="1" min="0" oninput="calcF20()" aria-label="Stellplaetze Anzahl SOLL B"> Stk &agrave; <input type="number" class="input-field input-sm" id="inp_b_sp_p" value="150" step="10" oninput="calcF20()" aria-label="Stellplaetze Preis SOLL B"> &euro;</td><td id="b_spm">&mdash;</td><td id="b_spa">&mdash;</td></tr>
-    <tr class="hl"><td><strong>SOLL Gewerbe B</strong></td><td></td><td></td><td id="b_gm"><strong>&mdash;</strong></td><td id="b_ga"><strong>&mdash;</strong></td></tr>
+    <tr class="hl"><td><strong>SOLL Gewerbe B</strong></td><td id="b_g_sqm"><strong>&mdash;</strong></td><td id="b_g_avg"><strong>&mdash;</strong></td><td id="b_gm"><strong>&mdash;</strong></td><td id="b_ga"><strong>&mdash;</strong></td></tr>
   </table></div>
 
   <div class="stat-box" style="margin-bottom:22px"><h3>Variante B: Erreichung Faktor</h3>
@@ -359,10 +359,10 @@
       <tr class="sep"><td><strong>Gesamtinvestition</strong></td><td style="color:var(--pur)" id="inv_total_a"><strong>&mdash;</strong></td></tr>
     </table></div>
     <div class="stat-box"><h3>Finanzierung</h3><table>
-      <tr><td>Eigenkapital (Andreas)</td><td style="color:var(--grn)">150.000 &euro;</td></tr>
-      <tr><td>Eigenkapital (Morits)</td><td style="color:var(--grn)">100.000 &euro;</td></tr>
+      <tr><td>Eigenkapital (Andreas)</td><td style="color:var(--grn)"><input type="number" class="input-field input-sm" id="ek_andreas" value="150000" step="10000" oninput="calcF20()" aria-label="Eigenkapital Andreas"> &euro;</td></tr>
+      <tr><td>Eigenkapital (Morits)</td><td style="color:var(--grn)"><input type="number" class="input-field input-sm" id="ek_morits" value="100000" step="10000" oninput="calcF20()" aria-label="Eigenkapital Morits"> &euro;</td></tr>
       <tr><td>= 50% DG Rohling</td><td style="font-size:10px;color:var(--mut)">Verkauf an Morits</td></tr>
-      <tr style="font-weight:700"><td>Eigene Mittel</td><td style="color:var(--grn)">250.000 &euro;</td></tr>
+      <tr style="font-weight:700"><td>Eigene Mittel</td><td style="color:var(--grn)" id="ek_total">&mdash;</td></tr>
       <tr class="sep"><td>Fremdkapitalbedarf</td><td style="color:var(--red);font-weight:700" id="inv_fk_a">&mdash;</td></tr>
     </table></div>
   </div>
@@ -372,16 +372,16 @@
   <div class="stat-grid">
     <div class="stat-box"><h3>Cashflow Variante A</h3><table>
       <tr><td>SOLL Mieteinnahmen</td><td id="cf_a_soll">&mdash;</td></tr>
-      <tr><td>Betriebskosten</td><td>-23.674 &euro;</td></tr>
+      <tr><td>Betriebskosten (p.a.)</td><td>-<input type="number" class="input-field input-sm" id="cf_bk" value="23674" step="100" oninput="calcF20()" aria-label="Betriebskosten pro Jahr"> &euro;</td></tr>
       <tr><td>NOI</td><td style="color:var(--grn)" id="cf_a_noi">&mdash;</td></tr>
-      <tr class="sep"><td>Zinslast (3,5% FK)</td><td style="color:var(--red)" id="cf_a_zins">&mdash;</td></tr>
+      <tr class="sep"><td>Zinslast (<input type="number" class="input-field input-xs" id="cf_zins" value="3.5" step="0.1" min="0" max="15" oninput="calcF20()" aria-label="Zinssatz Prozent" style="width:55px">% FK)</td><td style="color:var(--red)" id="cf_a_zins">&mdash;</td></tr>
       <tr style="font-weight:700"><td>Cashflow vor Tilgung</td><td id="cf_a_cf">&mdash;</td></tr>
     </table></div>
     <div class="stat-box"><h3>Cashflow Variante B</h3><table>
       <tr><td>SOLL Mieteinnahmen</td><td id="cf_b_soll">&mdash;</td></tr>
-      <tr><td>Betriebskosten</td><td>-23.674 &euro;</td></tr>
+      <tr><td>Betriebskosten (p.a.)</td><td id="cf_b_bk">&mdash;</td></tr>
       <tr><td>NOI</td><td style="color:var(--grn)" id="cf_b_noi">&mdash;</td></tr>
-      <tr class="sep"><td>Zinslast (3,5% FK)</td><td style="color:var(--red)" id="cf_b_zins">&mdash;</td></tr>
+      <tr class="sep"><td>Zinslast (<span id="cf_b_zins_pct">&mdash;</span>% FK)</td><td style="color:var(--red)" id="cf_b_zins">&mdash;</td></tr>
       <tr style="font-weight:700"><td>Cashflow vor Tilgung</td><td id="cf_b_cf">&mdash;</td></tr>
     </table></div>
   </div>
