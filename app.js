@@ -201,7 +201,9 @@ function calcF20() {
   var kp = getVal('inp_kp'); if (kp <= 0) kp = 2200000;
   var faktor = getVal('inp_faktor'); if (faktor <= 0) faktor = 20;
   var ziel_pa = kp / faktor, ziel_mon = ziel_pa / 12;
-  var grest = kp * 0.06, notar = kp * 0.015;
+  var grest_pct = getVal('inv_grest_pct') / 100; if (grest_pct <= 0) grest_pct = 0.06;
+  var notar_pct = getVal('inv_notar_pct') / 100; if (notar_pct <= 0) notar_pct = 0.015;
+  var grest = kp * grest_pct, notar = kp * notar_pct;
 
   // EK dynamisch aus Inputs
   var ek_andreas = getVal('ek_andreas'), ek_morits = getVal('ek_morits');

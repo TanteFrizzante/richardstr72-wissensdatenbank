@@ -352,8 +352,8 @@
   <div class="stat-grid">
     <div class="stat-box"><h3>Mittelverwendung (Gesamt)</h3><table>
       <tr><td>Kaufpreis</td><td id="inv_kp2">&mdash;</td></tr>
-      <tr><td>GrESt (6%)</td><td id="inv_grest">&mdash;</td></tr>
-      <tr><td>Notar (~1,5%)</td><td id="inv_notar">&mdash;</td></tr>
+      <tr><td>GrESt (<input type="number" class="input-field input-xs" id="inv_grest_pct" value="6.0" step="0.1" min="0" max="20" oninput="calcF20()" aria-label="Grunderwerbsteuer Prozent" style="width:50px">%)</td><td id="inv_grest">&mdash;</td></tr>
+      <tr><td>Notar (<input type="number" class="input-field input-xs" id="inv_notar_pct" value="1.5" step="0.1" min="0" max="10" oninput="calcF20()" aria-label="Notarkosten Prozent" style="width:50px">%)</td><td id="inv_notar">&mdash;</td></tr>
       <tr><td>Renovierung Gewerbe</td><td id="inv_mv_gew">&mdash;</td></tr>
       <tr><td>Sanierung Wohnen</td><td id="inv_mv_wohn">&mdash;</td></tr>
       <tr class="sep"><td><strong>Gesamtinvestition</strong></td><td style="color:var(--pur)" id="inv_total_a"><strong>&mdash;</strong></td></tr>
