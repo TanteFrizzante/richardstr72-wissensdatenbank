@@ -820,23 +820,97 @@
 
 <!-- ─── KAEUFER ─── -->
 <div class="page" id="buyer">
-  <div class="page-header"><h1>Kaeufer &amp; Verkaufsstatus</h1><a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')">&#x1F4CB; Trello Board</a></div>
-  <h2 class="section-title">Wohnen — WEG-Kaeufer</h2>
-  <div class="buyer-card" style="border-left:3px solid var(--grn)"><span class="tag tag-green">&#x2713; Heissester Interessent</span><h3>Jan-Philip Roedger</h3><div class="unit-info">&#x1F4E7; <a href="mailto:jp.saltero@gmail.com" style="color:var(--acc)">jp.saltero@gmail.com</a></div>
-    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Naechste Schritte (0/4)</div><div class="collapse-body"><div class="checklist-item">Erstgespraech / Besichtigung</div><div class="checklist-item">Unterlagen zusenden</div><div class="checklist-item">Kaufpreisverhandlung</div><div class="checklist-item">Notartermin vereinbaren</div></div></div></div>
-  <div class="buyer-card"><span class="tag tag-orange">&#x25CB; In Arbeit</span><h3>Kolja — EG rechts / WE2</h3><div class="unit-info">106,70 m&sup2; &middot; 3 ZKB, Balkon, ~50 m&sup2; Garten &middot; Bezugsfrei</div><div class="price">554.840 &euro; (5.200 &euro;/m&sup2;)</div>
-    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Abstimmung (0/5)</div><div class="collapse-body"><div class="checklist-item">NDA</div><div class="checklist-item">Grundrisse</div><div class="checklist-item">Mieterliste</div><div class="checklist-item">Teilungserklaerung</div><div class="checklist-item">Expose</div></div></div>
-    <div class="due-date">Termin: 28.01.2026 (stattgefunden)</div></div>
-  <div class="buyer-card"><span class="tag tag-orange">&#x25CB; In Arbeit</span><span class="tag tag-red">&#x26A0; Prio</span><h3>Lina — 1. OG / WE3</h3><div class="unit-info">138,31 m&sup2; &middot; 5 ZKB &middot; Bezugsfrei</div><div class="price">677.719 &euro; (4.900 &euro;/m&sup2;)</div>
-    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Abstimmung (2/4)</div><div class="collapse-body"><div class="checklist-item done">Grundrisse</div><div class="checklist-item done">Mieterliste</div><div class="checklist-item">Teilungserklaerung</div><div class="checklist-item">Expose</div></div></div></div>
-  <div class="buyer-card"><h3>Morits Schmitt — 50% DG / WE4</h3><div class="unit-info">69,50 m&sup2; (50% von 139 m&sup2;) &middot; Rohling &middot; EK-Partner</div><div class="price">100.000 &euro; fuer 50% DG Rohling &middot; 100.000 &euro; EK-Beitrag</div>
-    <div style="margin-top:10px"><div class="collapse-header" onclick="toggleCollapse(this)">Status (0/4)</div><div class="collapse-body"><div class="checklist-item">Kaufpreis 50% DG festlegen</div><div class="checklist-item">EK-Vereinbarung</div><div class="checklist-item">Notartermin</div><div class="checklist-item">DG-Ausbau spaeter planen</div></div></div>
+  <div class="page-header"><h1>Kaeufer &amp; Partner</h1><a href="#" class="trello-link" onclick="event.preventDefault();navigateToPage('trello')">&#x1F4CB; Trello Board</a></div>
+
+  <!-- ═══ JAN-PHILIPP RÖDGER ═══ -->
+  <div class="buyer-card" style="border-left:3px solid var(--grn)">
+    <span class="tag tag-green">&#x2713; Heissester Interessent</span>
+    <h3>Jan-Philipp Roedger</h3>
+    <div class="unit-info">&#x1F4E7; <a href="mailto:jp.saltero@gmail.com" style="color:var(--acc)">jp.saltero@gmail.com</a></div>
+    <div style="margin-top:10px">
+      <div class="collapse-header" onclick="toggleCollapse(this)">Naechste Schritte (0/4)</div>
+      <div class="collapse-body">
+        <div class="checklist-item">Erstgespraech / Besichtigung</div>
+        <div class="checklist-item">Unterlagen zusenden</div>
+        <div class="checklist-item">Kaufpreisverhandlung</div>
+        <div class="checklist-item">Notartermin vereinbaren</div>
+      </div>
+    </div>
+    <!-- Gespraechsleitfaden -->
+    <div style="margin-top:14px">
+      <div class="collapse-header open" onclick="toggleCollapse(this)">&#x1F4DD; Gespraechsleitfaden — 12.03.2026</div>
+      <div class="collapse-body open" id="jpr_leitfaden">
+        <p style="font-size:12px;color:var(--mut);margin-bottom:10px">Agenda &amp; Talking Points fuer das heutige Gespraech</p>
+        <div style="background:var(--card);border-radius:8px;padding:14px;margin-bottom:10px">
+          <strong style="color:var(--acc)">1. Kennenlernen &amp; Einstieg</strong>
+          <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.6">
+            <li>Vorstellung &amp; Hintergrund — wie ist Jan-Philipp auf das Objekt aufmerksam geworden?</li>
+            <li>Was ist seine Motivation / Nutzungsabsicht? (Eigennutzung, Kapitalanlage, beides?)</li>
+            <li>Erfahrung mit Immobilien / WEG?</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;margin-bottom:10px">
+          <strong style="color:var(--acc)">2. Objektvorstellung</strong>
+          <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.6">
+            <li>Gesamtkonzept Richardstr. 72 / Richardplatz 17 erklaeren</li>
+            <li>4 Haeuser, Mischnutzung Wohnen + Gewerbe, Bestand + Potential</li>
+            <li>Welche Einheit(en) kommen fuer ihn in Frage?</li>
+            <li>Besichtigung vor Ort anbieten / terminieren</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;margin-bottom:10px">
+          <strong style="color:var(--acc)">3. Kaufpreis &amp; Konditionen</strong>
+          <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.6">
+            <li>Preisvorstellung kommunizieren (abh. von Einheit)</li>
+            <li>WEG-Struktur &amp; Teilungserklaerung erklaeren</li>
+            <li>Nebenkosten: GrESt (6%), Notar (~1,5%), ggf. Makler</li>
+            <li>Zeitrahmen: Notartermin, Uebergabe</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;margin-bottom:10px">
+          <strong style="color:var(--acc)">4. Finanzierung</strong>
+          <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.6">
+            <li>Hat Jan-Philipp eine Finanzierungszusage / Vorpruefung?</li>
+            <li>EK-Situation klaeren</li>
+            <li>Ggf. Finanzierungskontakte anbieten (BaufiTeam, IBB)</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;margin-bottom:10px">
+          <strong style="color:var(--acc)">5. Naechste Schritte &amp; Abschluss</strong>
+          <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.6">
+            <li>Besichtigungstermin vereinbaren (falls nicht heute)</li>
+            <li>Unterlagen zusenden: Expose, Grundrisse, Teilungserklaerung</li>
+            <li>Zeitplan abstimmen — bis wann Entscheidung?</li>
+            <li>Folgetermin vereinbaren</li>
+          </ul>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;border-left:3px solid var(--warn)">
+          <strong style="color:var(--warn)">Notizen zum Gespraech</strong>
+          <textarea id="jpr_notes" style="width:100%;min-height:80px;margin-top:8px;background:var(--bg);color:var(--txt);border:1px solid var(--brd);border-radius:6px;padding:8px;font-size:13px;resize:vertical" placeholder="Hier Notizen waehrend des Gespraechs eintragen ..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MORITS SCHMITT ═══ -->
+  <div class="buyer-card" style="border-left:3px solid var(--acc)">
+    <span class="tag tag-orange">&#x25CB; EK-Partner</span>
+    <h3>Morits Schmitt — 50% DG / WE4</h3>
+    <div class="unit-info">69,50 m&sup2; (50% von 139 m&sup2;) &middot; Rohling &middot; EK-Partner</div>
+    <div class="price">100.000 &euro; fuer 50% DG Rohling &middot; 100.000 &euro; EK-Beitrag</div>
+    <div style="margin-top:10px">
+      <div class="collapse-header" onclick="toggleCollapse(this)">Status (0/4)</div>
+      <div class="collapse-body">
+        <div class="checklist-item">Kaufpreis 50% DG festlegen</div>
+        <div class="checklist-item">EK-Vereinbarung</div>
+        <div class="checklist-item">Notartermin</div>
+        <div class="checklist-item">DG-Ausbau spaeter planen</div>
+      </div>
+    </div>
     <div class="alert-warn">Aufschiebende Bedingung WEG / Baugenehmigung</div>
-    <div class="alert-info">DG-Ausbau wird spaeter kalkuliert — zunaechst Rohling-Verkauf</div></div>
-  <h2 class="section-title">Gewerbe — Eigennutzung</h2>
-  <div class="buyer-card cyan"><span class="tag tag-green">&#x2713; Eigennutzung</span><h3>Tante Frizzante — TE2-TE4</h3><div class="unit-info">Indexmietvertrag Basis 2020 &middot; IST: 1.200 &euro;/Mon (2,78 &euro;/m&sup2;) &middot; Ab Mai 2026: 1.375,20 &euro;</div></div>
-  <div class="buyer-card cyan"><span class="tag tag-green">&#x2713; Eigennutzung</span><h3>Buero — TE1</h3><div class="unit-info">57,53 m&sup2; &middot; Eigennutzung</div></div>
-  <div class="buyer-card cyan"><span class="tag tag-green">&#x2713; Eigennutzung</span><h3>WE1 — EG links</h3><div class="unit-info">59,56 m&sup2; &middot; Vermietet (329 &euro;/Mon)</div></div>
+    <div class="alert-info">DG-Ausbau wird spaeter kalkuliert — zunaechst Rohling-Verkauf</div>
+  </div>
+
 </div>
 
 <!-- ─── FINANZEN ─── -->
@@ -924,10 +998,9 @@
 <!-- ─── KONTAKTE ─── -->
 <div class="page" id="contact">
   <div class="page-header"><h1>Kontakte</h1></div>
-  <h2 class="section-title">Kaeufer (Wohnen)</h2>
+  <h2 class="section-title">Kaeufer &amp; Partner</h2>
   <div class="contact-grid" style="margin-bottom:24px">
-    <div class="contact-card"><h4>Lina</h4><div class="role">1. OG / WE3</div><div class="detail">138,31 m&sup2; &middot; 677.719 &euro;</div></div>
-    <div class="contact-card"><h4>Kolja</h4><div class="role">EG / WE2</div><div class="detail">106,70 m&sup2; &middot; 554.840 &euro;</div></div>
+    <div class="contact-card"><h4>Jan-Philipp Roedger</h4><div class="role">Interessent</div><div class="detail">jp.saltero@gmail.com</div></div>
     <div class="contact-card"><h4>Morits Schmitt</h4><div class="role">50% DG + EK-Partner</div><div class="detail">100k EK &middot; 50% DG Rohling</div></div>
   </div>
   <h2 class="section-title">Gewerbe</h2>
