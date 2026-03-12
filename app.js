@@ -351,16 +351,19 @@ function calcF20() {
   setEl('a_wm', fmtN(Math.round(a_w_mon)) + ' \u20AC'); setEl('a_wa', fmtN(Math.round(a_w_pa)) + ' \u20AC');
 
   // ─── VARIANTE A Gewerbe ───
-  var a_sqm_te14 = getVal('a_sqm_te14'), a_sqm_te5a = getVal('a_sqm_te5'), a_sqm_te6 = getVal('a_sqm_te6');
-  var a_te14 = a_sqm_te14 * getVal('inp_a_te14');
+  var a_sqm_te1 = getVal('a_sqm_te1'), a_sqm_te24 = getVal('a_sqm_te24');
+  var a_sqm_te5a = getVal('a_sqm_te5'), a_sqm_te6 = getVal('a_sqm_te6');
+  var a_te1 = a_sqm_te1 * getVal('inp_a_te1');
+  var a_te24 = a_sqm_te24 * getVal('inp_a_te24');
   var a_te5 = a_sqm_te5a * getVal('inp_a_te5');
   var a_te6 = a_sqm_te6 * getVal('inp_a_te6');
   var a_sp_mon = getVal('inp_a_sp_n') * getVal('inp_a_sp_p');
-  var a_g_mon = a_te14 + a_te5 + a_te6 + a_sp_mon, a_g_pa = a_g_mon * 12;
-  var a_g_sqm_total = a_sqm_te14 + a_sqm_te5a + a_sqm_te6;
-  var a_g_rent_sqm = a_te14 + a_te5 + a_te6;
+  var a_g_mon = a_te1 + a_te24 + a_te5 + a_te6 + a_sp_mon, a_g_pa = a_g_mon * 12;
+  var a_g_sqm_total = a_sqm_te1 + a_sqm_te24 + a_sqm_te5a + a_sqm_te6;
+  var a_g_rent_sqm = a_te1 + a_te24 + a_te5 + a_te6;
   var a_g_avg_val = a_g_sqm_total > 0 ? a_g_rent_sqm / a_g_sqm_total : 0;
-  setEl('a_te14m', fmtN(Math.round(a_te14)) + ' \u20AC'); setEl('a_te14a', fmtN(Math.round(a_te14 * 12)) + ' \u20AC');
+  setEl('a_te1m', fmtN(Math.round(a_te1)) + ' \u20AC'); setEl('a_te1a', fmtN(Math.round(a_te1 * 12)) + ' \u20AC');
+  setEl('a_te24m', fmtN(Math.round(a_te24)) + ' \u20AC'); setEl('a_te24a', fmtN(Math.round(a_te24 * 12)) + ' \u20AC');
   setEl('a_te5m', fmtN(Math.round(a_te5)) + ' \u20AC'); setEl('a_te5a', fmtN(Math.round(a_te5 * 12)) + ' \u20AC');
   setEl('a_te6m', fmtN(Math.round(a_te6)) + ' \u20AC'); setEl('a_te6a', fmtN(Math.round(a_te6 * 12)) + ' \u20AC');
   setEl('a_spm', fmtN(Math.round(a_sp_mon)) + ' \u20AC'); setEl('a_spa', fmtN(Math.round(a_sp_mon * 12)) + ' \u20AC');
@@ -401,16 +404,19 @@ function calcF20() {
   setEl('b_wm', fmtN(Math.round(b_w_mon)) + ' \u20AC'); setEl('b_wa', fmtN(Math.round(b_w_pa)) + ' \u20AC');
 
   // ─── VARIANTE B Gewerbe ───
-  var b_sqm_te14 = getVal('b_sqm_te14'), b_sqm_te5b = getVal('b_sqm_te5'), b_sqm_te6v = getVal('b_sqm_te6');
-  var b_te14 = b_sqm_te14 * getVal('inp_b_te14');
+  var b_sqm_te1 = getVal('b_sqm_te1'), b_sqm_te24 = getVal('b_sqm_te24');
+  var b_sqm_te5b = getVal('b_sqm_te5'), b_sqm_te6v = getVal('b_sqm_te6');
+  var b_te1 = b_sqm_te1 * getVal('inp_b_te1');
+  var b_te24 = b_sqm_te24 * getVal('inp_b_te24');
   var b_te5 = b_sqm_te5b * getVal('inp_b_te5');
   var b_te6 = b_sqm_te6v * getVal('inp_b_te6');
   var b_sp_mon = getVal('inp_b_sp_n') * getVal('inp_b_sp_p');
-  var b_g_mon = b_te14 + b_te5 + b_te6 + b_sp_mon, b_g_pa = b_g_mon * 12;
-  var b_g_sqm_total = b_sqm_te14 + b_sqm_te5b + b_sqm_te6v;
-  var b_g_rent_sqm = b_te14 + b_te5 + b_te6;
+  var b_g_mon = b_te1 + b_te24 + b_te5 + b_te6 + b_sp_mon, b_g_pa = b_g_mon * 12;
+  var b_g_sqm_total = b_sqm_te1 + b_sqm_te24 + b_sqm_te5b + b_sqm_te6v;
+  var b_g_rent_sqm = b_te1 + b_te24 + b_te5 + b_te6;
   var b_g_avg_val = b_g_sqm_total > 0 ? b_g_rent_sqm / b_g_sqm_total : 0;
-  setEl('b_te14m', fmtN(Math.round(b_te14)) + ' \u20AC'); setEl('b_te14a', fmtN(Math.round(b_te14 * 12)) + ' \u20AC');
+  setEl('b_te1m', fmtN(Math.round(b_te1)) + ' \u20AC'); setEl('b_te1a', fmtN(Math.round(b_te1 * 12)) + ' \u20AC');
+  setEl('b_te24m', fmtN(Math.round(b_te24)) + ' \u20AC'); setEl('b_te24a', fmtN(Math.round(b_te24 * 12)) + ' \u20AC');
   setEl('b_te5m', fmtN(Math.round(b_te5)) + ' \u20AC'); setEl('b_te5a', fmtN(Math.round(b_te5 * 12)) + ' \u20AC');
   setEl('b_te6m', fmtN(Math.round(b_te6)) + ' \u20AC'); setEl('b_te6a', fmtN(Math.round(b_te6 * 12)) + ' \u20AC');
   setEl('b_spm', fmtN(Math.round(b_sp_mon)) + ' \u20AC'); setEl('b_spa', fmtN(Math.round(b_sp_mon * 12)) + ' \u20AC');
