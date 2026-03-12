@@ -1,0 +1,877 @@
+{
+  "_meta": {
+    "quelle": "Flächenberechnung_Detail_Richardstr72.xlsx",
+    "stand": "2026-03-13",
+    "beschreibung": "Flächen- und Betriebskostendaten Richardstr. 72 / Richardplatz 17, 12055 Berlin-Neukölln"
+  },
+  "einheiten": [
+    {
+      "einheit": "WE1",
+      "lage": "Haus 1",
+      "bezeichnung": "EG links (59,56), 2 ZKB ",
+      "mea": "Sondereigentum WE1",
+      "raeume": [
+        {
+          "raum": "Zimmer 1, Wohnen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 10.41,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 10.41,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Zimmer 2, Schlafen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 32.25,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 32.25,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Flur",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 5.16,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 5.16,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Küche",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 7.04,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 7.04,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Bad",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 4.7,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 4.7,
+          "raumhoehe_m": 3.1
+        }
+      ],
+      "flaeche_brutto_m2": 59.56,
+      "flaeche_angerechnet_m2": 59.56
+    },
+    {
+      "einheit": "WE2",
+      "lage": "Haus 1",
+      "bezeichnung": "EG rechts (78,75), 3 ZKB Balkon, Garten",
+      "mea": "Sondereigentum WE2",
+      "raeume": [
+        {
+          "raum": "Zimmer 1, Wohnen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 24.25,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 24.25,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Zimmer 2, Schlafen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 21.7,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 21.7,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Zimmer 3, Kinder",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 11.84,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 11.84,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Flur",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 6.44,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 6.44,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Küche",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 9.32,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 9.32,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Bad",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 5.2,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 5.2,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Balkon",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 5.9,
+          "anrechnungsfaktor": 0.5,
+          "angerechnet_m2": 2.95,
+          "raumhoehe_m": 3.1
+        },
+        {
+          "raum": "Garten",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 50.0,
+          "anrechnungsfaktor": 0.5,
+          "angerechnet_m2": 25.0
+        }
+      ],
+      "flaeche_brutto_m2": 134.65,
+      "flaeche_angerechnet_m2": 106.7
+    },
+    {
+      "einheit": "WE3",
+      "lage": "Haus 1",
+      "bezeichnung": "1. OG links (58,8) & 1. OG rechts (ca. 79qm) 5 ZKB",
+      "mea": "Sondereigentum WE3",
+      "raeume": [
+        {
+          "raum": "Zimmer 1, Wohnen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 10.41,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 10.41,
+          "raumhoehe_m": 3.07
+        },
+        {
+          "raum": "Zimmer 2, Schlafen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 32.25,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 32.25,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Flur",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 5.16,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 5.16,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Küche",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 7.04,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 7.04,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Bad",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 4.7,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 4.7,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Zimmer 1, Wohnen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 24.25,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 24.25,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Zimmer 2, Schlafen",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 21.7,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 21.7,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Zimmer 3, Kinder",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 11.84,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 11.84,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Flur",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 6.44,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 6.44,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Küche",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 9.32,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 9.32,
+          "raumhoehe_m": 3.15
+        },
+        {
+          "raum": "Bad",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 5.2,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 5.2,
+          "raumhoehe_m": 3.15
+        }
+      ],
+      "flaeche_brutto_m2": 138.31,
+      "flaeche_angerechnet_m2": 138.31
+    },
+    {
+      "einheit": "WE4",
+      "lage": "Haus 1",
+      "bezeichnung": "Wohnen / Eigennutzung/bezugsfrei Dachgeschoss (leerstehend)",
+      "mea": "Sondereigentum WE4",
+      "raeume": [
+        {
+          "raum": "Dachgeschossrohling Potential",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 120.0,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 4.51
+        }
+      ],
+      "flaeche_brutto_m2": 120.0,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "GE",
+      "lage": "Haus 1",
+      "bezeichnung": "Treppenhaus 2. OG",
+      "mea": "Gemeinschaftseigentum",
+      "raeume": [
+        {
+          "raum": "Treppenhaus 2. OG",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 12.96,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0
+        },
+        {
+          "raum": "Treppenhaus 1. OG",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 12.96,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0
+        },
+        {
+          "raum": "Treppenhaus Erdgeschoss",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 12.44,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0
+        },
+        {
+          "raum": "Treppenhaus Kellergeschoss",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 6.51,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0
+        },
+        {
+          "raum": "Hausanschlussraum",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 14.14,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.3
+        },
+        {
+          "raum": "Kellerraum & Öltank / Hausanschlussraum",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 28.93,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 1.92
+        },
+        {
+          "raum": "Kohlekeller / Haustechnik",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 3.74,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 1.64
+        }
+      ],
+      "flaeche_brutto_m2": 91.69,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE1",
+      "lage": "Haus 1",
+      "bezeichnung": "Sonstiges Gewerbe KG links",
+      "mea": "Teileigentum TE1",
+      "raeume": [
+        {
+          "raum": "Sonstiges Gewerbe ",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 24.86,
+          "anrechnungsfaktor": 0.5,
+          "angerechnet_m2": 12.43,
+          "raumhoehe_m": 2.3
+        },
+        {
+          "raum": "Kellerraum 1",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 19.46,
+          "anrechnungsfaktor": 0.5,
+          "angerechnet_m2": 9.73,
+          "raumhoehe_m": 2.3
+        },
+        {
+          "raum": "Kellerraum 2",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 11.71,
+          "anrechnungsfaktor": 0.5,
+          "angerechnet_m2": 5.86,
+          "raumhoehe_m": 2.3
+        }
+      ],
+      "flaeche_brutto_m2": 56.03,
+      "flaeche_angerechnet_m2": 28.02
+    },
+    {
+      "einheit": "SE1",
+      "lage": "Haus 1",
+      "bezeichnung": "Kellerraum 1",
+      "mea": "Sondereigentum WE2",
+      "raeume": [
+        {
+          "raum": "Hausanschlussraum",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 4.5,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.3
+        }
+      ],
+      "flaeche_brutto_m2": 4.5,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "SE2",
+      "lage": "Haus 1",
+      "bezeichnung": "Kellerraum 2",
+      "mea": "Sondereigentum WE3",
+      "raeume": [
+        {
+          "raum": "Hausanschlussraum",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 4.5,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.3
+        }
+      ],
+      "flaeche_brutto_m2": 4.5,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "SE3",
+      "lage": "Haus 1",
+      "bezeichnung": "Kellerraum 3",
+      "mea": "Gemeinschaftseigentum",
+      "raeume": [
+        {
+          "raum": "Kellerraum 3",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 2.81,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.3
+        }
+      ],
+      "flaeche_brutto_m2": 2.81,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "SE4",
+      "lage": "Haus 1",
+      "bezeichnung": "Kellerraum 4",
+      "mea": "Sondereigentum WE1",
+      "raeume": [
+        {
+          "raum": "Kellerraum 4",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 9.92,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.3
+        }
+      ],
+      "flaeche_brutto_m2": 9.92,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "SE5",
+      "lage": "Haus 1",
+      "bezeichnung": "Kellerraum 5",
+      "mea": "Sondereigentum WE4",
+      "raeume": [
+        {
+          "raum": "Kellerraum 5",
+          "flaechenbezeichnung": "Wohnen",
+          "flaeche_m2": 6.02,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.3
+        }
+      ],
+      "flaeche_brutto_m2": 6.02,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE2",
+      "lage": "Haus 4",
+      "bezeichnung": "Scharnier EG (Tante Frizzante)",
+      "mea": "Teileigentum TE2",
+      "raeume": [
+        {
+          "raum": "Werktstatt",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 82.16,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 82.16,
+          "raumhoehe_m": 7.75
+        },
+        {
+          "raum": "Toilette Erdgeschoss Gewerbe",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 16.38,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.2
+        }
+      ],
+      "flaeche_brutto_m2": 98.54,
+      "flaeche_angerechnet_m2": 82.16
+    },
+    {
+      "einheit": "TE3",
+      "lage": "Haus 4",
+      "bezeichnung": "Scharnier 1. OG (Tante Frizzante)",
+      "mea": "Teileigentum TE3",
+      "raeume": [
+        {
+          "raum": "Scharnier 1. OG ",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 77.2,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 77.2,
+          "raumhoehe_m": 3.7
+        },
+        {
+          "raum": "Toilette Scharnier 1. OG",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 4.96,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 4.96,
+          "raumhoehe_m": 3.7
+        }
+      ],
+      "flaeche_brutto_m2": 82.16,
+      "flaeche_angerechnet_m2": 82.16
+    },
+    {
+      "einheit": "TE4",
+      "lage": "Haus 4",
+      "bezeichnung": "Scheune / Lager EG (Tante Frizzante)",
+      "mea": "Teileigentum TE3",
+      "raeume": [
+        {
+          "raum": "Gemeinschaftsraum",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 111.67,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 111.67,
+          "raumhoehe_m": 3.75
+        },
+        {
+          "raum": "Büro",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 22.04,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 22.04,
+          "raumhoehe_m": 2.65
+        },
+        {
+          "raum": "Flur",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 6.12,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 6.12,
+          "raumhoehe_m": 2.95
+        },
+        {
+          "raum": "Abstell 1",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 5.98,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 5.98,
+          "raumhoehe_m": 2.5
+        },
+        {
+          "raum": "Abstell 2",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 3.48,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 3.48,
+          "raumhoehe_m": 2.7
+        },
+        {
+          "raum": "Treppe",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 5.51,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 5.51,
+          "raumhoehe_m": 2.95
+        },
+        {
+          "raum": "Scheune DG",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 83.75,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 5.25
+        },
+        {
+          "raum": "Scheune DG",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 32.5,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 1.0
+        }
+      ],
+      "flaeche_brutto_m2": 271.05,
+      "flaeche_angerechnet_m2": 154.8
+    },
+    {
+      "einheit": "TE5",
+      "lage": "Haus 3",
+      "bezeichnung": "Quergebäude 1. OG (Wanubale GbR/Musiker)",
+      "mea": "Teileigentum TE4",
+      "raeume": [
+        {
+          "raum": "Raum 1 / Küche / Bad",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 36.15,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 36.15,
+          "raumhoehe_m": 3.68
+        },
+        {
+          "raum": "Raum 2 / Musikstudio",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 61.79,
+          "anrechnungsfaktor": 1.0,
+          "angerechnet_m2": 61.79,
+          "raumhoehe_m": 3.68
+        }
+      ],
+      "flaeche_brutto_m2": 97.94,
+      "flaeche_angerechnet_m2": 97.94
+    },
+    {
+      "einheit": "TE9",
+      "lage": "Haus 3",
+      "bezeichnung": "4. Garage (Annika Finck, Musikerhaus ganz links)",
+      "mea": "Teileigentum TE8",
+      "raeume": [
+        {
+          "raum": "4. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 15.78,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 15.78,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE10",
+      "lage": "Haus 3",
+      "bezeichnung": "5. Garage (Holger Jordan, Musikerhaus 2. v. links)",
+      "mea": "Teileigentum TE9",
+      "raeume": [
+        {
+          "raum": "5. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 14.6,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 14.6,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE11",
+      "lage": "Haus 3",
+      "bezeichnung": "6. Garage (Michael Steeger 3.v. links)",
+      "mea": "Teileigentum TE10",
+      "raeume": [
+        {
+          "raum": "6. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 13.97,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 13.97,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE12",
+      "lage": "Haus 3",
+      "bezeichnung": "7. Garage (Corinna Schaffer, 4. v. links)",
+      "mea": "Teileigentum TE11",
+      "raeume": [
+        {
+          "raum": "7. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 13.86,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 13.86,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE13",
+      "lage": "Haus 3",
+      "bezeichnung": "8. Garage (Detlev Leu, 5. v. links)",
+      "mea": "Teileigentum TE12",
+      "raeume": [
+        {
+          "raum": "8. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 14.81,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 14.81,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE14",
+      "lage": "Haus 3",
+      "bezeichnung": "9. Garage (Detlev Leu, ganz rechts), nicht vermessen",
+      "mea": "Teileigentum TE13",
+      "raeume": [
+        {
+          "raum": "9. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 15.0,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 15.0,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE6",
+      "lage": "Haus 2",
+      "bezeichnung": "1. Garage (Detlev Leu, 2er Garage angrenzend an Scheune",
+      "mea": "Teileigentum TE5",
+      "raeume": [
+        {
+          "raum": "1. Garage (Doppelgarage)",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 57.91,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 57.91,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE7",
+      "lage": "Haus 2",
+      "bezeichnung": "2. Garage (Thomas Finck, Garage die er selbst nutzt) ",
+      "mea": "Teileigentum TE6",
+      "raeume": [
+        {
+          "raum": "2. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 18.09,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 18.09,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "TE8",
+      "lage": "Haus 2",
+      "bezeichnung": "3. Garage (Thomas Finck, Doppelgarage am Haus)",
+      "mea": "Teileigentum TE7",
+      "raeume": [
+        {
+          "raum": "3. Garage",
+          "flaechenbezeichnung": "Garage",
+          "flaeche_m2": 33.58,
+          "anrechnungsfaktor": 0.0,
+          "angerechnet_m2": 0.0,
+          "raumhoehe_m": 2.77
+        }
+      ],
+      "flaeche_brutto_m2": 33.58,
+      "flaeche_angerechnet_m2": 0.0
+    },
+    {
+      "einheit": "WE5",
+      "lage": "Haus 2",
+      "bezeichnung": "Aufstockung DG Haus 2",
+      "mea": "Sondereigentum WE5",
+      "raeume": [
+        {
+          "raum": "Aufstockung Potential Neubau",
+          "flaechenbezeichnung": "Gewerbe",
+          "flaeche_m2": 126.28,
+          "anrechnungsfaktor": 1,
+          "angerechnet_m2": 126.28
+        }
+      ],
+      "flaeche_brutto_m2": 126.28,
+      "flaeche_angerechnet_m2": 126.28
+    }
+  ],
+  "kategorien": {
+    "wohnen": [
+      "WE1",
+      "WE2",
+      "WE3",
+      "WE4"
+    ],
+    "gewerbe": [
+      "TE1",
+      "TE2",
+      "TE3",
+      "TE4",
+      "TE5"
+    ],
+    "garagen": [
+      "TE9",
+      "TE10",
+      "TE11",
+      "TE12",
+      "TE13",
+      "TE14",
+      "TE6",
+      "TE7",
+      "TE8"
+    ],
+    "sondereigentum": [
+      "SE1",
+      "SE2",
+      "SE3",
+      "SE4",
+      "SE5"
+    ],
+    "gemeinschaftseigentum": [
+      "GE"
+    ],
+    "potential": [
+      "WE5"
+    ]
+  },
+  "betriebskosten": [
+    {
+      "BETRIEBSKOSTEN": 1,
+      "Maßnahme BK": "Grundsteuer",
+      "BK-Betrag": 6076.64
+    },
+    {
+      "BETRIEBSKOSTEN": 2,
+      "Maßnahme BK": "Hausversicherung",
+      "BK-Betrag": 5147.27
+    },
+    {
+      "BETRIEBSKOSTEN": 3,
+      "Maßnahme BK": "Müllabfuhr",
+      "BK-Betrag": 594.56
+    },
+    {
+      "BETRIEBSKOSTEN": 4,
+      "Maßnahme BK": "Straßenreinigung",
+      "BK-Betrag": 1111.12
+    },
+    {
+      "BETRIEBSKOSTEN": 5,
+      "Maßnahme BK": "Wasser",
+      "BK-Betrag": 2145
+    },
+    {
+      "BETRIEBSKOSTEN": 6,
+      "Maßnahme BK": "Strom",
+      "BK-Betrag": 829.4
+    },
+    {
+      "BETRIEBSKOSTEN": 7,
+      "Maßnahme BK": "Papiertonne",
+      "BK-Betrag": 118.8
+    },
+    {
+      "BETRIEBSKOSTEN": 8,
+      "Maßnahme BK": "Schornsteinfeger",
+      "BK-Betrag": 159.53
+    },
+    {
+      "BETRIEBSKOSTEN": 9,
+      "Maßnahme BK": "Heizöl",
+      "BK-Betrag": 6300
+    },
+    {
+      "BETRIEBSKOSTEN": 10,
+      "Maßnahme BK": "Winterdienst",
+      "BK-Betrag": 1191.49
+    },
+    {
+      "BETRIEBSKOSTEN": "BK-Kosten pro Monat",
+      "BK-Betrag": 1972.82
+    },
+    {
+      "BETRIEBSKOSTEN": "BK pro qm Wohnfläche ",
+      "BK-Betrag": 7.05
+    },
+    {
+      "BETRIEBSKOSTEN": "QM Anzahl Wohnen",
+      "BK-Betrag": 280
+    }
+  ],
+  "zusammenfassung": {
+    "gesamt_brutto_m2": 1501.56,
+    "gesamt_angerechnet_m2": 875.93,
+    "anzahl_einheiten": 25,
+    "anzahl_wohnungen": 4,
+    "anzahl_gewerbe": 5,
+    "anzahl_garagen": 9,
+    "anzahl_se": 5
+  }
+}
