@@ -9,7 +9,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // ─── Auth Gate ───
-var AUTH_HASH = '683d2896fa2a073c264323b75eab86c9f7d99cb3879fae62a671842e32c746c2';
+var AUTH_HASH = '1963a4cc101f0f24ad00ecd49d8949633d2bce019ffafc3a69ccbfce51fd852a';
 
 async function sha256(str) {
   var buf = new TextEncoder().encode(str);
