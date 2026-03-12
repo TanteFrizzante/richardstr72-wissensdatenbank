@@ -1,13 +1,13 @@
 /* Service Worker – Richardstr. 72 PWA */
-var CACHE = 'richard72-v1';
+var CACHE = 'richard72-v2';
+var BASE = self.registration.scope;
 var ASSETS = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/icon-192.png',
-  '/icon-512.png'
-];
+  'index.html',
+  'styles.css',
+  'app.js',
+  'icon-192.png',
+  'icon-512.png'
+].map(function(f) { return new URL(f, BASE).pathname; });
 
 /* Install: cache shell */
 self.addEventListener('install', function(e) {
