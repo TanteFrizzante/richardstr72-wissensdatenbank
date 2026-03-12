@@ -3,6 +3,11 @@
    Navigation, Calculators, Data
    ═══════════════════════════════════════════ */
 
+// ─── Service Worker (PWA) ───
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function() {});
+}
+
 // ─── Auth Gate ───
 var AUTH_HASH = '683d2896fa2a073c264323b75eab86c9f7d99cb3879fae62a671842e32c746c2';
 
@@ -56,7 +61,11 @@ function navigateToPage(pageId) {
   if (target) target.classList.add('active');
   var link = document.querySelector('[data-page="' + pageId + '"]');
   if (link) link.classList.add('active');
-  if (window.innerWidth <= 768 && sidebar) sidebar.classList.remove('open');
+  if (window.innerWidth <= 768 && sidebar) {
+    sidebar.classList.remove('open');
+    var ov = document.getElementById('sidebarOverlay');
+    if (ov) ov.classList.remove('show');
+  }
   window.scrollTo(0, 0);
 }
 
@@ -72,10 +81,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  var overlay = document.getElementById('sidebarOverlay');
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    if (overlay) overlay.classList.add('show');
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('show');
+  }
+
   if (menuToggle) {
     menuToggle.addEventListener('click', function () {
-      sidebar.classList.toggle('open');
+      if (sidebar.classList.contains('open')) closeSidebar();
+      else openSidebar();
     });
+  }
+  if (overlay) {
+    overlay.addEventListener('click', closeSidebar);
   }
 
   // Init all calculators

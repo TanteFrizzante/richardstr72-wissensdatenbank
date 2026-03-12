@@ -1026,6 +1026,41 @@ select.input-field {
   .page-header h1 {
     font-size: 20px;
   }
+
+  /* Tabellen horizontal scrollbar auf Mobile */
+  .card,
+  .stat-box,
+  [style*="overflow-x"] {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .comp-table {
+    min-width: 580px;
+  }
+
+  /* Grössere Touch-Targets */
+  .input-field {
+    min-height: 38px;
+    font-size: 14px;
+  }
+
+  .sidebar-nav a {
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+
+  /* Overlay wenn Sidebar offen */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+  }
+  .sidebar-overlay.show {
+    display: block;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1047,6 +1082,11 @@ select.input-field {
 
   .kpi-grid {
     grid-template-columns: 1fr;
+  }
+
+  .main-content {
+    padding: 12px;
+    padding-top: 56px;
   }
 }
 
