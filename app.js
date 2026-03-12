@@ -734,10 +734,10 @@ function calcFin() {
 
   // Gewerbe (€/m² oder Festbetrag)
   var te1_m = sqm_te1 * getVal('fu_te1');
-  var te24_m = getVal('fu_te24');  // Festbetrag
+  var te24_m = sqm_te24 * getVal('fu_te24');  // €/m²
   var te5_m = getVal('fu_te5');    // Festbetrag
   var sdg_m = sqm_sdg * getVal('fu_sdg');
-  var te6_m = getVal('fu_te6');    // Festbetrag
+  var te6_m = sqm_te6 * getVal('fu_te6');    // €/m²
   var sp_m = getVal('fu_sp');      // Festbetrag
   var sumG_m = te1_m + te24_m + te5_m + sdg_m + te6_m + sp_m;
   var sumG_a = sumG_m * 12;
@@ -754,10 +754,10 @@ function calcFin() {
 
   // SOLL Gewerbe
   var ste1_m = sqm_te1 * getVal('fs_te1');
-  var ste24_m = getVal('fs_te24');  // Festbetrag
+  var ste24_m = sqm_te24 * getVal('fs_te24');  // €/m²
   var ste5_m = getVal('fs_te5');    // Festbetrag
   var ssdg_m = sqm_sdg * getVal('fs_sdg');
-  var ste6_m = getVal('fs_te6');    // Festbetrag
+  var ste6_m = sqm_te6 * getVal('fs_te6');    // €/m²
   var ssp_m = getVal('fs_sp');      // Festbetrag
   var ssumG_m = ste1_m + ste24_m + ste5_m + ssdg_m + ste6_m + ssp_m;
   var ssumG_a = ssumG_m * 12;
