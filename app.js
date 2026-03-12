@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Init all calculators
   calcWEG(2000000);
   calcF20();
+  calcKPDetail();
   calcVM();
   calcFin();
   renderTrello();
@@ -500,6 +501,159 @@ function calcF20() {
   setEl('cf_b_cf', fmt(cf_b));
   var cfb = $('cf_b_cf');
   if (cfb) cfb.style.color = cf_b >= 0 ? 'var(--grn)' : 'var(--red)';
+}
+
+// ═══════════════════════════════════
+// KP FLAECHENDETAIL
+// ═══════════════════════════════════
+function calcKPDetail() {
+  // ─── Wohnen ───
+  var wIds = ['we1','we2','we3','we4'];
+  var w_sqm = 0, w_ang = 0, w_kp = 0;
+  for (var i = 0; i < wIds.length; i++) {
+    var id = wIds[i];
+    var sqm = getVal('kpd_sqm_' + id);
+    var ang = getVal('kpd_ang_' + id);
+    var kp = getVal('kpd_kp_' + id);
+    w_sqm += sqm; w_ang += ang; w_kp += kp;
+  }
+
+  // ─── Gewerbe ───
+  var gIds = ['te1','te2','te3','te4','te5'];
+  var g_sqm = 0, g_ang = 0, g_kp = 0;
+  for (var i = 0; i < gIds.length; i++) {
+    var id = gIds[i];
+    var sqm = getVal('kpd_sqm_' + id);
+    var ang = getVal('kpd_ang_' + id);
+    var kp = getVal('kpd_kp_' + id);
+    g_sqm += sqm; g_ang += ang; g_kp += kp;
+  }
+
+  // ─── Garagen ───
+  var garIds = ['te6','te7','te8','te9','te10','te11','te12','te13','te14'];
+  var gar_sqm = 0, gar_kp = 0;
+  for (var i = 0; i < garIds.length; i++) {
+    var id = garIds[i];
+    var sqm = getVal('kpd_sqm_' + id);
+    var kp = getVal('kpd_kp_' + id);
+    gar_sqm += sqm; gar_kp += kp;
+  }
+
+  // ─── Keller (SE) ───
+  var seIds = ['se1','se2','se3','se4','se5'];
+  var se_kp = 0;
+  for (var i = 0; i < seIds.length; i++) {
+    se_kp += getVal('kpd_kp_' + seIds[i]);
+  }
+
+  // ─── Gemeinschaftseigentum + Potential ───
+  var ge_kp = getVal('kpd_kp_ge');
+  var p_sqm = getVal('kpd_sqm_we5');
+  var p_kp = getVal('kpd_kp_we5');
+
+  // ─── GESAMT ───
+  var total_kp = w_kp + g_kp + gar_kp + se_kp + ge_kp + p_kp;
+
+  // Helper: safe division
+  function sd(a, b) { return b > 0 ? a / b : 0; }
+  function pct(v) { return total_kp > 0 ? (v / total_kp * 100).toFixed(1).replace('.', ',') + ' %' : '\u2014'; }
+  function eur(v) { return fmtN(Math.round(v)) + ' \u20AC'; }
+  function sqmF(v) { return v > 0 ? fmtN(Math.round(sd(v, 1) * 100) / 100).replace(/(\d)$/, '') : '\u2014'; }
+
+  // ─── Wohnen per-row ───
+  for (var i = 0; i < wIds.length; i++) {
+    var id = wIds[i];
+    var sqm = getVal('kpd_sqm_' + id), ang = getVal('kpd_ang_' + id), kp = getVal('kpd_kp_' + id);
+    setEl('kpd_sqmP_' + id, sqm > 0 ? fmtN(Math.round(kp / sqm)) + ' \u20AC' : '\u2014');
+    setEl('kpd_angP_' + id, ang > 0 ? fmtN(Math.round(kp / ang)) + ' \u20AC' : '\u2014');
+    setEl('kpd_pct_' + id, pct(kp));
+  }
+  // Wohnen sums
+  setEl('kpd_sqm_w_sum', w_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_ang_w_sum', w_ang.toFixed(2).replace('.', ','));
+  setEl('kpd_kp_w_sum', eur(w_kp));
+  setEl('kpd_sqmP_w_avg', w_sqm > 0 ? fmtN(Math.round(w_kp / w_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_angP_w_avg', w_ang > 0 ? fmtN(Math.round(w_kp / w_ang)) + ' \u20AC' : '\u2014');
+  setEl('kpd_pct_w_sum', pct(w_kp));
+
+  // ─── Gewerbe per-row ───
+  for (var i = 0; i < gIds.length; i++) {
+    var id = gIds[i];
+    var sqm = getVal('kpd_sqm_' + id), ang = getVal('kpd_ang_' + id), kp = getVal('kpd_kp_' + id);
+    setEl('kpd_sqmP_' + id, sqm > 0 ? fmtN(Math.round(kp / sqm)) + ' \u20AC' : '\u2014');
+    setEl('kpd_angP_' + id, ang > 0 ? fmtN(Math.round(kp / ang)) + ' \u20AC' : '\u2014');
+    setEl('kpd_pct_' + id, pct(kp));
+  }
+  // Gewerbe sums
+  setEl('kpd_sqm_g_sum', g_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_ang_g_sum', g_ang.toFixed(2).replace('.', ','));
+  setEl('kpd_kp_g_sum', eur(g_kp));
+  setEl('kpd_sqmP_g_avg', g_sqm > 0 ? fmtN(Math.round(g_kp / g_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_angP_g_avg', g_ang > 0 ? fmtN(Math.round(g_kp / g_ang)) + ' \u20AC' : '\u2014');
+  setEl('kpd_pct_g_sum', pct(g_kp));
+
+  // ─── Garagen per-row ───
+  for (var i = 0; i < garIds.length; i++) {
+    var id = garIds[i];
+    var sqm = getVal('kpd_sqm_' + id), kp = getVal('kpd_kp_' + id);
+    setEl('kpd_sqmP_' + id, sqm > 0 ? fmtN(Math.round(kp / sqm)) + ' \u20AC' : '\u2014');
+    setEl('kpd_pct_' + id, pct(kp));
+  }
+  // Garagen sums
+  setEl('kpd_sqm_gar_sum', gar_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_kp_gar_sum', eur(gar_kp));
+  setEl('kpd_sqmP_gar_avg', gar_sqm > 0 ? fmtN(Math.round(gar_kp / gar_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_pct_gar_sum', pct(gar_kp));
+
+  // ─── Keller per-row ───
+  for (var i = 0; i < seIds.length; i++) {
+    var kp = getVal('kpd_kp_' + seIds[i]);
+    setEl('kpd_pct_' + seIds[i], pct(kp));
+  }
+  setEl('kpd_kp_se_sum', eur(se_kp));
+  setEl('kpd_pct_se_sum', pct(se_kp));
+
+  // ─── GE + Potential ───
+  setEl('kpd_pct_ge', pct(ge_kp));
+  setEl('kpd_sqmP_we5', p_sqm > 0 ? fmtN(Math.round(p_kp / p_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_pct_we5', pct(p_kp));
+
+  // ─── Gesamtuebersicht ───
+  var total_sqm = w_sqm + g_sqm + gar_sqm + 27.75 + 91.69 + p_sqm;
+  var total_ang = w_ang + g_ang;
+
+  setEl('kpd_ov_w_sqm', w_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_w_ang', w_ang.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_w_kp', eur(w_kp));
+  setEl('kpd_ov_w_sqmP', w_sqm > 0 ? fmtN(Math.round(w_kp / w_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_ov_w_pct', pct(w_kp));
+
+  setEl('kpd_ov_g_sqm', g_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_g_ang', g_ang.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_g_kp', eur(g_kp));
+  setEl('kpd_ov_g_sqmP', g_sqm > 0 ? fmtN(Math.round(g_kp / g_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_ov_g_pct', pct(g_kp));
+
+  setEl('kpd_ov_gar_sqm', gar_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_gar_kp', eur(gar_kp));
+  setEl('kpd_ov_gar_sqmP', gar_sqm > 0 ? fmtN(Math.round(gar_kp / gar_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_ov_gar_pct', pct(gar_kp));
+
+  setEl('kpd_ov_se_kp', eur(se_kp));
+  setEl('kpd_ov_se_pct', pct(se_kp));
+
+  setEl('kpd_ov_ge_kp', eur(ge_kp));
+  setEl('kpd_ov_ge_pct', pct(ge_kp));
+
+  setEl('kpd_ov_p_sqm', p_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_p_kp', eur(p_kp));
+  setEl('kpd_ov_p_sqmP', p_sqm > 0 ? fmtN(Math.round(p_kp / p_sqm)) + ' \u20AC' : '\u2014');
+  setEl('kpd_ov_p_pct', pct(p_kp));
+
+  setEl('kpd_ov_total_sqm', total_sqm.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_total_ang', total_ang.toFixed(2).replace('.', ','));
+  setEl('kpd_ov_total_kp', eur(total_kp));
+  setEl('kpd_ov_total_sqmP', total_sqm > 0 ? fmtN(Math.round(total_kp / total_sqm)) + ' \u20AC' : '\u2014');
 }
 
 // ═══════════════════════════════════

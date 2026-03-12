@@ -40,6 +40,7 @@
     <li class="nav-section">Kalkulation</li>
     <li><a href="#" data-page="kauf_weg"><span class="nav-icon">&#x1F4B6;</span>KP-Variante WEG</a></li>
     <li><a href="#" data-page="kauf_allein"><span class="nav-icon">&#x1F3E2;</span>KP Variante Faktor 20</a></li>
+    <li><a href="#" data-page="kp_detail"><span class="nav-icon">&#x1F4CA;</span>KP Flaechendetail</a></li>
     <li><a href="#" data-page="var_miete"><span class="nav-icon">&#x1F4C8;</span>Variante Miete</a></li>
     <li><a href="#" data-page="finrechner"><span class="nav-icon">&#x1F4B3;</span>Finanzierungsrechner</a></li>
     <li class="nav-section">Projekt</li>
@@ -388,6 +389,373 @@
       <tr style="font-weight:700"><td>Cashflow vor Tilgung</td><td id="cf_b_cf">&mdash;</td></tr>
     </table></div>
   </div>
+</div>
+
+<!-- ─── KP FLAECHENDETAIL ─── -->
+<div class="page" id="kp_detail">
+  <div class="page-header">
+    <h1>KP Variante Flaechendetail</h1>
+    <div class="meta">Kaufpreisaufteilung nach Einheiten &middot; Alle Preise editierbar &middot; Live-Berechnung</div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+    <div class="editable-hint" style="margin-bottom:0">Kaufpreis pro Einheit editierbar &mdash; Summen, Anteile und &euro;/m&sup2; berechnen sich automatisch.</div>
+    <button class="btn btn-primary" onclick="calcKPDetail()" style="display:flex;align-items:center;gap:8px">&#x1F504; Aktualisieren</button>
+  </div>
+
+  <!-- ═══ WOHNEN ═══ -->
+  <div class="invest-box">
+    <h3 style="color:var(--acc)">Wohnen</h3>
+    <div style="overflow-x:auto">
+    <table class="comp-table" id="kpd_tbl_wohnen">
+      <thead>
+        <tr>
+          <th>Einheit</th><th>Haus</th><th>Bezeichnung</th>
+          <th style="text-align:right">Flaeche m&sup2;</th>
+          <th style="text-align:right">Angr. m&sup2;</th>
+          <th style="text-align:right">Kaufpreis &euro;</th>
+          <th style="text-align:right">&euro;/m&sup2; (Fl.)</th>
+          <th style="text-align:right">&euro;/m&sup2; (Angr.)</th>
+          <th style="text-align:right">Anteil %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>WE1</strong></td><td>Haus 1</td><td>EG links, 2 ZKB</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_we1" value="59.56" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_we1" value="59.56" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_we1" value="150000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_we1">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_we1">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_we1">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>WE2</strong></td><td>Haus 1</td><td>EG rechts, 3 ZKB Balkon Garten</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_we2" value="134.65" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_we2" value="106.70" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_we2" value="250000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_we2">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_we2">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_we2">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>WE3</strong></td><td>Haus 1</td><td>1. OG, 5 ZKB</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_we3" value="138.31" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_we3" value="138.31" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_we3" value="350000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_we3">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_we3">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_we3">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>WE4</strong></td><td>Haus 1</td><td>DG Rohling (leerstehend)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_we4" value="120.00" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_we4" value="0" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_we4" value="200000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_we4">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_we4">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_we4">&mdash;</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="hl">
+          <td colspan="3"><strong>&sum; Wohnen</strong></td>
+          <td style="text-align:right" id="kpd_sqm_w_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_ang_w_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_kp_w_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_sqmP_w_avg">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_w_avg">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_w_sum">&mdash;</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+
+  <!-- ═══ GEWERBE ═══ -->
+  <div class="invest-box">
+    <h3 style="color:var(--warn)">Gewerbe</h3>
+    <div style="overflow-x:auto">
+    <table class="comp-table" id="kpd_tbl_gew">
+      <thead>
+        <tr>
+          <th>Einheit</th><th>Haus</th><th>Bezeichnung</th>
+          <th style="text-align:right">Flaeche m&sup2;</th>
+          <th style="text-align:right">Angr. m&sup2;</th>
+          <th style="text-align:right">Kaufpreis &euro;</th>
+          <th style="text-align:right">&euro;/m&sup2; (Fl.)</th>
+          <th style="text-align:right">&euro;/m&sup2; (Angr.)</th>
+          <th style="text-align:right">Anteil %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TE1</strong></td><td>Haus 1</td><td>KG links (Gewerbe)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te1" value="56.03" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_te1" value="28.02" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te1" value="50000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te1">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_te1">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te1">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE2</strong></td><td>Haus 4</td><td>Scharnier EG (TF) + WC</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te2" value="98.54" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_te2" value="82.16" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te2" value="120000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te2">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_te2">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te2">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE3</strong></td><td>Haus 4</td><td>Scharnier 1. OG (TF)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te3" value="82.16" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_te3" value="82.16" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te3" value="120000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te3">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_te3">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te3">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE4</strong></td><td>Haus 4</td><td>Scheune/Lager EG + DG (TF)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te4" value="271.05" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_te4" value="154.80" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te4" value="200000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te4">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_te4">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te4">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE5</strong></td><td>Haus 3</td><td>Musikstudio (Wanubale GbR)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te5" value="97.94" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_ang_te5" value="97.94" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te5" value="100000" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te5">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_te5">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te5">&mdash;</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="hl">
+          <td colspan="3"><strong>&sum; Gewerbe</strong></td>
+          <td style="text-align:right" id="kpd_sqm_g_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_ang_g_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_kp_g_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_sqmP_g_avg">&mdash;</td>
+          <td style="text-align:right" id="kpd_angP_g_avg">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_g_sum">&mdash;</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+
+  <!-- ═══ GARAGEN ═══ -->
+  <div class="invest-box">
+    <h3 style="color:var(--grn)">Garagen &amp; Stellplaetze</h3>
+    <div style="overflow-x:auto">
+    <table class="comp-table" id="kpd_tbl_gar">
+      <thead>
+        <tr>
+          <th>Einheit</th><th>Haus</th><th>Bezeichnung</th>
+          <th style="text-align:right">Flaeche m&sup2;</th>
+          <th style="text-align:right">Kaufpreis &euro;</th>
+          <th style="text-align:right">&euro;/m&sup2;</th>
+          <th style="text-align:right">Anteil %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TE6</strong></td><td>Haus 2</td><td>1. Garage (Doppelgar. Scheune)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te6" value="57.91" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te6" value="30000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te6">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te6">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE7</strong></td><td>Haus 2</td><td>2. Garage (Finck)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te7" value="18.09" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te7" value="15000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te7">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te7">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE8</strong></td><td>Haus 2</td><td>3. Garage (Doppelgar. am Haus)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te8" value="33.58" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te8" value="20000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te8">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te8">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE9</strong></td><td>Haus 3</td><td>4. Garage (Finck)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te9" value="15.78" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te9" value="10000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te9">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te9">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE10</strong></td><td>Haus 3</td><td>5. Garage (Jordan)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te10" value="14.60" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te10" value="10000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te10">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te10">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE11</strong></td><td>Haus 3</td><td>6. Garage (Steeger)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te11" value="13.97" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te11" value="10000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te11">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te11">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE12</strong></td><td>Haus 3</td><td>7. Garage (Schaffer)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te12" value="13.86" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te12" value="10000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te12">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te12">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE13</strong></td><td>Haus 3</td><td>8. Garage (Leu)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te13" value="14.81" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te13" value="10000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te13">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te13">&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>TE14</strong></td><td>Haus 3</td><td>9. Garage (Leu)</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_te14" value="15.00" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_te14" value="10000" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_te14">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_te14">&mdash;</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="hl">
+          <td colspan="3"><strong>&sum; Garagen</strong></td>
+          <td style="text-align:right" id="kpd_sqm_gar_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_kp_gar_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_sqmP_gar_avg">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_gar_sum">&mdash;</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+
+  <!-- ═══ SONDEREIGENTUM / KELLER ═══ -->
+  <div class="invest-box">
+    <h3>Sondereigentum (Keller)</h3>
+    <div style="overflow-x:auto">
+    <table class="comp-table" id="kpd_tbl_se">
+      <thead>
+        <tr>
+          <th>Einheit</th><th>Haus</th><th>Bezeichnung</th>
+          <th style="text-align:right">Flaeche m&sup2;</th>
+          <th style="text-align:right">Kaufpreis &euro;</th>
+          <th style="text-align:right">Anteil %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>SE1</strong></td><td>Haus 1</td><td>Kellerraum 1</td>
+          <td style="text-align:right">4,50</td>
+          <td style="text-align:right"><input type="number" class="input-field input-sm" id="kpd_kp_se1" value="0" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_pct_se1">&mdash;</td></tr>
+        <tr><td><strong>SE2</strong></td><td>Haus 1</td><td>Kellerraum 2</td>
+          <td style="text-align:right">4,50</td>
+          <td style="text-align:right"><input type="number" class="input-field input-sm" id="kpd_kp_se2" value="0" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_pct_se2">&mdash;</td></tr>
+        <tr><td><strong>SE3</strong></td><td>Haus 1</td><td>Kellerraum 3</td>
+          <td style="text-align:right">2,81</td>
+          <td style="text-align:right"><input type="number" class="input-field input-sm" id="kpd_kp_se3" value="0" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_pct_se3">&mdash;</td></tr>
+        <tr><td><strong>SE4</strong></td><td>Haus 1</td><td>Kellerraum 4</td>
+          <td style="text-align:right">9,92</td>
+          <td style="text-align:right"><input type="number" class="input-field input-sm" id="kpd_kp_se4" value="0" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_pct_se4">&mdash;</td></tr>
+        <tr><td><strong>SE5</strong></td><td>Haus 1</td><td>Kellerraum 5</td>
+          <td style="text-align:right">6,02</td>
+          <td style="text-align:right"><input type="number" class="input-field input-sm" id="kpd_kp_se5" value="0" step="1000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_pct_se5">&mdash;</td></tr>
+      </tbody>
+      <tfoot>
+        <tr class="hl">
+          <td colspan="3"><strong>&sum; Keller</strong></td>
+          <td style="text-align:right">27,75</td>
+          <td style="text-align:right" id="kpd_kp_se_sum">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_se_sum">&mdash;</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+
+  <!-- ═══ GEMEINSCHAFTSEIGENTUM ═══ -->
+  <div class="invest-box">
+    <h3>Gemeinschaftseigentum</h3>
+    <div style="overflow-x:auto">
+    <table class="comp-table">
+      <thead>
+        <tr><th>Einheit</th><th>Haus</th><th>Bezeichnung</th><th style="text-align:right">Flaeche m&sup2;</th><th style="text-align:right">Kaufpreis &euro;</th><th style="text-align:right">Anteil %</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>GE</strong></td><td>Haus 1</td><td>Treppenhaeuser, Hausanschluss, Keller</td>
+          <td style="text-align:right">91,69</td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_ge" value="0" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_pct_ge">&mdash;</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ═══ POTENTIAL ═══ -->
+  <div class="invest-box">
+    <h3 style="color:var(--info)">Potential (Neubau / Aufstockung)</h3>
+    <div style="overflow-x:auto">
+    <table class="comp-table">
+      <thead>
+        <tr><th>Einheit</th><th>Haus</th><th>Bezeichnung</th><th style="text-align:right">Flaeche m&sup2;</th><th style="text-align:right">Kaufpreis &euro;</th><th style="text-align:right">&euro;/m&sup2;</th><th style="text-align:right">Anteil %</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>WE5</strong></td><td>Haus 2</td><td>Aufstockung DG Potential</td>
+          <td style="text-align:right"><input type="number" class="input-field input-xs" id="kpd_sqm_we5" value="126.28" step="0.01" oninput="calcKPDetail()"></td>
+          <td style="text-align:right"><input type="number" class="input-field input-md" id="kpd_kp_we5" value="0" step="5000" oninput="calcKPDetail()"></td>
+          <td style="text-align:right" id="kpd_sqmP_we5">&mdash;</td>
+          <td style="text-align:right" id="kpd_pct_we5">&mdash;</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ═══ GESAMTUEBERSICHT ═══ -->
+  <div class="invest-box" style="border-left:3px solid var(--acc)">
+    <h3>Gesamtuebersicht</h3>
+    <div style="overflow-x:auto">
+    <table class="comp-table">
+      <thead>
+        <tr><th>Kategorie</th><th style="text-align:right">Flaeche m&sup2;</th><th style="text-align:right">Angr. m&sup2;</th><th style="text-align:right">Kaufpreis &euro;</th><th style="text-align:right">&euro;/m&sup2; (Fl.)</th><th style="text-align:right">Anteil %</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Wohnen (WE1-WE4)</td><td style="text-align:right" id="kpd_ov_w_sqm">&mdash;</td><td style="text-align:right" id="kpd_ov_w_ang">&mdash;</td><td style="text-align:right" id="kpd_ov_w_kp">&mdash;</td><td style="text-align:right" id="kpd_ov_w_sqmP">&mdash;</td><td style="text-align:right" id="kpd_ov_w_pct">&mdash;</td></tr>
+        <tr><td>Gewerbe (TE1-TE5)</td><td style="text-align:right" id="kpd_ov_g_sqm">&mdash;</td><td style="text-align:right" id="kpd_ov_g_ang">&mdash;</td><td style="text-align:right" id="kpd_ov_g_kp">&mdash;</td><td style="text-align:right" id="kpd_ov_g_sqmP">&mdash;</td><td style="text-align:right" id="kpd_ov_g_pct">&mdash;</td></tr>
+        <tr><td>Garagen (TE6-TE14)</td><td style="text-align:right" id="kpd_ov_gar_sqm">&mdash;</td><td style="text-align:right">&mdash;</td><td style="text-align:right" id="kpd_ov_gar_kp">&mdash;</td><td style="text-align:right" id="kpd_ov_gar_sqmP">&mdash;</td><td style="text-align:right" id="kpd_ov_gar_pct">&mdash;</td></tr>
+        <tr><td>Keller (SE1-SE5)</td><td style="text-align:right">27,75</td><td style="text-align:right">&mdash;</td><td style="text-align:right" id="kpd_ov_se_kp">&mdash;</td><td style="text-align:right">&mdash;</td><td style="text-align:right" id="kpd_ov_se_pct">&mdash;</td></tr>
+        <tr><td>Gemeinschaftseigentum</td><td style="text-align:right">91,69</td><td style="text-align:right">&mdash;</td><td style="text-align:right" id="kpd_ov_ge_kp">&mdash;</td><td style="text-align:right">&mdash;</td><td style="text-align:right" id="kpd_ov_ge_pct">&mdash;</td></tr>
+        <tr><td>Potential (WE5)</td><td style="text-align:right" id="kpd_ov_p_sqm">&mdash;</td><td style="text-align:right">&mdash;</td><td style="text-align:right" id="kpd_ov_p_kp">&mdash;</td><td style="text-align:right" id="kpd_ov_p_sqmP">&mdash;</td><td style="text-align:right" id="kpd_ov_p_pct">&mdash;</td></tr>
+      </tbody>
+      <tfoot>
+        <tr class="hl" style="font-size:14px">
+          <td><strong>GESAMT</strong></td>
+          <td style="text-align:right" id="kpd_ov_total_sqm">&mdash;</td>
+          <td style="text-align:right" id="kpd_ov_total_ang">&mdash;</td>
+          <td style="text-align:right;font-size:16px" id="kpd_ov_total_kp">&mdash;</td>
+          <td style="text-align:right" id="kpd_ov_total_sqmP">&mdash;</td>
+          <td style="text-align:right">100,0 %</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+
 </div>
 
 <!-- ─── VARIANTE MIETE ─── -->
